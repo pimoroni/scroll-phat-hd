@@ -222,12 +222,23 @@ class Matrix:
         # Chop a width * height window out of the display buffer
         display_buffer = display_buffer[:self.width, :self.height]
         
+        #if self.height > display_buffer.shape[1]:
+        #    display_buffer = numpy.pad(display_buffer, ((0,0),(0,self.height - display_buffer.shape[1] + 1)), mode='constant')
+            
+        #if self.width > display_buffer.shape[0]:
+        #    display_buffer = numpy.pad(display_buffer, ((0,self.width - display_buffer.shape[0] + 1),(0,0)), mode='constant')
+        
         output = [0 for x in range(144)]
         
         for x in range(self.width):
             for y in range(self.height):
                 idx = self._pixel_addr(x, y)
-                output[idx] = int(display_buffer[x][y])
+                
+                try:
+                    output[idx] = int(display_buffer[x][y])
+                    
+                except IndexError:
+                    output[idx] = 0
 
         offset = 0
         for chunk in self._chunk(output, 32):
