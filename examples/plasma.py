@@ -1,11 +1,7 @@
 import time
 import math
 
-import smbus
-import is31fl3731
-
-i2c = smbus.SMBus(1)
-display = is31fl3731.ScrollPhatHD(i2c)
+import scrollphathd
 
 speed_factor = 10
 
@@ -18,7 +14,7 @@ while True:
         for y in range(0, 7):
             v = 128.0 + (128.0 * math.sin((x * s) + i / 4.0) * math.cos((y * s) + i / 4.0))
 
-            display.pixel(x, y, v)
+            scrollphathd.pixel(x, y, v)
 
     time.sleep(0.01)
-    display.show()
+    scrollphathd.show()

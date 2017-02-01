@@ -35,7 +35,8 @@ class Matrix:
         self.address = address
         self.reset()
         self.init()
-        
+       
+        self._frame = 0 
         self._scroll = [0,0]
         self._rotate = 0 # Increments of 90 degrees
         self._flipx = False
@@ -165,27 +166,12 @@ class Matrix:
         rate //= 270
         self._register(_CONFIG_BANK, _BLINK_REGISTER, rate & 0x07 | 0x08)
 
-    def fill(self, color=None, blink=None, frame=None):
-        if frame is None:
-            frame = self._frame
+    def fill(self, brightness):
+        for x in range(self.width):
+            for y in range(self.height):
+                self.pixel(x, y,  brightness)
 
-        self._bank(frame)
-        
-        if color is not None:
-            if not 0 <= color <= 255:
-                raise ValueError("Color out of range: 0-255")
-
-            data = [color] * 24
-
-            for row in range(6):
-                #print data
-
-                self.i2c.write_i2c_block_data(self.address, _COLOR_OFFSET + row * 24, data)
-
-        if blink is not None:
-            data = bool(blink) * 0xff
-            for col in range(18):
-                self._register(frame, _BLINK_OFFSET + col, data)
+        self.show()
 
     def _pixel_addr(self, x, y):
         return x + y * 16
