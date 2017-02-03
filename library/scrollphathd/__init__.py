@@ -19,9 +19,10 @@ rotate = display.rotate
 flip = display.flip
 draw_char = display.draw_char
 write_string = display.write_string
+clear = display.clear
 
-def clear():
-    display.fill(0)
+def _exit():
+    display.clear()
     display.show()
 
-atexit.register(clear)
+atexit.register(_exit)

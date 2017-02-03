@@ -57,6 +57,10 @@ class Matrix:
         self._flipx = x
         self._flipy = y
 
+    def clear(self):
+        del self.buf
+        self.buf = numpy.zeros((self.width, self.height))
+
     def _bank(self, bank=None):
         #print "bank", bank
 
@@ -75,7 +79,7 @@ class Matrix:
 
         self.i2c.write_i2c_block_data(self.address, register, [value])
 
-    def draw_char(self, o_x, o_y, char, font=None):
+    def draw_char(self, o_x, o_y, char, font=None, brightness=1.0):
         if font is None:
             if self._font is not None:
                 font = self._font
@@ -92,13 +96,13 @@ class Matrix:
 
         for x in range(len(char[0])):
             for y in range(len(char)):
-                self.pixel(o_x + x, o_y + y, char[y][x])
+                self.pixel(o_x + x, o_y + y, int(char[y][x] * brightness))
 
         return (o_x + x, o_y + font.height)
 
-    def write_string(self, string, x=0, y=0, font=None, letter_spacing=1):
+    def write_string(self, string, x=0, y=0, font=None, letter_spacing=1, brightness=1.0):
         for char in string:
-            x, n = self.draw_char(x, y, char, font)
+            x, n = self.draw_char(x, y, char, font=font, brightness=brightness)
             x += 1 + letter_spacing
 
     def init(self):
