@@ -82,16 +82,24 @@ class Matrix:
             else:
                 return (o_x, o_y)
 
+        if type(char) is not int:
+            char = ord(char)
+
         if char not in font.data:
             return (o_x, o_y)
 
         char = font.data[char]
 
-        for x in range(font.width):
-            for y in range(font.height):
+        for x in range(len(char[0])):
+            for y in range(len(char)):
                 self.pixel(o_x + x, o_y + y, char[y][x])
 
-        return (o_x + x, o_y + y)
+        return (o_x + x, o_y + font.height)
+
+    def write_string(self, string, x=0, y=0, font=None, letter_spacing=1):
+        for char in string:
+            x, n = self.draw_char(x, y, char, font)
+            x += 1 + letter_spacing
 
     def init(self):
         # Switch to configuration bank
