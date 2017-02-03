@@ -36,6 +36,7 @@ class Matrix:
         self.reset()
         self.init()
        
+        self._font = None
         self._frame = 0 
         self._scroll = [0,0]
         self._rotate = 0 # Increments of 90 degrees
@@ -74,6 +75,24 @@ class Matrix:
 
         self.i2c.write_i2c_block_data(self.address, register, [value])
 
+    def draw_char(self, o_x, o_y, char, font=None):
+        if font is None:
+            if self._font is not None:
+                font = self._font
+            else:
+                return (o_x, o_y)
+
+        if char not in font.data:
+            return (o_x, o_y)
+
+        char = font.data[char]
+
+        for x in range(font.width):
+            for y in range(font.height):
+                self.pixel(o_x + x, o_y + y, char[y][x])
+
+        return (o_x + x, o_y + y)
+
     def init(self):
         # Switch to configuration bank
         self._bank(_CONFIG_BANK)
@@ -83,6 +102,9 @@ class Matrix:
         
         # Disable audio sync
         self.i2c.write_i2c_block_data(self.address, _AUDIOSYNC_REGISTER, [0])
+
+        self._bank(1)
+        self.i2c.write_i2c_block_data(self.address, 0, [255] * 17)
         
         # Switch to bank 0 ( frame 0 )
         self._bank(0)
@@ -98,52 +120,6 @@ class Matrix:
     def sleep(self, value):
         return self._register(_CONFIG_BANK, _SHUTDOWN_REGISTER, not value)
 
-    def autoplay(self, delay=0, loops=0, frames=0):
-        if delay == 0:
-            self._mode(_PICTURE_MODE)
-            return
-
-        delay //= 11
-
-        if not 0 <= loops <= 7:
-            raise ValueError("Loops out of range")
-
-        if not 0 <= frames <= 7:
-            raise ValueError("Frames out of range")
-
-        if not 1 <= delay <= 64:
-            raise ValueError("Delay out of range")
-
-        self._register(_CONFIG_BANK, _AUTOPLAY1_REGISTER, loops << 4 | frames)
-        self._register(_CONFIG_BANK, _AUTOPLAY2_REGISTER, delay % 64)
-        self._mode(_AUTOPLAY_MODE | self._frame)
-
-    def fade(self, fade_in=None, fade_out=None, pause=0):
-        if fade_in is None and fade_out is None:
-            self._register(_CONFIG_BANK, _BREATH2_REGISTER, 0)
-
-        elif fade_in is None:
-            fade_in = fade_out
-
-        elif fade_out is None:
-            fade_out = fade_in
-
-        fade_in = int(math.log(fade_in / 26, 2))
-        fade_out = int(math.log(fade_out / 26, 2))
-        pause = int(math.log(pause / 26, 2))
-
-        if not 0 <= fade_in <= 7:
-            raise ValueError("Fade in out of range: 0-7")
-
-        if not 0 <= fade_out <= 7:
-            raise ValueError("Fade out out of range: 0-7")
-
-        if not 0 <= pause <= 7:
-            raise ValueError("Pause out of range: 0-7")
-
-        self._register(_CONFIG_BANK, _BREATH1_REGISTER, fade_out << 4 | fade_in)
-        self._register(_CONFIG_BANK, _BREATH2_REGISTER, 1 << 4 | pause)
-
     def frame(self, frame=None, show=True):
         if frame is None:
             return self._frame
@@ -154,17 +130,6 @@ class Matrix:
         self._frame = frame
         if show:
             self._register(_CONFIG_BANK, _FRAME_REGISTER, frame);
-
-    def blink(self, rate=None):
-        if rate is None:
-            return (self._register(_CONFIG_BANK, _BLINK_REGISTER) & 0x07) * 270
-
-        elif rate == 0:
-            self._register(_CONFIG_BANK, _BLINK_REGISTER, 0x00)
-            return
-
-        rate //= 270
-        self._register(_CONFIG_BANK, _BLINK_REGISTER, rate & 0x07 | 0x08)
 
     def fill(self, brightness):
         for x in range(self.width):
@@ -181,15 +146,17 @@ class Matrix:
             self.buf[x][y] = brightness
         
         except IndexError:
-            if y > self.buf.shape[1]:
+            if y >= self.buf.shape[1]:
                 self.buf = numpy.pad(self.buf, ((0,0),(0,y - self.buf.shape[1] + 1)), mode='constant')
                 
-            if x > self.buf.shape[0]:
+            if x >= self.buf.shape[0]:
                 self.buf = numpy.pad(self.buf, ((0,x - self.buf.shape[0] + 1),(0,0)), mode='constant')
                 
             self.buf[x][y] = brightness
         
     def show(self):
+        next_frame = 0 if self.frame == 1 else 0
+
         display_buffer = numpy.copy(self.buf)
         
         for axis in [0,1]:
@@ -218,7 +185,7 @@ class Matrix:
         
         for x in range(self.width):
             for y in range(self.height):
-                idx = self._pixel_addr(x, y)
+                idx = self._pixel_addr(x, 6-y)
                 
                 try:
                     output[idx] = int(display_buffer[x][y])
@@ -226,11 +193,15 @@ class Matrix:
                 except IndexError:
                     output[idx] = 0
 
+        self._bank(next_frame)
+
         offset = 0
         for chunk in self._chunk(output, 32):
             #print(chunk)
             self.i2c.write_i2c_block_data(self.address, _COLOR_OFFSET + offset, chunk)
             offset += 32
+
+        self.frame(next_frame)
         
         del display_buffer
         
@@ -238,40 +209,6 @@ class Matrix:
         for i in xrange(0, len(l), n):
             yield l[i:i + n]
                 
-
-'''
-    def pixel(self, x, y, color=None, blink=None, frame=None):
-        if not 0 <= x <= self.width:
-            return
-
-        if not 0 <= y <= self.height:
-            return
-
-        pixel = self._pixel_addr(x, y)
-
-        if color is None and blink is None:
-            return self._register(self._frame, pixel)
-
-        if frame is None:
-            frame = self._frame
-
-        if color is not None:
-            if not 0 <= color <= 255:
-                raise ValueError("Color out of range")
-
-            self._register(frame, _COLOR_OFFSET + pixel, color)
-
-        if blink is not None:
-            addr, bit = divmod(pixel, 8)
-            bits = self._register(frame, _BLINK_OFFSET + addr)
-
-            if blink:
-                bits |= 1 << bit
-            else:
-                bits &= ~(1 << bit)
-
-            self._register(frame, _BLINK_OFFSET + addr, bits)
-'''
 
 class ScrollPhatHD(Matrix):
     width = 17

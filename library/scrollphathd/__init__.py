@@ -17,6 +17,7 @@ height = display.height
 scroll_to = display.scroll_to
 rotate = display.rotate
 flip = display.flip
+draw_char = display.draw_char
 
 def clear():
     display.fill(0)
