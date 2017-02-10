@@ -8,7 +8,11 @@ __version__ = '0.0.1'
 i2c = smbus.SMBus(1)
 display = is31fl3731.ScrollPhatHD(i2c)
 
-pixel = display.pixel
+DISPLAY_HEIGHT = 7
+DISPLAY_WIDTH = 17
+
+pixel = display.set_pixel
+set_pixel = display.set_pixel
 show = display.show
 scroll = display.scroll
 fill = display.fill

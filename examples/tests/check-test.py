@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import time
 import math
 
@@ -12,7 +14,7 @@ try:
         for x in range(scrollphathd.width):
             for y in range(scrollphathd.height):
                 offset += 1
-                color = int(64 * scale) * (offset % 2)
+                color = 0.25 * scale * (offset % 2)
                 scrollphathd.pixel(x, y, color)
 
         scrollphathd.show()

@@ -1,8 +1,10 @@
+#!/usr/bin/env python
+
 import time
 
 import scrollphathd
 
-scrollphathd.pixel(8,4,64)
+scrollphathd.pixel(8,4,1.0)
 
 try:
     while True:

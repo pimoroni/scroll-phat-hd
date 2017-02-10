@@ -2,6 +2,8 @@ import math
 import time
 import numpy
 
+from .fonts import font5x7
+
 _MODE_REGISTER = 0x00
 _FRAME_REGISTER = 0x01
 _AUTOPLAY1_REGISTER = 0x02
@@ -33,175 +35,239 @@ class Matrix:
         self.buf = numpy.zeros((self.width, self.height))
         self.i2c = i2c
         self.address = address
-        self.reset()
-        self.init()
-       
-        self._font = None
-        self._frame = 0 
+        self._reset()
+
+        self._font = font5x7
+        self._current_frame = 0
         self._scroll = [0,0]
         self._rotate = 0 # Increments of 90 degrees
         self._flipx = False
         self._flipy = False
-        
-    def scroll(self, x=0, y=0):
-        self._scroll[0] += x
-        self._scroll[1] += y
-        
-    def scroll_to(self, x=0, y=0):
-        self._scroll = [x,y]
 
-    def rotate(self, degrees=0):
-        self._rotate = int(round(degrees/90.0))
-        
-    def flip(self, x=False, y=False):
-        self._flipx = x
-        self._flipy = y
+        # Display initialization
 
-    def clear(self):
-        del self.buf
-        self.buf = numpy.zeros((self.width, self.height))
-
-    def _bank(self, bank=None):
-        #print "bank", bank
-
-        if bank is None:
-            return self.i2c.readfrom_mem(self.address, _BANK_ADDRESS, 1)[0]
-
-        self.i2c.write_i2c_block_data(self.address, _BANK_ADDRESS, [bank])
-
-    def _register(self, bank, register, value=None):
-        self._bank(bank)
-
-        if value is None:
-            return self.i2c.readfrom_mem(self.address, register, 1)[0]
-
-        #print "reg", value
-
-        self.i2c.write_i2c_block_data(self.address, register, [value])
-
-    def draw_char(self, o_x, o_y, char, font=None, brightness=1.0):
-        if font is None:
-            if self._font is not None:
-                font = self._font
-            else:
-                return (o_x, o_y)
-
-        if type(char) is not int:
-            char = ord(char)
-
-        if char not in font.data:
-            return (o_x, o_y)
-
-        char = font.data[char]
-
-        for x in range(len(char[0])):
-            for y in range(len(char)):
-                self.pixel(o_x + x, o_y + y, int(char[y][x] * brightness))
-
-        return (o_x + x, o_y + font.height)
-
-    def write_string(self, string, x=0, y=0, font=None, letter_spacing=1, brightness=1.0):
-        for char in string:
-            x, n = self.draw_char(x, y, char, font=font, brightness=brightness)
-            x += 1 + letter_spacing
-
-    def init(self):
         # Switch to configuration bank
         self._bank(_CONFIG_BANK)
-        
+
         # Switch to Picture Mode
         self.i2c.write_i2c_block_data(self.address, _MODE_REGISTER, [_PICTURE_MODE])
-        
+
         # Disable audio sync
         self.i2c.write_i2c_block_data(self.address, _AUDIOSYNC_REGISTER, [0])
 
         self._bank(1)
         self.i2c.write_i2c_block_data(self.address, 0, [255] * 17)
-        
+
         # Switch to bank 0 ( frame 0 )
         self._bank(0)
-        
+
         # Enable all LEDs
         self.i2c.write_i2c_block_data(self.address, 0, [255] * 17)
 
-    def reset(self):
-        self.sleep(True)
-        time.sleep(0.00001)
-        self.sleep(False)
+    def scroll(self, x=0, y=0):
+        """Offset the buffer by x/y pixels
 
-    def sleep(self, value):
-        return self._register(_CONFIG_BANK, _SHUTDOWN_REGISTER, not value)
+        Scroll pHAT HD displays an 17x7 pixel window into the bufer,
+        which starts at the left offset and wraps around.
 
-    def frame(self, frame=None, show=True):
-        if frame is None:
-            return self._frame
+        The x and y values are added to the internal scroll offset.
 
-        if not 0 <= frame <= 8:
-            raise ValueError("Frame out of range: 0-8")
+        If called with no arguments, a horizontal right to left scroll is used.
 
-        self._frame = frame
-        if show:
-            self._register(_CONFIG_BANK, _FRAME_REGISTER, frame);
+        :param x: Amount to scroll on x-axis
+        :param y: Amount to scroll on y-axis
 
-    def fill(self, brightness):
-        for x in range(self.width):
-            for y in range(self.height):
-                self.pixel(x, y,  brightness)
+        """
 
-        self.show()
+        if x == 0 and y == 0:
+            x = -1
 
-    def _pixel_addr(self, x, y):
-        return x + y * 16
-        
-    def pixel(self, x, y, brightness):
+        self._scroll[0] += x
+        self._scroll[1] += y
+
+    def scroll_to(self, x=0, y=0):
+        """Scroll the buffer to a specific location.
+
+        Scroll pHAT HD displays a 17x7 pixel window into the buffer,
+        which starts at the left offset and wraps around.
+
+        The x and y values set the internal scroll offset.
+
+        If called with no arguments, the scroll offset is reset to 0,0
+
+        :param x: Position to scroll to on x-axis
+        :param y: Position to scroll to on y-axis
+
+        """
+
+        self._scroll = [x,y]
+
+    def rotate(self, degrees=0):
+        """Rotate the buffer 0, 90, 180 or 270 degrees before dislaying.
+
+
+        :param degrees: Amount to rotate- will snap to the nearest 90 degrees
+
+        """
+
+        self._rotate = int(round(degrees/90.0))
+
+    def flip(self, x=False, y=False):
+        """Flip the buffer horizontally and/or vertically before displaying.
+
+        :param x: Flip horizontally left to right
+        :param y: Flip vertically up to down
+
+        """
+
+        self._flipx = x
+        self._flipy = y
+
+    def clear(self):
+        """Clear the buffer
+
+        You must call `show` after clearing the buffer to update the display.
+
+        """
+
+        del self.buf
+        self.buf = numpy.zeros((self.width, self.height))
+
+    def draw_char(self, x, y, char, font=None, brightness=1.0):
+        """Draw a single character to the buffer.
+
+        :param o_x: Offset x - distance of the char from the left of the buffer
+        :param o_y: Offset y - distance of the char from the top of the buffer
+        :param char: Char to display- either an integer ordinal or a single letter
+        :param font: Font to use, default is to use one specified with `set_font`
+        :param brightness: Brightness of the pixels that compromise the char, from 0.0 to 1.0
+
+        """
+
+        if font is None:
+            if self._font is not None:
+                font = self._font
+            else:
+                return (x, y)
+
+        if type(char) is not int:
+            char = ord(char)
+
+        if char not in font.data:
+            return (x, y)
+
+        char = font.data[char]
+
+        for px in range(len(char[0])):
+            for py in range(len(char)):
+                self.set_pixel(x + px, y + py, (char[py][px] / 255.0) * brightness)
+
+        return (x + px, y + font.height)
+
+    def write_string(self, string, x=0, y=0, font=None, letter_spacing=1, brightness=1.0):
+        """Write a string to the buffer. Calls draw_char for each character.
+
+        :param string: The string to display
+        :param x: Offset x - distance of the string from the left of the buffer
+        :param y: Offset y - distance of the string from the top of the buffer
+        :param font: Font to use, default is to use the one specified with `set_font`
+        :param brightness: Brightness of the pixels that compromise the text, from 0.0 to 1.0
+
+        """
+
+        o_x = x
+
+        for char in string:
+            x, n = self.draw_char(x, y, char, font=font, brightness=brightness)
+            x += 1 + letter_spacing
+
+        return x - o_x
+
+    def fill(self, brightness, x=0, y=0, width=0, height=0):
+        """Fill an area of the display.
+
+        :param brightness: Brightness of pixels
+        :param x: Offset x - distance of the area from the left of the buffer
+        :param y: Offset y - distance of the area from the top of the buffer
+        :param width: Width of the area (default is 17)
+        :param height: Height of the area (default is 7)
+
+        """
+
+        if width == 0:
+            width = self.width
+
+        if height == 0:
+            height = self.height
+
+        for px in range(self.width):
+            for py in range(self.height):
+                self.set_pixel(x+px, y+py,  brightness)
+
+    def set_pixel(self, x, y, brightness):
+        """Set a single pixel in the buffer.
+
+        :param x: Position of pixel from left of buffer
+        :param y: Position of pixel from top of buffer
+        :param brightness: Intensity of the pixel, from 0.0 to 1.0 or 0 to 255.
+
+        """
+
+        brightness = int(255 * brightness)
+
+        if brightness > 255 or brightness < 0:
+            raise ValueError("Value {} out of range. Brightness should be between 0 and 1".format(brightness))
+
+
         try:
             self.buf[x][y] = brightness
-        
+
         except IndexError:
             if y >= self.buf.shape[1]:
                 self.buf = numpy.pad(self.buf, ((0,0),(0,y - self.buf.shape[1] + 1)), mode='constant')
-                
+
             if x >= self.buf.shape[0]:
                 self.buf = numpy.pad(self.buf, ((0,x - self.buf.shape[0] + 1),(0,0)), mode='constant')
-                
+
             self.buf[x][y] = brightness
-        
+
     def show(self):
-        next_frame = 0 if self.frame == 1 else 0
+        """Show the buffer contents on the display.
+
+        The buffer is copied, then  scrolling, rotation and flip y/x
+        transforms applied before taking a 17x7 slice and displaying.
+
+        """
+
+        next_frame = 0 if self._current_frame == 1 else 0
 
         display_buffer = numpy.copy(self.buf)
-        
+
         for axis in [0,1]:
             if not self._scroll[axis] == 0:
-                display_buffer = numpy.roll(display_buffer, self._scroll[axis], axis=axis)
-                
-        if self._rotate:
-            display_buffer = numpy.rot90(display_buffer, self._rotate)
-            
-        if self._flipy:
-            display_buffer = numpy.flipud(display_buffer)
-            
-        if self._flipx:
-            display_buffer = numpy.fliplr(display_buffer)
-            
+                display_buffer = numpy.roll(display_buffer, -self._scroll[axis], axis=axis)
+
         # Chop a width * height window out of the display buffer
         display_buffer = display_buffer[:self.width, :self.height]
-        
-        #if self.height > display_buffer.shape[1]:
-        #    display_buffer = numpy.pad(display_buffer, ((0,0),(0,self.height - display_buffer.shape[1] + 1)), mode='constant')
-            
-        #if self.width > display_buffer.shape[0]:
-        #    display_buffer = numpy.pad(display_buffer, ((0,self.width - display_buffer.shape[0] + 1),(0,0)), mode='constant')
-        
+
+        if self._rotate:
+            display_buffer = numpy.rot90(display_buffer, self._rotate)
+
+        if self._flipy:
+            display_buffer = numpy.flipud(display_buffer)
+
+        if self._flipx:
+            display_buffer = numpy.fliplr(display_buffer)
+
         output = [0 for x in range(144)]
-        
+
         for x in range(self.width):
             for y in range(self.height):
                 idx = self._pixel_addr(x, 6-y)
-                
+
                 try:
                     output[idx] = int(display_buffer[x][y])
-                    
+
                 except IndexError:
                     output[idx] = 0
 
@@ -213,14 +279,57 @@ class Matrix:
             self.i2c.write_i2c_block_data(self.address, _COLOR_OFFSET + offset, chunk)
             offset += 32
 
-        self.frame(next_frame)
-        
+        self._frame(next_frame)
+
         del display_buffer
-        
+
+    def _reset(self):
+        self._sleep(True)
+        time.sleep(0.00001)
+        self._sleep(False)
+
+    def _sleep(self, value):
+        return self._register(_CONFIG_BANK, _SHUTDOWN_REGISTER, not value)
+
+    def _frame(self, frame=None, show=True):
+        if frame is None:
+            return self._current_frame
+
+        if not 0 <= frame <= 8:
+            raise ValueError("Frame out of range: 0-8")
+
+        self._current_frame = frame
+
+        if show:
+            self._register(_CONFIG_BANK, _FRAME_REGISTER, frame);
+
+    def _bank(self, bank=None):
+        """Switch display driver memory bank"""
+
+        if bank is None:
+            return self.i2c.readfrom_mem(self.address, _BANK_ADDRESS, 1)[0]
+
+        self.i2c.write_i2c_block_data(self.address, _BANK_ADDRESS, [bank])
+
+    def _register(self, bank, register, value=None):
+        """Write display driver register"""
+
+        self._bank(bank)
+
+        if value is None:
+            return self.i2c.readfrom_mem(self.address, register, 1)[0]
+
+        #print "reg", value
+
+        self.i2c.write_i2c_block_data(self.address, register, [value])
+
     def _chunk(self, l, n):
-        for i in xrange(0, len(l), n):
+        for i in range(0, len(l)+1, n):
             yield l[i:i + n]
-                
+
+    def _pixel_addr(self, x, y):
+        return x + y * 16
+
 
 class ScrollPhatHD(Matrix):
     width = 17
