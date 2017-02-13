@@ -31,7 +31,7 @@ Set A Single Pixel In Buffer
 
 Scroll pHAT HD uses white LEDs which can be brightness controlled.
 
-When you set a pixel it will not immediately display on Scroll pHAT HD, you must call :python:`scrollphat.show()`.
+When you set a pixel it will not immediately display on Scroll pHAT HD, you must call :python:`scrollphathd.show()`.
 
 .. automethod:: scrollphathd.is31fl3731.Matrix.set_pixel
    :noindex:
@@ -46,7 +46,7 @@ Display Buffer
 --------------
 
 All of your changes to Scroll pHAT HD are stored in a Python buffer. To display them
-on Scroll pHAT HD you must call :python:`scrollphat.update()`.
+on Scroll pHAT HD you must call :python:`scrollphthd.update()`.
 
 .. automethod:: scrollphathd.is31fl3731.Matrix.show
    :noindex:
