@@ -24,6 +24,7 @@ flip = display.flip
 draw_char = display.draw_char
 write_string = display.write_string
 clear = display.clear
+set_graph = display.set_graph
 
 def _exit():
     display.clear()

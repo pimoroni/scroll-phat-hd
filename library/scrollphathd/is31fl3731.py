@@ -204,6 +204,35 @@ class Matrix:
             for py in range(self.height):
                 self.set_pixel(x+px, y+py,  brightness)
 
+    def set_graph(self, values, low=None, high=None, brightness=1.0, x=0, y=0, width=None, height=None):
+        if width is None:
+            width = self.width
+
+        if height is None:
+            height = self.height
+
+        if low is None:
+            low = min(values)
+
+        if high is None:
+            high = max(values)
+
+        span = high - low
+
+        for p_x, value in enumerate(values):
+            value -= low
+            value /= float(span)
+            value *= height * 10.0
+
+            value = min(value, height * 10)
+            value = max(value, 0)
+
+            for p_y in range(height):
+                self.set_pixel(x+p_x, y+(height-p_y), brightness if value > 10 else (value / 10.0) * brightness)
+                value -= 10
+                if value < 0:
+                    value = 0
+
     def set_pixel(self, x, y, brightness):
         """Set a single pixel in the buffer.
 
@@ -213,11 +242,10 @@ class Matrix:
 
         """
 
-        brightness = int(255 * brightness)
+        brightness = int(255.0 * brightness)
 
         if brightness > 255 or brightness < 0:
             raise ValueError("Value {} out of range. Brightness should be between 0 and 1".format(brightness))
-
 
         try:
             self.buf[x][y] = brightness
