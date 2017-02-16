@@ -5,6 +5,17 @@ import random
 
 import scrollphathd
 
+print("""
+Scroll pHAT HD: Graph
+
+Displays a graph with random values.
+
+Press Ctrl+C to exit!
+
+""")
+
+
+
 scrollphathd.rotate(180)
 
 values = []

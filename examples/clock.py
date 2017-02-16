@@ -6,6 +6,16 @@ import signal
 import scrollphathd
 from scrollphathd.fonts import font5x5
 
+print("""
+Scroll pHAT HD: Clock
+
+Displays hours and minutes in text,
+plus a seconds progress bar.
+
+Press Ctrl+C to exit!
+
+""")
+
 BRIGHTNESS = 0.5
 
 scrollphathd.rotate(180)
@@ -25,8 +35,12 @@ while True:
         if bar_sec < 0:
             bar_sec = 0
 
-    str_time = time.strftime("%H:%M")
+    str_time = time.strftime("%H:%M") 
     scrollphathd.write_string(str_time, x=0, y=0, font=font5x5, brightness=0.5)
+
+    if int(time.time()) % 2 == 0:
+        scrollphathd.clear_rect(8,0,1,5)
+
     scrollphathd.show()
     time.sleep(0.1)
 

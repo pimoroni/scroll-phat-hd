@@ -4,7 +4,8 @@ import time
 
 import scrollphathd
 
-print("""Advanced Scrolling
+print("""
+Scroll pHAT HD: Advanced Scrolling
 
 Advanced scrolling example which displays a message line-by-line
 and then skips back to the beginning.

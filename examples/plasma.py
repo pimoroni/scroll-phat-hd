@@ -5,6 +5,15 @@ import math
 
 import scrollphathd
 
+print("""
+Scroll pHAT HD: Plasma
+
+Displays a basic demo-scene style pattern.
+
+Press Ctrl+C to exit!
+
+""")
+
 i = 0
 
 while True:

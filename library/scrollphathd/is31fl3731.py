@@ -200,9 +200,21 @@ class Matrix:
         if height == 0:
             height = self.height
 
-        for px in range(self.width):
-            for py in range(self.height):
+        for px in range(width):
+            for py in range(height):
                 self.set_pixel(x+px, y+py,  brightness)
+
+    def clear_rect(self, x, y, width, height):
+        """Clear a rectangle.
+
+        :param x: Offset x - distance of the area from the left of the buffer
+        :param y: Offset y - distance of the area from the top of the buffer
+        :param width: Width of the area (default is 17)
+        :param height: Height of the area (default is 7)
+
+        """
+
+        self.fill(0, x, y, width, height)
 
     def set_graph(self, values, low=None, high=None, brightness=1.0, x=0, y=0, width=None, height=None):
         if width is None:

@@ -16,6 +16,7 @@ set_pixel = display.set_pixel
 show = display.show
 scroll = display.scroll
 fill = display.fill
+clear_rect = display.clear_rect
 width = display.width
 height = display.height
 scroll_to = display.scroll_to

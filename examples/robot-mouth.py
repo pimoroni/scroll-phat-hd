@@ -5,6 +5,15 @@ from PIL import Image
 
 import scrollphathd
 
+print("""
+Scroll pHAT HD: Robot Mouth
+
+Loads mouth.bmp and scrolls it across the screen.
+
+Press Ctrl+C to exit!
+
+""")
+
 IMAGE_BRIGHTNESS = 0.5
 
 img = Image.open("mouth.bmp")
