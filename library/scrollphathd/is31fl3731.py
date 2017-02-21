@@ -217,6 +217,19 @@ class Matrix:
         self.fill(0, x, y, width, height)
 
     def set_graph(self, values, low=None, high=None, brightness=1.0, x=0, y=0, width=None, height=None):
+        """Plot a series of values into the display buffer.
+
+        :param values: A list of numerical values to display
+        :param low: The lowest possible value (default min(values))
+        :param high:  The highest possible value (default max(values))
+        :param brightness:  Maximum graph brightness (from 0.0 to 1.0)
+        :param x: x position of graph in display buffer (default 0)
+        :param y: y position of graph in display buffer (default 0)
+        :param width: width of graph in display buffer (default 17)
+        :param height: height of graph in display buffer (default 7)
+        :return: None
+
+        """
         if width is None:
             width = self.width
 
@@ -231,19 +244,24 @@ class Matrix:
 
         span = high - low
 
-        for p_x, value in enumerate(values):
-            value -= low
-            value /= float(span)
-            value *= height * 10.0
+        for p_x in range(width):
+            try:
+                value = values[p_x]
+                value -= low
+                value /= float(span)
+                value *= height * 10.0
 
-            value = min(value, height * 10)
-            value = max(value, 0)
+                value = min(value, height * 10)
+                value = max(value, 0)
 
-            for p_y in range(height):
-                self.set_pixel(x+p_x, y+(height-p_y), brightness if value > 10 else (value / 10.0) * brightness)
-                value -= 10
-                if value < 0:
-                    value = 0
+                for p_y in range(height):
+                    self.set_pixel(x+p_x, y+(height-p_y), brightness if value > 10 else (value / 10.0) * brightness)
+                    value -= 10
+                    if value < 0:
+                        value = 0
+
+            except KeyError:
+                return
 
     def set_pixel(self, x, y, brightness):
         """Set a single pixel in the buffer.
