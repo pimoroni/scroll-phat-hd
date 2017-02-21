@@ -49,7 +49,7 @@ setup(
     url             = 'http://www.pimoroni.com',
     classifiers     = classifiers,
     py_modules      = [],
-    packages        = ['scrollphathd'],
+    packages        = ['scrollphathd','scrollphathd.fonts'],
     include_package_data = True,
     install_requires= []
 )
