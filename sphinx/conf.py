@@ -13,9 +13,9 @@ PACKAGE_MODULE = "scrollphathd"
 
 import sphinx_rtd_theme
 
-MOCK_MODULES = ['smbus']
+MOCK_MODULES = ['smbus','numpy']
 for module_name in MOCK_MODULES:
-    sys.modules[module_name] = mock.Mock()
+    sys.modules[module_name] = mock.MagicMock()
 
 sys.path.insert(0, '../library/')
 
