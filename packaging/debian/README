@@ -2,7 +2,7 @@ README
 
 Scroll pHAT HD provides a matrix of 119, brightness controlled, white LED pixels. It's ideal for writing messages, showing graphs, and drawing pictures. Perfect for RPi Zero but works with A+/B+/2 too!
 
-Learn more: https://shop.pimoroni.com/products/scroll-phat-d
+Learn more: https://shop.pimoroni.com/products/scroll-phat-hd
 For examples run: `curl -sS get.pimoroni.com/scrollphathd | bash`
 
 IMPORTANT
