@@ -42,6 +42,30 @@ Write A Text String
 .. automethod:: scrollphathd.is31fl3731.Matrix.write_string
    :noindex:
 
+Draw A Single Char
+------------------
+
+.. automethod:: scrollphathd.is31fl3731.Matrix.draw_char
+   :noindex:
+
+Display A Graph
+---------------
+
+.. automethod:: scrollphathd.is31fl3731.Matrix.set_graph
+   :noindex:
+
+Fill An Area
+------------
+
+.. automethod:: scrollphathd.is31fl3731.Matrix.fill
+   :noindex:
+
+Clear An Area
+-------------
+
+.. automethod:: scrollphathd.is31fl3731.Matrix.clear_rect
+   :noindex:
+
 Display Buffer
 --------------
 
@@ -74,3 +98,10 @@ Rotate The Display
 
 .. automethod:: scrollphathd.is31fl3731.Matrix.rotate
    :noindex:
+
+Flip The Display
+----------------
+
+.. automethod:: scrollphathd.is31fl3731.Matrix.flip
+   :noindex:
+
