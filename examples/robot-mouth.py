@@ -1,9 +1,14 @@
 #!/usr/bin/env python
 
 import time
-from PIL import Image
+
+try:
+    from PIL import Image
+except ImportError:
+    exit("This script requires the pillow module\nInstall with: sudo pip install pillow")
 
 import scrollphathd
+
 
 print("""
 Scroll pHAT HD: Robot Mouth

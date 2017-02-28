@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-Copyright (c) 2015 Pimoroni
+Copyright (c) 2017 Pimoroni
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -51,5 +51,5 @@ setup(
     py_modules      = [],
     packages        = ['scrollphathd','scrollphathd.fonts'],
     include_package_data = True,
-    install_requires= []
+    install_requires= [ 'numpy' ]
 )

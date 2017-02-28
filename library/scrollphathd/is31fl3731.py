@@ -1,6 +1,11 @@
 import math
 import time
-import numpy
+
+try:
+    import numpy
+except ImportError:
+    exit("This library requires the numpy module\nInstall with: sudo pip install numpy")
+
 
 from .fonts import font5x7
 

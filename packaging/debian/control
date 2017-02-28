@@ -11,7 +11,7 @@ X-Python3-Version: >= 3.4
 Package: python-scrollphathd
 Architecture: all
 Section: python
-Depends: ${misc:Depends}, ${python:Depends}, python-smbus
+Depends: ${misc:Depends}, ${python:Depends}, python-smbus, python-numpy
 Suggests: i2c-tools, python-psutil
 Description: python library designed to control Scroll pHAT HD.
  Scroll pHAT HD provides a matrix of 119, brightness controlled, white LED pixels.
@@ -22,7 +22,7 @@ Description: python library designed to control Scroll pHAT HD.
 Package: python3-scrollphathd
 Architecture: all
 Section: python
-Depends: ${misc:Depends}, ${python3:Depends}, python3-smbus
+Depends: ${misc:Depends}, ${python3:Depends}, python3-smbus, python3-numpy
 Suggests: i2c-tools, python3-psutil
 Description: python library designed to control Scroll pHAT HD.
  Scroll pHAT HD provides a matrix of 119, brightness controlled, white LED pixels.

@@ -1,12 +1,12 @@
 README
 
-Scroll pHAT HD provides a matrix of 119, brightness controlled, white LED pixels. It's ideal for writing messages, showing graphs, and drawing pictures. Perfect for RPi Zero but works with A+/B+/2 too!
+Scroll pHAT HD provides a matrix of 119, brightness controlled, white LED pixels. It's ideal for writing messages, showing graphs, and drawing pictures.
 
 Learn more: https://shop.pimoroni.com/products/scroll-phat-hd
 For examples run: `curl -sS get.pimoroni.com/scrollphathd | bash`
 
 IMPORTANT
 
-Scroll pHAT requires i2c.
+Scroll pHAT HD requires i2c.
 To enable run `curl get.pimoroni.com/i2c | bash`
 or use raspi-config and reboot your Raspberry Pi.
