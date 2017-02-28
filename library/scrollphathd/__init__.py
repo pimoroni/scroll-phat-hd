@@ -1,4 +1,5 @@
 import atexit
+from sys import exit
 
 try:
     import smbus
