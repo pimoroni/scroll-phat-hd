@@ -22,25 +22,11 @@ If you choose to download examples you'll find them in `/home/pi/Pimoroni/scroll
 
 **Library install for Python 3:**
 
-on Raspbian:
-
-```bash
-sudo apt-get install python3-scrollphathd
-```
-other environments: 
-
 ```bash
 sudo pip3 install scrollphathd
 ```
 
 **Library install for Python 2:**
-
-on Raspbian:
-
-```bash
-sudo apt-get install python-scrollphathd
-```
-other environments: 
 
 ```bash
 sudo pip2 install scrollphathd
@@ -54,4 +40,3 @@ In all cases you will have to enable the i2c bus.
 * Function reference - http://docs.pimoroni.com/scrollphathd/
 * GPIO Pinout - https://pinout.xyz/pinout/scroll_phat_hd
 * Get help - http://forums.pimoroni.com/c/support
-
