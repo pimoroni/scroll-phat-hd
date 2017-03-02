@@ -135,6 +135,8 @@ class Matrix:
 
         """
 
+        self._current_frame = 0
+        self._scroll = [0,0]
         del self.buf
         self.buf = numpy.zeros((self.width, self.height))
 
