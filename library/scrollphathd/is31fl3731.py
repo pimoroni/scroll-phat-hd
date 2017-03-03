@@ -135,8 +135,9 @@ class Matrix:
 
         """
 
+        shape = self.buf.shape
         del self.buf
-        self.buf = numpy.zeros((self.width, self.height))
+        self.buf = numpy.zeros(shape)
 
     def draw_char(self, x, y, char, font=None, brightness=1.0):
         """Draw a single character to the buffer.
