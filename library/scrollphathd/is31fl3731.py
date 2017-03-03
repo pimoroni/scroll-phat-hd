@@ -329,7 +329,7 @@ class Matrix:
 
         for x in range(self.width):
             for y in range(self.height):
-                idx = self._pixel_addr(x, 6-y)
+                idx = self._pixel_addr(x, (self.height-1)-y)
 
                 try:
                     output[idx] = int(display_buffer[x][y])
