@@ -115,7 +115,14 @@ class Matrix:
 
         """
 
-        self._rotate = int(round(degrees/90.0))
+        # Check whether the rotation will change the aspect ratio of the display.
+        new_rotate = int(round(degrees/90.0))
+        if new_rotate % 2 != self._rotate % 2:
+            # If aspect changed, also rotate the buffer. Rotate in opposite
+            # directions depending on direction of transition to ensure
+            # buffer orientation is always consistent.
+            self.buf = numpy.rot90(self.buf, 1 if self._rotate % 2 else -1)
+        self._rotate = new_rotate
 
     def flip(self, x=False, y=False):
         """Flip the buffer horizontally and/or vertically before displaying.
