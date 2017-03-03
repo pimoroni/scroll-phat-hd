@@ -311,11 +311,13 @@ class Matrix:
             if not self._scroll[axis] == 0:
                 display_buffer = numpy.roll(display_buffer, -self._scroll[axis], axis=axis)
 
-        # Chop a width * height window out of the display buffer
-        display_buffer = display_buffer[:self.width, :self.height]
-
         if self._rotate:
             display_buffer = numpy.rot90(display_buffer, self._rotate)
+
+        # Chop a width * height window out of the display buffer
+        # This must be done after rotating, as the clip region will
+        # be the wrong shape if it is subsequently rotated 90 degrees.
+        display_buffer = display_buffer[:self.width, :self.height]
 
         if self._flipy:
             display_buffer = numpy.flipud(display_buffer)
