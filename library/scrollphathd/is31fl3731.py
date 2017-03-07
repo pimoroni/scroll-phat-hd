@@ -266,7 +266,7 @@ class Matrix:
                     if value < 0:
                         value = 0
 
-            except KeyError:
+            except IndexError:
                 return
 
     def set_brightness(self, brightness):
