@@ -37,7 +37,7 @@ class Matrix:
     height = 7
 
     def __init__(self, i2c, address=0x74):
-        self.buf = numpy.zeros((self.width, self.height))
+        self.buf = numpy.zeros((max(self.width, self.height), max(self.width, self.height)))
         self.i2c = i2c
         self.address = address
         self._reset()
@@ -136,7 +136,7 @@ class Matrix:
         """
 
         del self.buf
-        self.buf = numpy.zeros((self.width, self.height))
+        self.buf = numpy.zeros((max(self.width, self.height), max(self.width, self.height)))
 
     def draw_char(self, x, y, char, font=None, brightness=1.0):
         """Draw a single character to the buffer.
@@ -311,7 +311,10 @@ class Matrix:
                 display_buffer = numpy.roll(display_buffer, -self._scroll[axis], axis=axis)
 
         # Chop a width * height window out of the display buffer
-        display_buffer = display_buffer[:self.width, :self.height]
+        if self._rotate%2:
+            display_buffer = display_buffer[:self.height, :self.width]
+        else:
+            display_buffer = display_buffer[:self.width, :self.height]
 
         if self._rotate:
             display_buffer = numpy.rot90(display_buffer, self._rotate)
