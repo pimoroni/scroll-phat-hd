@@ -34,7 +34,7 @@ _COLOR_OFFSET = 0x24
 
 class Matrix:
     width = 17
-    height = 7
+    height = 17
 
     def __init__(self, i2c, address=0x74):
         self.buf = numpy.zeros((self.width, self.height))
@@ -311,7 +311,10 @@ class Matrix:
                 display_buffer = numpy.roll(display_buffer, -self._scroll[axis], axis=axis)
 
         # Chop a width * height window out of the display buffer
-        display_buffer = display_buffer[:self.width, :self.height]
+        if self._rotate%2:
+            display_buffer = display_buffer[:self.height, :self.width]
+        else:
+            display_buffer = display_buffer[:self.width, :self.height]
 
         if self._rotate:
             display_buffer = numpy.rot90(display_buffer, self._rotate)
