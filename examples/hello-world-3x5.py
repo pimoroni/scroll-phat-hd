@@ -16,12 +16,16 @@ Press Ctrl+C to exit!
 
 """)
 
-scrollphathd.rotate(180)
+#Uncomment to rotate the text
+#scrollphathd.rotate(180)
+
+#Set a more eye-friendly default brightness
+scrollphathd.set_brightness(0.1)
 
 scrollphathd.write_string("Hello World! ", x=0, y=1, font=font3x5, brightness=0.5)
 
 while True:
     scrollphathd.show()
-    scrollphathd.scroll(1)
+    scrollphathd.scroll()
     time.sleep(0.05)
 

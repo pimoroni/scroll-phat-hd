@@ -13,7 +13,8 @@ and then skips back to the beginning.
 Press Ctrl+C to exit.
 """)
 
-scrollphathd.rotate(180)
+#uncomment to rotate
+#scrollphathd.rotate(180)
 
 rewind = True
 delay = 0.03
