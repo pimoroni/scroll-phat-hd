@@ -48,6 +48,7 @@ class Matrix:
         self._rotate = 0 # Increments of 90 degrees
         self._flipx = False
         self._flipy = False
+        self._brightness = 1.0
 
         # Display initialization
 
@@ -85,7 +86,7 @@ class Matrix:
         """
 
         if x == 0 and y == 0:
-            x = -1
+            x = 1
 
         self._scroll[0] += x
         self._scroll[1] += y
@@ -268,6 +269,15 @@ class Matrix:
             except KeyError:
                 return
 
+    def set_brightness(self, brightness):
+        """Set a global brightness value.
+
+        :param brightness: Brightness value from 0.0 to 1.0
+
+        """
+
+        self._brightness = brightness
+
     def set_pixel(self, x, y, brightness):
         """Set a single pixel in the buffer.
 
@@ -329,7 +339,7 @@ class Matrix:
                 idx = self._pixel_addr(x, 6-y)
 
                 try:
-                    output[idx] = int(display_buffer[x][y])
+                    output[idx] = int(display_buffer[x][y] * self._brightness)
 
                 except IndexError:
                     output[idx] = 0

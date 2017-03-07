@@ -1,5 +1,5 @@
 import atexit
-from sys import exit
+from sys import exit, version_info
 
 try:
     import smbus
@@ -21,6 +21,7 @@ DISPLAY_WIDTH = 17
 
 pixel = display.set_pixel
 set_pixel = display.set_pixel
+set_brightness = display.set_brightness
 show = display.show
 scroll = display.scroll
 fill = display.fill
