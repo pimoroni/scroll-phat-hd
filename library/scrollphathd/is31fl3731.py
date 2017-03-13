@@ -37,7 +37,7 @@ class Matrix:
     height = 7
 
     def __init__(self, i2c, address=0x74):
-        self.buf = numpy.zeros((max(self.width, self.height), max(self.width, self.height)))
+        self.buf = numpy.zeros((self.width, self.height))
         self.i2c = i2c
         self.address = address
         self._reset()
@@ -137,7 +137,7 @@ class Matrix:
         """
 
         del self.buf
-        self.buf = numpy.zeros((max(self.width, self.height), max(self.width, self.height)))
+        self.buf = numpy.zeros((self.width, self.height))
 
     def draw_char(self, x, y, char, font=None, brightness=1.0):
         """Draw a single character to the buffer.
