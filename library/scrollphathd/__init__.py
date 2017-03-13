@@ -11,7 +11,7 @@ except ImportError:
 
 from . import is31fl3731
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 i2c = smbus.SMBus(1)
 display = is31fl3731.ScrollPhatHD(i2c)
