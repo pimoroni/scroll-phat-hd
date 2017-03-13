@@ -15,21 +15,20 @@ Press Ctrl+C to exit!
 
 """)
 
-BRIGHTNESS = 0.5
-
+scrollphathd.set_brightness(0.1)
 scrollphathd.rotate(270)
 
 while True:
     scrollphathd.clear()
 
     str_time = time.strftime("%H") 
-    scrollphathd.write_string(str_time, x=0, y=0, font=font5x5, brightness=0.5)
+    scrollphathd.write_string(str_time, x=0, y=0, font=font5x5)
 
     str_time = time.strftime("%M")
-    scrollphathd.write_string(str_time, x=0, y=6, font=font5x5, brightness=0.5)
+    scrollphathd.write_string(str_time, x=0, y=6, font=font5x5)
 
     str_time = time.strftime("%S")
-    scrollphathd.write_string(str_time, x=0, y=12, font=font5x5, brightness=0.5)
+    scrollphathd.write_string(str_time, x=0, y=12, font=font5x5)
 
     scrollphathd.show()
     time.sleep(0.1)
