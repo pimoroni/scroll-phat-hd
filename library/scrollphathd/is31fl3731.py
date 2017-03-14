@@ -328,14 +328,14 @@ class Matrix:
         else:
             display_buffer = display_buffer[:self.width, :self.height]
 
-        if self._rotate:
-            display_buffer = numpy.rot90(display_buffer, self._rotate)
-
-        if self._flipy:
+        if self._flipx:
             display_buffer = numpy.flipud(display_buffer)
 
-        if self._flipx:
+        if self._flipy:
             display_buffer = numpy.fliplr(display_buffer)
+
+        if self._rotate:
+            display_buffer = numpy.rot90(display_buffer, self._rotate)
 
         output = [0 for x in range(144)]
 
