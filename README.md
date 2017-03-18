@@ -48,7 +48,7 @@ sudo pip2 install scrollphathd
 
 In all cases you will have to enable the i2c bus.
 
-##Documentation & Support
+## Documentation & Support
 
 * Getting started - https://learn.pimoroni.com/tutorial/sandyj/soldering-phats
 * Function reference - http://docs.pimoroni.com/scrollphathd/
