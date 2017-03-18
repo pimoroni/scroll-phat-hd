@@ -38,7 +38,7 @@ sudo pip3 install scrollphathd
 on Raspbian:
 
 ```bash
-sudo apt-get install python-scrollphat
+sudo apt-get install python-scrollphathd
 ```
 other environments: 
 
