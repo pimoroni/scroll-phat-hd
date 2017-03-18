@@ -4,7 +4,7 @@
 
 https://shop.pimoroni.com/products/scroll-phat-hd
 
-##Installing
+## Installing
 
 **Full install ( recommended ):**
 
@@ -22,11 +22,25 @@ If you choose to download examples you'll find them in `/home/pi/Pimoroni/scroll
 
 **Library install for Python 3:**
 
+on Raspbian:
+
+```bash
+sudo apt-get install python3-scrollphathd
+```
+other environments: 
+
 ```bash
 sudo pip3 install scrollphathd
 ```
 
 **Library install for Python 2:**
+
+on Raspbian:
+
+```bash
+sudo apt-get install python-scrollphat
+```
+other environments: 
 
 ```bash
 sudo pip2 install scrollphathd
