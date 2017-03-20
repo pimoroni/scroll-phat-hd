@@ -36,7 +36,7 @@ while True:
             bar_sec = 0
 
     str_time = time.strftime("%H:%M") 
-    scrollphathd.write_string(str_time, x=0, y=0, font=font5x5, brightness=0.5)
+    scrollphathd.write_string(str_time, x=0, y=0, font=font5x5, brightness=BRIGHTNESS)
 
     if int(time.time()) % 2 == 0:
         scrollphathd.clear_rect(8,0,1,5)
