@@ -116,7 +116,14 @@ class Matrix:
 
         """
 
-        self._rotate = int(round(degrees/90.0))
+        # Check whether the rotation will change the aspect ratio of the display.
+        new_rotate = int(round(degrees/90.0))
+        if new_rotate % 2 != self._rotate % 2:
+            # If aspect changed, also rotate the buffer. Rotate in opposite
+            # directions depending on direction of transition to ensure
+            # buffer orientation is always consistent.
+            self.buf = numpy.rot90(self.buf, 1 if self._rotate % 2 else -1)
+        self._rotate = new_rotate
 
     def flip(self, x=False, y=False):
         """Flip the buffer horizontally and/or vertically before displaying.
@@ -136,8 +143,9 @@ class Matrix:
 
         """
 
+        shape = self.buf.shape
         del self.buf
-        self.buf = numpy.zeros((self.width, self.height))
+        self.buf = numpy.zeros(shape)
 
     def draw_char(self, x, y, char, font=None, brightness=1.0):
         """Draw a single character to the buffer.
@@ -320,11 +328,13 @@ class Matrix:
             if not self._scroll[axis] == 0:
                 display_buffer = numpy.roll(display_buffer, -self._scroll[axis], axis=axis)
 
-        # Chop a width * height window out of the display buffer
-        display_buffer = display_buffer[:self.width, :self.height]
-
         if self._rotate:
             display_buffer = numpy.rot90(display_buffer, self._rotate)
+
+        # Chop a width * height window out of the display buffer
+        # This must be done after rotating, as the clip region will
+        # be the wrong shape if it is subsequently rotated 90 degrees.
+        display_buffer = display_buffer[:self.width, :self.height]
 
         if self._flipy:
             display_buffer = numpy.flipud(display_buffer)
@@ -336,7 +346,7 @@ class Matrix:
 
         for x in range(self.width):
             for y in range(self.height):
-                idx = self._pixel_addr(x, 6-y)
+                idx = self._pixel_addr(x, (self.height-1)-y)
 
                 try:
                     output[idx] = int(display_buffer[x][y] * self._brightness)
