@@ -195,7 +195,7 @@ class Matrix:
 
         return x - o_x
 
-    def fill(self, brightness, x=0, y=0, width=0, height=0):
+    def fill(self, brightness, x=0, y=0, width=None, height=None):
         """Fill an area of the display.
 
         :param brightness: Brightness of pixels
@@ -206,10 +206,10 @@ class Matrix:
 
         """
 
-        if width == 0:
+        if width is None:
             width = self.width
 
-        if height == 0:
+        if height is None:
             height = self.height
 
         for px in range(width):
