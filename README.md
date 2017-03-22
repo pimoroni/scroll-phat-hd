@@ -4,7 +4,7 @@
 
 https://shop.pimoroni.com/products/scroll-phat-hd
 
-##Installing
+## Installing
 
 **Full install ( recommended ):**
 
@@ -22,11 +22,25 @@ If you choose to download examples you'll find them in `/home/pi/Pimoroni/scroll
 
 **Library install for Python 3:**
 
+on Raspbian:
+
+```bash
+sudo apt-get install python3-scrollphathd
+```
+other environments: 
+
 ```bash
 sudo pip3 install scrollphathd
 ```
 
 **Library install for Python 2:**
+
+on Raspbian:
+
+```bash
+sudo apt-get install python-scrollphathd
+```
+other environments: 
 
 ```bash
 sudo pip2 install scrollphathd
@@ -34,7 +48,7 @@ sudo pip2 install scrollphathd
 
 In all cases you will have to enable the i2c bus.
 
-##Documentation & Support
+## Documentation & Support
 
 * Getting started - https://learn.pimoroni.com/tutorial/sandyj/soldering-phats
 * Function reference - http://docs.pimoroni.com/scrollphathd/
