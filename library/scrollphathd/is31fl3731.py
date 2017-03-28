@@ -37,18 +37,17 @@ class Matrix:
     height = 7
 
     def __init__(self, i2c, address=0x74):
-        self.buf = numpy.zeros((self.width, self.height))
         self.i2c = i2c
         self.address = address
         self._reset()
 
         self._font = font5x7
-        self._current_frame = 0
-        self._scroll = [0,0]
         self._rotate = 0 # Increments of 90 degrees
         self._flipx = False
         self._flipy = False
         self._brightness = 1.0
+
+        self.clear()
 
         # Display initialization
 
@@ -136,8 +135,15 @@ class Matrix:
 
         """
 
-        del self.buf
-        self.buf = numpy.zeros((self.width, self.height))
+        self._current_frame = 0
+        self._scroll = [0,0]
+
+        try:
+            del self.buf
+        except AttributeError:
+            pass
+
+        self.buf = numpy.zeros((max(self.width, self.height), max(self.width, self.height)))
 
     def draw_char(self, x, y, char, font=None, brightness=1.0):
         """Draw a single character to the buffer.
@@ -189,7 +195,7 @@ class Matrix:
 
         return x - o_x
 
-    def fill(self, brightness, x=0, y=0, width=0, height=0):
+    def fill(self, brightness, x=0, y=0, width=None, height=None):
         """Fill an area of the display.
 
         :param brightness: Brightness of pixels
@@ -200,10 +206,10 @@ class Matrix:
 
         """
 
-        if width == 0:
+        if width is None:
             width = self.width
 
-        if height == 0:
+        if height is None:
             height = self.height
 
         for px in range(width):
@@ -321,22 +327,25 @@ class Matrix:
                 display_buffer = numpy.roll(display_buffer, -self._scroll[axis], axis=axis)
 
         # Chop a width * height window out of the display buffer
-        display_buffer = display_buffer[:self.width, :self.height]
+        if self._rotate%2:
+            display_buffer = display_buffer[:self.height, :self.width]
+        else:
+            display_buffer = display_buffer[:self.width, :self.height]
+
+        if self._flipx:
+            display_buffer = numpy.flipud(display_buffer)
+
+        if self._flipy:
+            display_buffer = numpy.fliplr(display_buffer)
 
         if self._rotate:
             display_buffer = numpy.rot90(display_buffer, self._rotate)
-
-        if self._flipy:
-            display_buffer = numpy.flipud(display_buffer)
-
-        if self._flipx:
-            display_buffer = numpy.fliplr(display_buffer)
 
         output = [0 for x in range(144)]
 
         for x in range(self.width):
             for y in range(self.height):
-                idx = self._pixel_addr(x, 6-y)
+                idx = self._pixel_addr(x, self.height-(y+1))
 
                 try:
                     output[idx] = int(display_buffer[x][y] * self._brightness)

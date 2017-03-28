@@ -1,3 +1,14 @@
+scrollphathd (0.0.2) stable; urgency=low
+
+  * New: Added set_brightness to globally set maximum display brightness
+  * Improvement: Clear now resets scroll position
+  * Bugfix: Corrected default scroll direction
+  * Bugfix: 90 and 270 degree rotations are no longer cropped to 7 pixels wide
+  * Bugfix: Fixed missing version_info
+  * Bugfix: Graph catches IndexError and gracefully ignores missing values
+
+ -- Phil Howard <phil@pimoroni.com>  Tue, 13 Mar 2017 00:00:00 +0000
+
 scrollphathd (0.0.1) stable; urgency=low
 
   * Initial release

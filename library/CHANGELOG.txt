@@ -1,3 +1,13 @@
+0.0.2
+-----
+
+* New: Added set_brightness to globally set maximum display brightness
+* Improvement: Clear now resets scroll position
+* Bugfix: Corrected default scroll direction
+* Bugfix: 90 and 270 degree rotations are no longer cropped to 7 pixels wide
+* Bugfix: Fixed missing version_info
+* Bugfix: Graph catches IndexError and gracefully ignores missing values
+
 0.0.1
 -----
 
