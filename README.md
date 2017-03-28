@@ -1,56 +1,77 @@
 ![Scroll pHAT HD](scroll-phat-hd-logo.png)
+https://shop.pimoroni.com/products/scroll-phat-hd
 
 17x7 pixels of single-colour, brightness-controlled, message scrolling goodness!
 
-https://shop.pimoroni.com/products/scroll-phat-hd
-
 ## Installing
 
-**Full install ( recommended ):**
+### Full install (recommended):
 
-We've created a super-easy installation script that will install all pre-requisites and get your Scroll pHAT HD up and running in a jiffy. To run it fire up Terminal which you'll find in Menu -> Accessories -> Terminal on your Raspberry Pi desktop like so:
+We've created an easy installation script that will install all pre-requisites and get your Scroll pHAT HD
+up and running with minimal efforts. To run it, fire up Terminal which you'll find in Menu -> Accessories -> Terminal
+on your Raspberry Pi desktop, as illustrated below:
 
-![Finding the terminal](terminal.jpg)
+![Finding the terminal](http://get.pimoroni.com/resources/github-repo-terminal.png)
 
-In the new terminal window type the following and follow the instructions:
+In the new terminal window type the command exactly as it appears below (check for typos) and follow the on-screen instructions:
 
 ```bash
-curl -sS https://get.pimoroni.com/scrollphathd | bash
+curl https://get.pimoroni.com/scrollphathd | bash
 ```
+
+Alternatively, on Raspbian, you can download the `pimoroni-dashboard` and install your product by browsing to the relevant entry:
+
+```bash
+sudo apt-get install pimoroni
+```
+(you will find the Dashboard under 'Accessories' too, in the Pi menu - or just run `pimoroni-dashboard` at the command line)
 
 If you choose to download examples you'll find them in `/home/pi/Pimoroni/scrollphathd/`.
 
-**Library install for Python 3:**
+### Manual install:
+
+#### Library install for Python 3:
 
 on Raspbian:
 
 ```bash
 sudo apt-get install python3-scrollphathd
 ```
+
 other environments: 
 
 ```bash
 sudo pip3 install scrollphathd
 ```
 
-**Library install for Python 2:**
+#### Library install for Python 2:
 
 on Raspbian:
 
 ```bash
 sudo apt-get install python-scrollphathd
 ```
+
 other environments: 
 
 ```bash
 sudo pip2 install scrollphathd
 ```
 
+### Development:
+
+If you want to contribute, or like living on the edge of your seat by having the latest code, you should clone this repository, `cd` to the library directory, and run:
+
+```bash
+sudo python3 setup.py install
+```
+(or `sudo python setup.py install` whichever your primary Python environment may be)
+
 In all cases you will have to enable the i2c bus.
 
 ## Documentation & Support
 
-* Getting started - https://learn.pimoroni.com/tutorial/sandyj/soldering-phats
+* Guides and tutorials - https://learn.pimoroni.com/scroll-phat-hd
 * Function reference - http://docs.pimoroni.com/scrollphathd/
 * GPIO Pinout - https://pinout.xyz/pinout/scroll_phat_hd
 * Get help - http://forums.pimoroni.com/c/support
