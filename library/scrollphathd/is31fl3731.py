@@ -310,6 +310,9 @@ class Matrix:
 
             self.buf[x][y] = brightness
 
+    def get_buffer_shape(self):
+        return self.buf.shape
+
     def show(self):
         """Show the buffer contents on the display.
 
