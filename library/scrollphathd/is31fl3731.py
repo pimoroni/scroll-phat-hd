@@ -334,6 +334,19 @@ class Matrix:
 
         return self.buf.shape
 
+    def get_shape(self):
+        """Get the size/shape of the display.
+
+        Returns a tuple containing the width and height of the display,
+        after applying rotation.
+
+        """
+
+        if self._rotate%2:
+            return (self.height, self.width)
+        else:
+            return (self.width, self.height)
+
     def show(self):
         """Show the buffer contents on the display.
 
@@ -343,21 +356,16 @@ class Matrix:
         """
 
         next_frame = 0 if self._current_frame == 1 else 0
+        display_shape = self.get_shape()
 
-        if self._rotate%2:
-            display_buffer = self._grow_buffer(self.buf, (self.height, self.width))
-        else:
-            display_buffer = self._grow_buffer(self.buf, (self.width, self.height))
+        display_buffer = self._grow_buffer(self.buf, display_shape)
 
         for axis in [0,1]:
             if not self._scroll[axis] == 0:
                 display_buffer = numpy.roll(display_buffer, -self._scroll[axis], axis=axis)
 
         # Chop a width * height window out of the display buffer
-        if self._rotate%2:
-            display_buffer = display_buffer[:self.height, :self.width]
-        else:
-            display_buffer = display_buffer[:self.width, :self.height]
+        display_buffer = display_buffer[:display_shape[0], :display_shape[1]]
 
         if self._flipx:
             display_buffer = numpy.flipud(display_buffer)
