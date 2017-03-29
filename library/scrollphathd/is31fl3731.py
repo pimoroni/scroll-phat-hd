@@ -341,18 +341,20 @@ class Matrix:
             if not self._scroll[axis] == 0:
                 display_buffer = numpy.roll(display_buffer, -self._scroll[axis], axis=axis)
 
-        if self._rotate % 2:
-            display_buffer = numpy.rot90(display_buffer[:self.height, :self.width], self._rotate)
-
+        # Chop a width * height window out of the display buffer
+        if self._rotate%2:
+            display_buffer = display_buffer[:self.height, :self.width]
         else:
-            display_buffer = numpy.rot90(display_buffer[:self.width, :self.height], self._rotate)
-
+            display_buffer = display_buffer[:self.width, :self.height]
 
         if self._flipx:
             display_buffer = numpy.flipud(display_buffer)
 
         if self._flipy:
             display_buffer = numpy.fliplr(display_buffer)
+
+        if self._rotate:
+            display_buffer = numpy.rot90(display_buffer, self._rotate)
 
         output = [0 for x in range(144)]
 
@@ -370,6 +372,7 @@ class Matrix:
 
         offset = 0
         for chunk in self._chunk(output, 32):
+            #print(chunk)
             self.i2c.write_i2c_block_data(self.address, _COLOR_OFFSET + offset, chunk)
             offset += 32
 
