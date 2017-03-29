@@ -13,7 +13,15 @@ from . import is31fl3731
 
 __version__ = '0.0.2'
 
-i2c = smbus.SMBus(1)
+i2c = None
+
+try:
+    i2c = smbus.SMBus(1)
+except IOError as e:
+    if hasattr(e,"errno") and e.errno == 2:
+        e.strerror += "\n\nMake sure you've enabled i2c in your Raspberry Pi configuration.\n"
+    raise e
+
 display = is31fl3731.ScrollPhatHD(i2c)
 
 DISPLAY_HEIGHT = 7

@@ -39,7 +39,13 @@ class Matrix:
     def __init__(self, i2c, address=0x74):
         self.i2c = i2c
         self.address = address
-        self._reset()
+
+        try:
+            self._reset()
+        except IOError as e:
+            if hasattr(e,"errno") and e.errno == 5:
+                e.strerror += "\n\nMake sure your Scroll pHAT HD is attached, and double-check your soldering.\n"
+            raise e
 
         self._font = font5x7
         self._rotate = 0 # Increments of 90 degrees
