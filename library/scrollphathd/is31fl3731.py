@@ -75,7 +75,7 @@ class Matrix:
         # Enable all LEDs
         self.i2c.write_i2c_block_data(self.address, 0, [255] * 17)
 
-    def scroll(self, x=0, y=0):
+    def scroll(self, x=1, y=0):
         """Offset the buffer by x/y pixels
 
         Scroll pHAT HD displays an 17x7 pixel window into the bufer,
@@ -89,9 +89,6 @@ class Matrix:
         :param y: Amount to scroll on y-axis
 
         """
-
-        if x == 0 and y == 0:
-            x = 1
 
         self._scroll[0] += x
         self._scroll[1] += y
