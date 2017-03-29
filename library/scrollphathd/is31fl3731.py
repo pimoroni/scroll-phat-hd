@@ -215,6 +215,10 @@ class Matrix:
         if height is None:
             height = self.height
 
+        # if the buffer is not big enough, grow it in one operation.
+        if (x + width) > self.buf.shape[0] or (y + height) > self.buf.shape[1]:
+            self.buf = self._grow_buffer(self.buf, (x + width, y + height))
+
         for px in range(width):
             for py in range(height):
                 self.set_pixel(x+px, y+py,  brightness)
