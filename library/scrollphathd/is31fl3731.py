@@ -311,6 +311,12 @@ class Matrix:
             self.buf[x][y] = brightness
 
     def get_buffer_shape(self):
+        """Get the size/shape of the internal buffer.
+
+        Returns a tuple containing the width and height of the buffer.
+
+        """
+
         return self.buf.shape
 
     def show(self):
