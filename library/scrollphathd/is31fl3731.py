@@ -219,9 +219,8 @@ class Matrix:
         if (x + width) > self.buf.shape[0] or (y + height) > self.buf.shape[1]:
             self.buf = self._grow_buffer(self.buf, (x + width, y + height))
 
-        for px in range(width):
-            for py in range(height):
-                self.set_pixel(x+px, y+py,  brightness)
+        # fill in one operation using a slice
+        self.buf[x:x+width,y:y+height] = int(255.0 * brightness)
 
     def clear_rect(self, x, y, width, height):
         """Clear a rectangle.
