@@ -146,7 +146,7 @@ class Matrix:
         except AttributeError:
             pass
 
-        self.buf = numpy.zeros((self.width, self.height))
+        self.buf = numpy.zeros((1, 1))
 
     def draw_char(self, x, y, char, font=None, brightness=1.0):
         """Draw a single character to the buffer.
@@ -215,9 +215,12 @@ class Matrix:
         if height is None:
             height = self.height
 
-        for px in range(width):
-            for py in range(height):
-                self.set_pixel(x+px, y+py,  brightness)
+        # if the buffer is not big enough, grow it in one operation.
+        if (x + width) > self.buf.shape[0] or (y + height) > self.buf.shape[1]:
+            self.buf = self._grow_buffer(self.buf, (x + width, y + height))
+
+        # fill in one operation using a slice
+        self.buf[x:x+width,y:y+height] = int(255.0 * brightness)
 
     def clear_rect(self, x, y, width, height):
         """Clear a rectangle.
@@ -287,6 +290,20 @@ class Matrix:
 
         self._brightness = brightness
 
+    def _grow_buffer(self, buffer, newshape):
+        """Grows a copy of buffer until the new shape fits inside it.
+
+        :param buffer: Buffer to grow.
+        :param newshape: Tuple containing the minimum (x,y) size.
+
+        Returns the new buffer.
+
+        """
+        x_pad = max(0, newshape[0] - buffer.shape[0])
+        y_pad = max(0, newshape[1] - buffer.shape[1])
+
+        return numpy.pad(buffer, ((0, x_pad), (0, y_pad)), 'constant')
+
     def set_pixel(self, x, y, brightness):
         """Set a single pixel in the buffer.
 
@@ -305,12 +322,7 @@ class Matrix:
             self.buf[x][y] = brightness
 
         except IndexError:
-            if y >= self.buf.shape[1]:
-                self.buf = numpy.pad(self.buf, ((0,0),(0,y - self.buf.shape[1] + 1)), mode='constant')
-
-            if x >= self.buf.shape[0]:
-                self.buf = numpy.pad(self.buf, ((0,x - self.buf.shape[0] + 1),(0,0)), mode='constant')
-
+            self.buf = self._grow_buffer(self.buf, (x+1, y+1))
             self.buf[x][y] = brightness
 
     def get_buffer_shape(self):
@@ -322,6 +334,19 @@ class Matrix:
 
         return self.buf.shape
 
+    def get_shape(self):
+        """Get the size/shape of the display.
+
+        Returns a tuple containing the width and height of the display,
+        after applying rotation.
+
+        """
+
+        if self._rotate%2:
+            return (self.height, self.width)
+        else:
+            return (self.width, self.height)
+
     def show(self):
         """Show the buffer contents on the display.
 
@@ -331,18 +356,16 @@ class Matrix:
         """
 
         next_frame = 0 if self._current_frame == 1 else 0
+        display_shape = self.get_shape()
 
-        display_buffer = numpy.copy(self.buf)
+        display_buffer = self._grow_buffer(self.buf, display_shape)
 
         for axis in [0,1]:
             if not self._scroll[axis] == 0:
                 display_buffer = numpy.roll(display_buffer, -self._scroll[axis], axis=axis)
 
         # Chop a width * height window out of the display buffer
-        if self._rotate%2:
-            display_buffer = display_buffer[:self.height, :self.width]
-        else:
-            display_buffer = display_buffer[:self.width, :self.height]
+        display_buffer = display_buffer[:display_shape[0], :display_shape[1]]
 
         if self._flipx:
             display_buffer = numpy.flipud(display_buffer)
