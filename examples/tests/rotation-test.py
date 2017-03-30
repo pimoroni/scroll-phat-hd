@@ -4,7 +4,8 @@ import time
 
 import scrollphathd
 
-scrollphathd.set_pixel(8,4,1.0)
+scrollphathd.set_pixel(0,0,1)
+scrollphathd.set_pixel(1,1,1)
 
 try:
     while True:

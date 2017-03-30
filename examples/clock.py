@@ -18,7 +18,8 @@ Press Ctrl+C to exit!
 
 BRIGHTNESS = 0.5
 
-scrollphathd.rotate(180)
+#Uncomment to rotate
+#scrollphathd.rotate(180)
 
 while True:
     scrollphathd.clear()

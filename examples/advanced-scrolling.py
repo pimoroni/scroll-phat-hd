@@ -16,6 +16,8 @@ Press Ctrl+C to exit.
 #uncomment to rotate
 #scrollphathd.rotate(180)
 
+scrollphathd.set_brightness(0.2)
+
 rewind = True
 delay = 0.03
 
