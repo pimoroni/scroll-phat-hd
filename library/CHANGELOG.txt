@@ -7,6 +7,7 @@
 * Improvement: Clear now resets scroll position
 * Improvement: Fill now grows buffer and fills in single operations
 * Improvement: scroll(0,0) no longer enforces a default scroll
+* Improvement: width/height now private, reimplemented as read-only properties
 * Bugfix: Corrected default scroll direction
 * Bugfix: 90 and 270 degree rotations are no longer cropped to 7 pixels wide
 * Bugfix: Fixed missing version_info
