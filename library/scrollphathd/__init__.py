@@ -44,6 +44,7 @@ write_string = display.write_string
 clear = display.clear
 set_graph = display.set_graph
 get_buffer_shape = display.get_buffer_shape
+get_shape = display.get_shape
 
 def _exit():
     display.clear()
