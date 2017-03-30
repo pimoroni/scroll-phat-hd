@@ -105,6 +105,12 @@ Flip The Display
 .. automethod:: scrollphathd.is31fl3731.Matrix.flip
    :noindex:
 
+Get The Display Size
+--------------------
+
+.. automethod:: scrollphathd.is31fl3731.Matrix.get_shape
+   :noindex:
+
 Get The Buffer Size
 -------------------
 
