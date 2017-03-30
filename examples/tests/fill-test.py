@@ -1,19 +1,15 @@
 #!/usr/bin/env python
 
-import time
-
 import scrollphathd
-
-scrollphathd.set_pixel(0,0,1)
-scrollphathd.set_pixel(1,1,1)
 
 try:
     while True:
-        for x in [0,90,180,270]:
-            scrollphathd.rotate(x)
+        for x in range(18):
+            scrollphathd.fill(0.1,0,0,x,7)
             scrollphathd.show()
-            time.sleep(0.1)
-
+        for x in range(18):
+            scrollphathd.fill(0,0,0,x,7)
+            scrollphathd.show()
 except KeyboardInterrupt:
     scrollphathd.fill(0)
     scrollphathd.show()

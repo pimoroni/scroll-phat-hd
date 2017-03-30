@@ -2,7 +2,10 @@ scrollphathd (0.0.2) stable; urgency=low
 
   * New: Added set_brightness to globally set maximum display brightness
   * New: Added get_buffer_shape to return internal buffer shape
+  * New: Added get_shape to return display shape
   * Improvement: Clear now resets scroll position
+  * Improvement: Fill now grows buffer and fills in single operations
+  * Improvement: scroll(0,0) no longer enforces a default scroll
   * Bugfix: Corrected default scroll direction
   * Bugfix: 90 and 270 degree rotations are no longer cropped to 7 pixels wide
   * Bugfix: Fixed missing version_info
