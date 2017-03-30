@@ -33,8 +33,8 @@ _BLINK_OFFSET = 0x12
 _COLOR_OFFSET = 0x24
 
 class Matrix:
-    width = 17
-    height = 7
+    _width = 17
+    _height = 7
 
     def __init__(self, i2c, address=0x74):
         self.i2c = i2c
@@ -74,6 +74,14 @@ class Matrix:
 
         # Enable all LEDs
         self.i2c.write_i2c_block_data(self.address, 0, [255] * 17)
+
+    @property
+    def width(self):
+        return self._width
+
+    @property
+    def height(self):
+        return self._height
 
     def scroll(self, x=1, y=0):
         """Offset the buffer by x/y pixels
@@ -204,16 +212,16 @@ class Matrix:
         :param brightness: Brightness of pixels
         :param x: Offset x - distance of the area from the left of the buffer
         :param y: Offset y - distance of the area from the top of the buffer
-        :param width: Width of the area (default is 17)
-        :param height: Height of the area (default is 7)
+        :param width: Width of the area (default is buffer width)
+        :param height: Height of the area (default is buffer height)
 
         """
 
         if width is None:
-            width = self.width
+            width = self.buf.shape[0]
 
         if height is None:
-            height = self.height
+            height = self.buf.shape[1]
 
         # if the buffer is not big enough, grow it in one operation.
         if (x + width) > self.buf.shape[0] or (y + height) > self.buf.shape[1]:
@@ -249,10 +257,10 @@ class Matrix:
 
         """
         if width is None:
-            width = self.width
+            width = self._width
 
         if height is None:
-            height = self.height
+            height = self._height
 
         if low is None:
             low = min(values)
@@ -342,10 +350,10 @@ class Matrix:
 
         """
 
-        if self._rotate%2:
-            return (self.height, self.width)
+        if self._rotate % 2:
+            return (self._height, self._width)
         else:
-            return (self.width, self.height)
+            return (self._width, self._height)
 
     def show(self):
         """Show the buffer contents on the display.
@@ -378,9 +386,9 @@ class Matrix:
 
         output = [0 for x in range(144)]
 
-        for x in range(self.width):
-            for y in range(self.height):
-                idx = self._pixel_addr(x, self.height-(y+1))
+        for x in range(self._width):
+            for y in range(self._height):
+                idx = self._pixel_addr(x, self._height-(y+1))
 
                 try:
                     output[idx] = int(display_buffer[x][y] * self._brightness)
