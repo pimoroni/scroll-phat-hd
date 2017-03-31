@@ -33,8 +33,8 @@ scrollphathd.draw_char(x, y, char, font=None, brightness=1.0)
 ```
 
 Parameters:  
-o_x – Offset x - distance of the char from the left of the buffer  
-o_y – Offset y - distance of the char from the top of the buffer  
+x – Offset x - distance of the char from the left of the buffer  
+y – Offset y - distance of the char from the top of the buffer  
 char – Char to display- either an integer ordinal or a single letter  
 font – Font to use, default is to use one specified with set_font  
 brightness – Brightness of the pixels that compromise the char, from 0.0 to 1.0  
