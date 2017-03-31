@@ -139,7 +139,7 @@ class Matrix:
         del self.buf
         self.buf = numpy.zeros((self.width, self.height))
 
-    def draw_char(self, x, y, char, font=None, brightness=1.0):
+    def draw_char(self, x, y, char, font=None, brightness=1.0, backbrightness=0.0):
         """Draw a single character to the buffer.
 
         :param o_x: Offset x - distance of the char from the left of the buffer
@@ -147,6 +147,7 @@ class Matrix:
         :param char: Char to display- either an integer ordinal or a single letter
         :param font: Font to use, default is to use one specified with `set_font`
         :param brightness: Brightness of the pixels that compromise the char, from 0.0 to 1.0
+	:param backbrightness: Brightness of the background pixels within the bounding box of the char, from 0.0 to 1.0
 
         """
 
@@ -166,11 +167,11 @@ class Matrix:
 
         for px in range(len(char[0])):
             for py in range(len(char)):
-                self.set_pixel(x + px, y + py, (char[py][px] / 255.0) * brightness)
+                self.set_pixel(x + px, y + py, (char[py][px] / 255.0) * brightness + ((255 - char[py][px]) / 255.0) * backbrightness)
 
         return (x + px, y + font.height)
 
-    def write_string(self, string, x=0, y=0, font=None, letter_spacing=1, brightness=1.0):
+    def write_string(self, string, x=0, y=0, font=None, letter_spacing=1, brightness=1.0, backbrightness=0.0):
         """Write a string to the buffer. Calls draw_char for each character.
 
         :param string: The string to display
@@ -178,13 +179,14 @@ class Matrix:
         :param y: Offset y - distance of the string from the top of the buffer
         :param font: Font to use, default is to use the one specified with `set_font`
         :param brightness: Brightness of the pixels that compromise the text, from 0.0 to 1.0
+	:param backbrightness: Brightness of the background pixels within the bounding box of the char, from 0.0 to 1.0
 
         """
 
         o_x = x
 
         for char in string:
-            x, n = self.draw_char(x, y, char, font=font, brightness=brightness)
+            x, n = self.draw_char(x, y, char, font=font, brightness=brightness, backbrightness=backbrightness)
             x += 1 + letter_spacing
 
         return x - o_x
