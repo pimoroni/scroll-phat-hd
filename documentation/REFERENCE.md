@@ -81,7 +81,7 @@ width – Width of the area (default is 17)
 height – Height of the area (default is 7)  
 
 ## Display Buffer
-All of your changes to Scroll pHAT HD are stored in a Python buffer. To display them on Scroll pHAT HD you must call scrollphthd.update().
+All of your changes to Scroll pHAT HD are stored in a Python buffer. To display them on Scroll pHAT HD you must call scrollphthd.show().
 
 ```python
 scrollphathd.show()
