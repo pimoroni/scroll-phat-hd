@@ -103,7 +103,7 @@ You must call show after clearing the buffer to update the display.
 scrollphathd.scroll(x=0, y=0)
 ```
 
-Scroll pHAT HD displays an 17x7 pixel window into the bufer, which starts at the left offset and wraps around.
+Scroll pHAT HD displays an 17x7 pixel window into the buffer, which starts at the left offset and wraps around.
 The x and y values are added to the internal scroll offset. If called with no arguments, a horizontal right to left scroll is used.
 
 Parameters:  
