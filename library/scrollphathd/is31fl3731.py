@@ -185,14 +185,16 @@ class Matrix:
 
         for px in range(len(char_map[0])):
             for py in range(len(char_map)):
-                self.set_pixel(x + px, y + py, (char_map[py][px] / 255.0) * brightness)
+                pixel = char_map[py][px]
+                if pixel > 0:
+                    self.set_pixel(x + px, y + py, (pixel / 255.0) * brightness)
 
         if monospaced:
             px = font.width - 1
 
         return (x + px, y + font.height)
 
-    def write_string(self, string, x=0, y=0, font=None, letter_spacing=1, brightness=1.0, monospaced=False):
+    def write_string(self, string, x=0, y=0, font=None, letter_spacing=1, brightness=1.0, monospaced=False, fill_background=False):
         """Write a string to the buffer. Calls draw_char for each character.
 
         :param string: The string to display
