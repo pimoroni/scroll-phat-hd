@@ -3,6 +3,9 @@ scrollphathd (0.0.2) stable; urgency=low
   * New: Added set_brightness to globally set maximum display brightness
   * New: Added get_buffer_shape to return internal buffer shape
   * New: Added get_shape to return display shape
+  * Improvement: '1' in font3x5 is now 3 pixels wide
+  * Improvement: Monospacing option for fonts
+  * Improvement: Fonts can now be indexed by char in addition to ordinal
   * Improvement: Clear now resets scroll position
   * Improvement: Fill now grows buffer and fills in single operations
   * Improvement: scroll(0,0) no longer enforces a default scroll
