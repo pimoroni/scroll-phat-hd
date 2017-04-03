@@ -23,6 +23,7 @@ except IOError as e:
     raise e
 
 display = is31fl3731.ScrollPhatHD(i2c)
+_clear_on_exit = True
 
 DISPLAY_HEIGHT = 7
 DISPLAY_WIDTH = 17
@@ -46,8 +47,25 @@ set_graph = display.set_graph
 get_buffer_shape = display.get_buffer_shape
 get_shape = display.get_shape
 
+def set_clear_on_exit(value=True):
+    """Set whether Scroll pHAT HD should be cleared upon exit.
+
+    By default Scroll pHAT HD will turn off the pixels on exit, but calling::
+
+        scrollphathd.set_clear_on_exit(False)
+
+    Will ensure that it does not.
+
+    :param value: True or False (default True)
+
+    """
+
+    global _clear_on_exit
+    _clear_on_exit = value
+
 def _exit():
-    display.clear()
-    display.show()
+    if _clear_on_exit:
+        display.clear()
+        display.show()
 
 atexit.register(_exit)
