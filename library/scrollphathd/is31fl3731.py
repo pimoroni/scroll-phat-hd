@@ -156,14 +156,17 @@ class Matrix:
 
         self.buf = numpy.zeros((1, 1))
 
-    def draw_char(self, x, y, char, font=None, brightness=1.0):
+    def draw_char(self, x, y, char, font=None, brightness=1.0, monospaced=False):
         """Draw a single character to the buffer.
+
+        Returns the x and y coordinates of the bottom left-most corner of the drawn character.
 
         :param o_x: Offset x - distance of the char from the left of the buffer
         :param o_y: Offset y - distance of the char from the top of the buffer
         :param char: Char to display- either an integer ordinal or a single letter
         :param font: Font to use, default is to use one specified with `set_font`
         :param brightness: Brightness of the pixels that compromise the char, from 0.0 to 1.0
+        :param monospaced: Whether to space characters out evenly
 
         """
 
@@ -173,21 +176,23 @@ class Matrix:
             else:
                 return (x, y)
 
-        if type(char) is not int:
-            char = ord(char)
-
-        if char not in font.data:
+        if char in font.data:
+            char_map = font.data[char]
+        elif type(char) is not int and ord(char) in font.data:
+            char_map = font.data[ord(char)]
+        else:
             return (x, y)
 
-        char = font.data[char]
+        for px in range(len(char_map[0])):
+            for py in range(len(char_map)):
+                self.set_pixel(x + px, y + py, (char_map[py][px] / 255.0) * brightness)
 
-        for px in range(len(char[0])):
-            for py in range(len(char)):
-                self.set_pixel(x + px, y + py, (char[py][px] / 255.0) * brightness)
+        if monospaced:
+            px = font.width - 1
 
         return (x + px, y + font.height)
 
-    def write_string(self, string, x=0, y=0, font=None, letter_spacing=1, brightness=1.0):
+    def write_string(self, string, x=0, y=0, font=None, letter_spacing=1, brightness=1.0, monospaced=False):
         """Write a string to the buffer. Calls draw_char for each character.
 
         :param string: The string to display
@@ -195,13 +200,14 @@ class Matrix:
         :param y: Offset y - distance of the string from the top of the buffer
         :param font: Font to use, default is to use the one specified with `set_font`
         :param brightness: Brightness of the pixels that compromise the text, from 0.0 to 1.0
+        :param monospaced: Whether to space characters out evenly
 
         """
 
         o_x = x
 
         for char in string:
-            x, n = self.draw_char(x, y, char, font=font, brightness=brightness)
+            x, n = self.draw_char(x, y, char, font=font, brightness=brightness, monospaced=monospaced)
             x += 1 + letter_spacing
 
         return x - o_x
