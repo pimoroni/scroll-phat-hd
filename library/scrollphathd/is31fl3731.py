@@ -33,22 +33,27 @@ _BLINK_OFFSET = 0x12
 _COLOR_OFFSET = 0x24
 
 class Matrix:
-    width = 17
-    height = 7
+    _width = 17
+    _height = 7
 
     def __init__(self, i2c, address=0x74):
-        self.buf = numpy.zeros((self.width, self.height))
         self.i2c = i2c
         self.address = address
-        self._reset()
+
+        try:
+            self._reset()
+        except IOError as e:
+            if hasattr(e,"errno") and e.errno == 5:
+                e.strerror += "\n\nMake sure your Scroll pHAT HD is attached, and double-check your soldering.\n"
+            raise e
 
         self._font = font5x7
-        self._current_frame = 0
-        self._scroll = [0,0]
         self._rotate = 0 # Increments of 90 degrees
         self._flipx = False
         self._flipy = False
         self._brightness = 1.0
+
+        self.clear()
 
         # Display initialization
 
@@ -70,7 +75,15 @@ class Matrix:
         # Enable all LEDs
         self.i2c.write_i2c_block_data(self.address, 0, [255] * 17)
 
-    def scroll(self, x=0, y=0):
+    @property
+    def width(self):
+        return self._width
+
+    @property
+    def height(self):
+        return self._height
+
+    def scroll(self, x=1, y=0):
         """Offset the buffer by x/y pixels
 
         Scroll pHAT HD displays an 17x7 pixel window into the bufer,
@@ -80,13 +93,10 @@ class Matrix:
 
         If called with no arguments, a horizontal right to left scroll is used.
 
-        :param x: Amount to scroll on x-axis
-        :param y: Amount to scroll on y-axis
+        :param x: Amount to scroll on x-axis (default 1)
+        :param y: Amount to scroll on y-axis (default 0)
 
         """
-
-        if x == 0 and y == 0:
-            x = 1
 
         self._scroll[0] += x
         self._scroll[1] += y
@@ -101,8 +111,8 @@ class Matrix:
 
         If called with no arguments, the scroll offset is reset to 0,0
 
-        :param x: Position to scroll to on x-axis
-        :param y: Position to scroll to on y-axis
+        :param x: Position to scroll to on x-axis (default 0)
+        :param y: Position to scroll to on y-axis (default 0)
 
         """
 
@@ -136,17 +146,27 @@ class Matrix:
 
         """
 
-        del self.buf
-        self.buf = numpy.zeros((self.width, self.height))
+        self._current_frame = 0
+        self._scroll = [0,0]
 
-    def draw_char(self, x, y, char, font=None, brightness=1.0):
+        try:
+            del self.buf
+        except AttributeError:
+            pass
+
+        self.buf = numpy.zeros((1, 1))
+
+    def draw_char(self, x, y, char, font=None, brightness=1.0, monospaced=False):
         """Draw a single character to the buffer.
+
+        Returns the x and y coordinates of the bottom left-most corner of the drawn character.
 
         :param o_x: Offset x - distance of the char from the left of the buffer
         :param o_y: Offset y - distance of the char from the top of the buffer
         :param char: Char to display- either an integer ordinal or a single letter
         :param font: Font to use, default is to use one specified with `set_font`
         :param brightness: Brightness of the pixels that compromise the char, from 0.0 to 1.0
+        :param monospaced: Whether to space characters out evenly
 
         """
 
@@ -156,21 +176,25 @@ class Matrix:
             else:
                 return (x, y)
 
-        if type(char) is not int:
-            char = ord(char)
-
-        if char not in font.data:
+        if char in font.data:
+            char_map = font.data[char]
+        elif type(char) is not int and ord(char) in font.data:
+            char_map = font.data[ord(char)]
+        else:
             return (x, y)
 
-        char = font.data[char]
+        for px in range(len(char_map[0])):
+            for py in range(len(char_map)):
+                pixel = char_map[py][px]
+                if pixel > 0:
+                    self.set_pixel(x + px, y + py, (pixel / 255.0) * brightness)
 
-        for px in range(len(char[0])):
-            for py in range(len(char)):
-                self.set_pixel(x + px, y + py, (char[py][px] / 255.0) * brightness)
+        if monospaced:
+            px = font.width - 1
 
         return (x + px, y + font.height)
 
-    def write_string(self, string, x=0, y=0, font=None, letter_spacing=1, brightness=1.0):
+    def write_string(self, string, x=0, y=0, font=None, letter_spacing=1, brightness=1.0, monospaced=False, fill_background=False):
         """Write a string to the buffer. Calls draw_char for each character.
 
         :param string: The string to display
@@ -178,37 +202,41 @@ class Matrix:
         :param y: Offset y - distance of the string from the top of the buffer
         :param font: Font to use, default is to use the one specified with `set_font`
         :param brightness: Brightness of the pixels that compromise the text, from 0.0 to 1.0
+        :param monospaced: Whether to space characters out evenly
 
         """
 
         o_x = x
 
         for char in string:
-            x, n = self.draw_char(x, y, char, font=font, brightness=brightness)
+            x, n = self.draw_char(x, y, char, font=font, brightness=brightness, monospaced=monospaced)
             x += 1 + letter_spacing
 
         return x - o_x
 
-    def fill(self, brightness, x=0, y=0, width=0, height=0):
+    def fill(self, brightness, x=0, y=0, width=None, height=None):
         """Fill an area of the display.
 
         :param brightness: Brightness of pixels
         :param x: Offset x - distance of the area from the left of the buffer
         :param y: Offset y - distance of the area from the top of the buffer
-        :param width: Width of the area (default is 17)
-        :param height: Height of the area (default is 7)
+        :param width: Width of the area (default is buffer width)
+        :param height: Height of the area (default is buffer height)
 
         """
 
-        if width == 0:
-            width = self.width
+        if width is None:
+            width = self.buf.shape[0]
 
-        if height == 0:
-            height = self.height
+        if height is None:
+            height = self.buf.shape[1]
 
-        for px in range(width):
-            for py in range(height):
-                self.set_pixel(x+px, y+py,  brightness)
+        # if the buffer is not big enough, grow it in one operation.
+        if (x + width) > self.buf.shape[0] or (y + height) > self.buf.shape[1]:
+            self.buf = self._grow_buffer(self.buf, (x + width, y + height))
+
+        # fill in one operation using a slice
+        self.buf[x:x+width,y:y+height] = int(255.0 * brightness)
 
     def clear_rect(self, x, y, width, height):
         """Clear a rectangle.
@@ -237,10 +265,10 @@ class Matrix:
 
         """
         if width is None:
-            width = self.width
+            width = self._width
 
         if height is None:
-            height = self.height
+            height = self._height
 
         if low is None:
             low = min(values)
@@ -278,6 +306,20 @@ class Matrix:
 
         self._brightness = brightness
 
+    def _grow_buffer(self, buffer, newshape):
+        """Grows a copy of buffer until the new shape fits inside it.
+
+        :param buffer: Buffer to grow.
+        :param newshape: Tuple containing the minimum (x,y) size.
+
+        Returns the new buffer.
+
+        """
+        x_pad = max(0, newshape[0] - buffer.shape[0])
+        y_pad = max(0, newshape[1] - buffer.shape[1])
+
+        return numpy.pad(buffer, ((0, x_pad), (0, y_pad)), 'constant')
+
     def set_pixel(self, x, y, brightness):
         """Set a single pixel in the buffer.
 
@@ -287,22 +329,39 @@ class Matrix:
 
         """
 
-        brightness = int(255.0 * brightness)
-
-        if brightness > 255 or brightness < 0:
+        if brightness > 1.0 or brightness < 0:
             raise ValueError("Value {} out of range. Brightness should be between 0 and 1".format(brightness))
+
+        brightness = int(255.0 * brightness)
 
         try:
             self.buf[x][y] = brightness
 
         except IndexError:
-            if y >= self.buf.shape[1]:
-                self.buf = numpy.pad(self.buf, ((0,0),(0,y - self.buf.shape[1] + 1)), mode='constant')
-
-            if x >= self.buf.shape[0]:
-                self.buf = numpy.pad(self.buf, ((0,x - self.buf.shape[0] + 1),(0,0)), mode='constant')
-
+            self.buf = self._grow_buffer(self.buf, (x+1, y+1))
             self.buf[x][y] = brightness
+
+    def get_buffer_shape(self):
+        """Get the size/shape of the internal buffer.
+
+        Returns a tuple containing the width and height of the buffer.
+
+        """
+
+        return self.buf.shape
+
+    def get_shape(self):
+        """Get the size/shape of the display.
+
+        Returns a tuple containing the width and height of the display,
+        after applying rotation.
+
+        """
+
+        if self._rotate % 2:
+            return (self._height, self._width)
+        else:
+            return (self._width, self._height)
 
     def show(self):
         """Show the buffer contents on the display.
@@ -313,30 +372,31 @@ class Matrix:
         """
 
         next_frame = 0 if self._current_frame == 1 else 0
+        display_shape = self.get_shape()
 
-        display_buffer = numpy.copy(self.buf)
+        display_buffer = self._grow_buffer(self.buf, display_shape)
 
         for axis in [0,1]:
             if not self._scroll[axis] == 0:
                 display_buffer = numpy.roll(display_buffer, -self._scroll[axis], axis=axis)
 
         # Chop a width * height window out of the display buffer
-        display_buffer = display_buffer[:self.width, :self.height]
+        display_buffer = display_buffer[:display_shape[0], :display_shape[1]]
+
+        if self._flipx:
+            display_buffer = numpy.flipud(display_buffer)
+
+        if self._flipy:
+            display_buffer = numpy.fliplr(display_buffer)
 
         if self._rotate:
             display_buffer = numpy.rot90(display_buffer, self._rotate)
 
-        if self._flipy:
-            display_buffer = numpy.flipud(display_buffer)
-
-        if self._flipx:
-            display_buffer = numpy.fliplr(display_buffer)
-
         output = [0 for x in range(144)]
 
-        for x in range(self.width):
-            for y in range(self.height):
-                idx = self._pixel_addr(x, 6-y)
+        for x in range(self._width):
+            for y in range(self._height):
+                idx = self._pixel_addr(x, self._height-(y+1))
 
                 try:
                     output[idx] = int(display_buffer[x][y] * self._brightness)

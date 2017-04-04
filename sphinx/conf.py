@@ -34,11 +34,21 @@ class OutlineMethodDocumenter(autodoc.MethodDocumenter):
     def add_content(self, more_content, no_docstring=False):
         return
 
+    def add_directive_header(self, sig):
+        if self.objpath[0] == u"Matrix":
+            self.objpath[0] = u'scrollphathd'
+        autodoc.MethodDocumenter.add_directive_header(self, sig)
+
 class OutlineFunctionDocumenter(autodoc.FunctionDocumenter):
     objtype = 'function'
 
     def add_content(self, more_content, no_docstring=False):
         return
+
+    def add_directive_header(self, sig):
+        if self.objpath[0] == u"Matrix":
+            self.objpath[0] = u'scrollphathd'
+        autodoc.FunctionDocumenter.add_directive_header(self, sig)
 
 class MethodDocumenter(autodoc.MethodDocumenter):
     objtype = 'method'

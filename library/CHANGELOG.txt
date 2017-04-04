@@ -1,3 +1,24 @@
+0.0.2
+-----
+
+* New: Added set_brightness to globally set maximum display brightness
+* New: Added get_buffer_shape to return internal buffer shape
+* New: Added get_shape to return display shape
+* New: Added set_clear_on_exit, pass True/False to set/clear
+* Improvement: draw_char no longer fills black pixels, which was incongruent with letter spacing
+* Improvement: '1' in font3x5 is now 3 pixels wide
+* Improvement: Monospacing option for fonts
+* Improvement: Fonts can now be indexed by char in addition to ordinal
+* Improvement: Clear now resets scroll position
+* Improvement: Fill now grows buffer and fills in single operations
+* Improvement: scroll(0,0) no longer enforces a default scroll
+* Improvement: width/height now private, reimplemented as read-only properties
+* Improvement: initialization now detects disabled i2c or missing pHAT and emits a friendly error
+* Bugfix: Corrected default scroll direction
+* Bugfix: 90 and 270 degree rotations are no longer cropped to 7 pixels wide
+* Bugfix: Fixed missing version_info
+* Bugfix: Graph catches IndexError and gracefully ignores missing values
+
 0.0.1
 -----
 

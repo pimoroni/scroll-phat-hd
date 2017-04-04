@@ -70,7 +70,7 @@ Display Buffer
 --------------
 
 All of your changes to Scroll pHAT HD are stored in a Python buffer. To display them
-on Scroll pHAT HD you must call :python:`scrollphthd.update()`.
+on Scroll pHAT HD you must call :python:`scrollphathd.show()`.
 
 .. automethod:: scrollphathd.is31fl3731.Matrix.show
    :noindex:
@@ -105,3 +105,14 @@ Flip The Display
 .. automethod:: scrollphathd.is31fl3731.Matrix.flip
    :noindex:
 
+Get The Display Size
+--------------------
+
+.. automethod:: scrollphathd.is31fl3731.Matrix.get_shape
+   :noindex:
+
+Get The Buffer Size
+-------------------
+
+.. automethod:: scrollphathd.is31fl3731.Matrix.get_buffer_shape
+   :noindex:
