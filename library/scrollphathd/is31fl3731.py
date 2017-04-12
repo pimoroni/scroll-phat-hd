@@ -54,6 +54,7 @@ class Matrix:
         self._brightness = 1.0
 
         self.clear()
+        self.show()
 
         # Display initialization
 
