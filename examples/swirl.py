@@ -32,8 +32,10 @@ def swirl(x, y, step):
 
     return max(0.0,0.7 - min(1.0,r/8.0))
 
+scrollphathd.set_brightness(0.8)
+
 while True:
-    t = math.sin(time.time() / 10) * 1500
+    t = math.sin(time.time() / 18) * 1500
 
     for x in range(0, 17):
         for y in range(0, 7):
