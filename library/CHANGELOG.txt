@@ -1,4 +1,4 @@
-0.0.2
+1.0.0
 -----
 
 * New: Added set_brightness to globally set maximum display brightness
@@ -14,6 +14,7 @@
 * Improvement: scroll(0,0) no longer enforces a default scroll
 * Improvement: width/height now private, reimplemented as read-only properties
 * Improvement: initialization now detects disabled i2c or missing pHAT and emits a friendly error
+* Improvement: cleared display sooner to mitigate flash of lit pixels on startup
 * Bugfix: Corrected default scroll direction
 * Bugfix: 90 and 270 degree rotations are no longer cropped to 7 pixels wide
 * Bugfix: Fixed missing version_info

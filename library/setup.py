@@ -39,7 +39,7 @@ classifiers = ['Development Status :: 5 - Production/Stable',
 
 setup(
     name            = 'scrollphathd',
-    version         = '0.0.2',
+    version         = '1.0.0',
     author          = 'Philip Howard',
     author_email    = 'phil@pimoroni.com',
     description     = 'Scroll pHAT HD Driver',
