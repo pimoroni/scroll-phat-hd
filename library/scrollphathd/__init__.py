@@ -22,7 +22,7 @@ except IOError as e:
         e.strerror += "\n\nMake sure you've enabled i2c in your Raspberry Pi configuration.\n"
     raise e
 
-display = is31fl3731.ScrollPhatHD(i2c)
+display = is31fl3731.ScrollPhatHD(i2c, gamma_table=is31fl3731.LED_GAMMA)
 _clear_on_exit = True
 
 DISPLAY_HEIGHT = 7
