@@ -5,7 +5,7 @@ import signal
 import scrollphathd
 from scrollphathd.fonts import font3x5
 
-scrollphathd.set_brightness(0.1)
+scrollphathd.set_brightness(0.5)
 
 scrollphathd.fill(1,0,0,17,7)
 

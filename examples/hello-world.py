@@ -20,7 +20,7 @@ Press Ctrl+C to exit!
 #scrollphathd.rotate(180)
 
 #Set a more eye-friendly default brightness
-scrollphathd.set_brightness(0.1)
+scrollphathd.set_brightness(0.5)
 
 scrollphathd.write_string("Hello World! ", x=0, y=0, font=font5x7, brightness=0.5)
 

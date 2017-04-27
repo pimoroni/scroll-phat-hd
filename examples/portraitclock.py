@@ -15,7 +15,7 @@ Press Ctrl+C to exit!
 
 """)
 
-scrollphathd.set_brightness(0.1)
+scrollphathd.set_brightness(0.5)
 scrollphathd.rotate(270)
 
 while True:

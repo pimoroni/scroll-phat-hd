@@ -30,7 +30,7 @@ parser.add_argument('-m', '--message', metavar='MESSAGE', type=str, help='Messag
 
 args = parser.parse_args()
 
-scrollphathd.set_brightness(0.1)
+scrollphathd.set_brightness(0.5)
 scrollphathd.clear()
 scrollphathd.write_string(args.message, x=0, y=0, font=font3x5, brightness=0.5)
 

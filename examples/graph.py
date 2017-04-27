@@ -27,6 +27,6 @@ while True:
     if len(values) > 17:
         values.pop(-1)
 
-    scrollphathd.set_graph(values, low=0, high=50, brightness=0.1)
+    scrollphathd.set_graph(values, low=0, high=50, brightness=0.5)
     scrollphathd.show()
     time.sleep(0.05)
