@@ -13,7 +13,7 @@ Architecture: all
 Section: python
 Depends: ${misc:Depends}, ${python:Depends}, python-smbus, python-numpy
 Suggests: i2c-tools, python-psutil
-Description: python library designed to control Scroll pHAT HD.
+Description: Python library for the Pimoroni Scroll pHAT HD.
  Scroll pHAT HD provides a matrix of 119, brightness controlled,
  white LED pixels.
  It's ideal for writing messages, showing graphs, and drawing pictures.
@@ -25,7 +25,7 @@ Architecture: all
 Section: python
 Depends: ${misc:Depends}, ${python3:Depends}, python3-smbus, python3-numpy
 Suggests: i2c-tools, python3-psutil
-Description: python library designed to control Scroll pHAT HD.
+Description: Python library for the Pimoroni Scroll pHAT HD.
  Scroll pHAT HD provides a matrix of 119, brightness controlled,
  white LED pixels.
  It's ideal for writing messages, showing graphs, and drawing pictures.
