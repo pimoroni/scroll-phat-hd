@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+#made by @mrglennjones with help from @pimoroni & pb
+
 import sys
 import time
 import tweepy
