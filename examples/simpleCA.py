@@ -5,14 +5,13 @@ import math
 import threading
 
 import numpy as np
-from collections import deque
 import scrollphathd
 
 import Tkinter
+
 top = Tkinter.Tk()
 
 running = False
-
 rule=30
 
 ##rule = 54
