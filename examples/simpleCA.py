@@ -60,7 +60,7 @@ def evolve(row):
     for x in range(0, 17):
         ##  get the sum [Y] over the range x-1 to x+1
         ##  bit shift 1bit Y places to the left
-        ##  XOR with the rule
+        ##  bitise AND with the rule
         ##  so, read the three cells at x-1, x and x+1 (with wrapping)
         a = row[x-1] if x > 0 else row[16]
         b = row[x]
