@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# please excuse my python, i'm new here ;)
+
 import time
 import math
 import threading
@@ -9,22 +11,26 @@ import scrollphathd
 
 import Tkinter
 
-top = Tkinter.Tk()
-
+## use this so that we can break out of the rendering thread
 running = False
-rule=30
 
-##rule = 54
-##rule = 60
-##rule = 110
-##rule = 132
+## our rule number
+rule = 30
 
-def init(_rule):  
+## some other intersting rules
+## rule = 22
+## rule = 54
+## rule = 60
+## rule = 110
+## rule = 132
+
+## init the scrollphat and start the rendering loop
+def initRenderThread(_rule):  
     global matrix
     global running
     global row
     global rule
- 
+    
     matrix = np.zeros((7, 17), dtype=np.int)
     matrix[0,8] = 1;
     row = 0
@@ -37,7 +43,15 @@ def init(_rule):
     running=True;
 
     while running:
-        redraw()
+        ## redraw first, so that it shows the initial contitions ;)
+        for y in range(0, 7):
+            for x in range(0, 17):
+                scrollphathd.pixel(x, y, matrix[y,x])
+        
+        scrollphathd.show()
+
+        ## incrementally fill in the rows until we hit the bottom
+        ## then roll the matrix and replace the last row
         if row < 6:
             matrix[row+1] = evolve(matrix[row])
             row = row + 1
@@ -45,21 +59,15 @@ def init(_rule):
             matrix = np.roll(matrix, -1, axis=0)
             matrix[6] = evolve(matrix[5])
 
-
-def redraw():
-    for y in range(0, 7):
-        for x in range(0, 17):
-            brightness = matrix[y,x]
-            scrollphathd.pixel(x, y, brightness)
-    scrollphathd.show()
-    ##  might want to slow it down a bit ;)
-    ##  time.sleep(0.01)
+        ##  might want to slow it down a bit ;)
+        ##  time.sleep(0.01)
 
 def evolve(row):
+    ## make an empty array to fill with values
     out = np.zeros((17), dtype=np.int)
     for x in range(0, 17):
         ##  get the sum [Y] over the range x-1 to x+1
-        ##  bit shift 1bit Y places to the left
+        ##  bit shift 1 bit Y places to the left
         ##  bitise AND with the rule
         ##  so, read the three cells at x-1, x and x+1 (with wrapping)
         a = row[x-1] if x > 0 else row[16]
@@ -69,6 +77,7 @@ def evolve(row):
         out[x] = 1 if o&rule else 0
     return out
 
+## start / restart the CA
 def startCA():
     global th
     global running
@@ -79,34 +88,50 @@ def startCA():
         clearCA()
         startCA()
     else:
-        th = threading.Thread(target=init, args=(rule,))
+        ## start a new thread. prevents the GUI locking up ;)
+        th = threading.Thread(target=initRenderThread, args=(rule,))
         th.start()
 
+## stop the CA
 def stopCA():
     global running
     running=False;
 
+## clear screen
 def clearCA():
     scrollphathd.clear()
     scrollphathd.show()
 
+## handle rule change
 def changeRule():
     global rule
     rule = int(SRuleNumber.get())
 
 
+## GUI Specs for a simple control panel
+
+top = Tkinter.Tk()
+top.grid()
+
 svRule = Tkinter.StringVar()
 SRuleNumber = Tkinter.Spinbox(top, from_=1, to=256, textvariable=svRule, command = changeRule )
-SRuleNumber.pack()
+SRuleNumber.grid(column=1, row=0, columnspan=2)
 svRule.set(rule)
 
 BStart = Tkinter.Button(top, text ="Start", command = startCA)
-BStart.pack()
+BStart.grid(column=1, row=1)
 
 BStop = Tkinter.Button(top, text ="Stop", command = stopCA)
-BStop.pack()
+BStop.grid(column=2, row=1)
 
 BClear = Tkinter.Button(top, text ="Clear", command = clearCA)
-BClear.pack()
+BClear.grid(column=3, row=1)
 
+## Start the GUI
 top.mainloop()
+
+## clean exit when GUI window closes
+stopCA()
+clearCA()
+
+## here endeth the script
