@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import time
-import signal
 
 import scrollphathd
 from scrollphathd.fonts import font5x7
@@ -31,4 +30,3 @@ while True:
     scrollphathd.show()
     scrollphathd.scroll()
     time.sleep(0.05)
-
