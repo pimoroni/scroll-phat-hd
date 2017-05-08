@@ -62,7 +62,7 @@ while True:
     pos_x = 0
     pos_y = 0
 
-    for current_line, line_length in enumerate(lines):
+    for current_line, line_length in enumerate(lengths):
         # Delay a slightly longer time at the start of each line
         time.sleep(delay*10)
 
