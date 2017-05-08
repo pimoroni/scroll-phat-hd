@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-# please excuse my python, i'm new here ;)
+# simple CA
+# loops through a bunch of interesting simple CA
 
 import time
 
