@@ -15,6 +15,10 @@ Press Ctrl+C to exit!
 
 """)
 
+# Display a progress bar for seconds
+# Displays a dot if False
+DISPLAY_BAR = False
+
 # Brightness of the seconds bar and text
 BRIGHTNESS = 0.5
 
@@ -39,22 +43,27 @@ while True:
     #  ^ - 0 seconds                59 seconds - ^
     seconds_progress = float_sec * 15
 
-    # Step through 15 pixels to draw the seconds bar
-    for y in range(15):
-        # For each pixel, we figure out its brightness by
-        # seeing how much of "seconds_progress" is left to draw
-        # If it's greater than 1 (full brightness) then we just display 1.
-        current_pixel = min(seconds_progress, 1)
+    if DISPLAY_BAR:
+        # Step through 15 pixels to draw the seconds bar
+        for y in range(15):
+            # For each pixel, we figure out its brightness by
+            # seeing how much of "seconds_progress" is left to draw
+            # If it's greater than 1 (full brightness) then we just display 1.
+            current_pixel = min(seconds_progress, 1)
 
-        # Multiply the pixel brightness (0.0 to 1.0) by our global brightness value
-        scrollphathd.set_pixel(y + 1, 6, current_pixel * BRIGHTNESS)
+            # Multiply the pixel brightness (0.0 to 1.0) by our global brightness value
+            scrollphathd.set_pixel(y + 1, 6, current_pixel * BRIGHTNESS)
 
-        # Subtract 1 now we've drawn that pixel
-        seconds_progress -= 1
+            # Subtract 1 now we've drawn that pixel
+            seconds_progress -= 1
 
-        # If we reach or pass 0, there are no more pixels left to draw
-        if seconds_progress <= 0:
-            break
+            # If we reach or pass 0, there are no more pixels left to draw
+            if seconds_progress <= 0:
+                break
+
+    else:
+        # Just display a simple dot
+        scrollphathd.set_pixel(int(seconds_progress), 6, BRIGHTNESS)
 
     # Display the time (HH:MM) in a 5x5 pixel font
     scrollphathd.write_string(
