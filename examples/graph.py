@@ -14,19 +14,23 @@ Press Ctrl+C to exit!
 
 """)
 
-
+MIN_VALUE = 0
+MAX_VALUE = 50
 
 scrollphathd.rotate(180)
 
-values = []
-for i in range(17):
-    values.append(0)
+# Begin with a list of 17 zeros
+values = [0] * scrollphathd.DISPLAY_WIDTH
 
 while True:
-    values.insert(0,random.randrange(0,50))
-    if len(values) > 17:
-        values.pop(-1)
+    # Insert a random value at the beginning
+    values.insert(0, random.randrange(MIN_VALUE, MAX_VALUE))
 
-    scrollphathd.set_graph(values, low=0, high=50, brightness=0.5)
+    # Get rid of the last value, keeping the list at 17 (DISPLAY_WIDTH) items
+    values = values[:scrollphathd.DISPLAY_WIDTH]
+
+    # Plot the random values onto Scroll pHAT HD
+    scrollphathd.set_graph(values, low=MIN_VALUE, high=MAX_VALUE, brightness=0.5)
+
     scrollphathd.show()
     time.sleep(0.05)
