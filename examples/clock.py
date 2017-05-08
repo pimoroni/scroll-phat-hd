@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import time
-import signal
 
 import scrollphathd
 from scrollphathd.fonts import font5x5
@@ -16,32 +15,68 @@ Press Ctrl+C to exit!
 
 """)
 
+# Brightness of the seconds bar and text
 BRIGHTNESS = 0.5
 
-#Uncomment to rotate
+# Uncomment to rotate
 #scrollphathd.rotate(180)
 
 while True:
     scrollphathd.clear()
-    float_sec = (time.time() % 60) / 60.0
-    bar_sec = float_sec * 17 * BRIGHTNESS
 
-    for y in range(17):
-        b = BRIGHTNESS if bar_sec >= BRIGHTNESS else bar_sec
+    # Grab the "seconds" component of the current time
+    # and convert it to a range from 0.0 to 1.0
+    float_sec = (time.time() % 60) / 59.0
 
-        scrollphathd.set_pixel(y,6,b)
+    # Multiply our range by 15 to spread the current
+    # number of seconds over 15 pixels.
+    #
+    # 60 is evenly divisible by 15, so that
+    # each fully lit pixel represents 4 seconds.
+    #
+    # For example this is 28 seconds:
+    # [x][x][x][x][x][x][x][ ][ ][ ][ ][ ][ ][ ][ ]
+    #  ^ - 0 seconds                59 seconds - ^
+    seconds_progress = float_sec * 15
 
-        bar_sec -= BRIGHTNESS
+    # Step through 15 pixels to draw the seconds bar
+    for y in range(15):
+        # For each pixel, we figure out its brightness by
+        # seeing how much of "seconds_progress" is left to draw
+        # If it's greater than 1 (full brightness) then we just display 1.
+        current_pixel = min(seconds_progress, 1)
 
-        if bar_sec < 0:
-            bar_sec = 0
+        # Multiply the pixel brightness (0.0 to 1.0) by our global brightness value
+        scrollphathd.set_pixel(y + 1, 6, current_pixel * BRIGHTNESS)
 
-    str_time = time.strftime("%H:%M") 
-    scrollphathd.write_string(str_time, x=0, y=0, font=font5x5, brightness=BRIGHTNESS)
+        # Subtract 1 now we've drawn that pixel
+        seconds_progress -= 1
 
+        # If we reach or pass 0, there are no more pixels left to draw
+        if seconds_progress <= 0:
+            break
+
+    # Display the time (HH:MM) in a 5x5 pixel font
+    scrollphathd.write_string(
+        time.strftime("%H:%M"),
+        x=0, # Align to the left of the buffer
+        y=0, # Align to the top of the buffer
+        font=font5x5, # Use the font5x5 font we imported above
+        brightness=BRIGHTNESS # Use our global brightness value
+    )
+
+    # int(time.time()) % 2 will tick between 0 and 1 every second.
+    # We can use this fact to clear the ":" and cause it to blink on/off
+    # every other second, like a digital clock.
+    # To do this we clear a rectangle 8 pixels along, 0 down,
+    # that's 1 pixel wide and 5 pixels tall.
     if int(time.time()) % 2 == 0:
-        scrollphathd.clear_rect(8,0,1,5)
+        scrollphathd.clear_rect(8, 0, 1, 5)
 
+    # Display our time and sleep a bit. Using 1 second in time.sleep
+    # is not recommended, since you might get quite far out of phase
+    # with the passing of real wall-time seconds and it'll look weird!
+    #
+    # 1/10th of a second is accurate enough for a simple clock though :D
     scrollphathd.show()
     time.sleep(0.1)
-
