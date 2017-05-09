@@ -8,6 +8,14 @@ import time
 import numpy
 import scrollphathd
 
+print("""
+Scroll pHAT HD: Cellular Automata
+
+Displays a series of interesting cellular automata rules.
+
+Press Ctrl+C to exit!
+
+""")
 
 def mainloop():
 
