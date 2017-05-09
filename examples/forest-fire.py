@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Forest fire model cellular automaton. Simulates the growth 
+# Forest fire model cellular automaton. Simulates the growth
 # of trees in a forest, with sporadic outbreaks of forest fires.
 
 # https://en.wikipedia.org/wiki/Forest-fire_model
@@ -10,7 +10,9 @@
 
 import random
 import time
+
 import scrollphathd
+
 
 print("""
 Scroll pHAT HD: Forest Fire
@@ -22,18 +24,19 @@ Press Ctrl+C to exit!
 
 """)
 
+
 # Avoid retina-searage!
 scrollphathd.set_brightness(0.5)
 
 # The height and width of the forest. Same as Scroll pHAT HD
 # dimensions
-height = 7
-width = 17
+height = scrollphathd.height
+width = scrollphathd.width
 
 # Initial probability of a grid square having a tree
 initial_trees = 0.55
 
-# p = probability of tree growing, f = probability of fire 
+# p = probability of tree growing, f = probability of fire
 p = 0.01
 f = 0.001
 
@@ -58,7 +61,7 @@ def show_grid(grid):
             scrollphathd.set_pixel(x, y, grid[(x, y)])
     scrollphathd.show()
 
-# Go through grid, update grid squares based on state of 
+# Go through grid, update grid squares based on state of
 # square and neighbouring squares
 def update_grid(grid):
     new_grid = {}
@@ -72,7 +75,7 @@ def update_grid(grid):
                 new_grid[(x, y)] = (burning if any(grid.get((x + dx, y + dy), space) == burning for dx, dy in hood) or random.random() <= f else tree)
     return new_grid
 
-# Main function. Initialises grid, then shows, updates, and 
+# Main function. Initialises grid, then shows, updates, and
 # waits for 1/20 of a second.
 def main():
     grid = initialise()
