@@ -3,16 +3,22 @@
 #made by @mrglennjones with help from @pimoroni & pb
 
 import time
-import tweepy
 import Queue
+from sys import exit
+
+try:
+    import tweepy
+except ImportError:
+    exit("This script requires the tweepy module\nInstall with: sudo pip install tweepy")
 
 import scrollphathd
 from scrollphathd.fonts import font5x7smoothed
 
+
 #adjust the tracked keyword below to your keyword or #hashtag
 keyword = '#bilgetank'
 
-#enter your twitter app keys here        
+#enter your twitter app keys here
 #you can get these at apps.twitter.com
 consumer_key = ''
 consumer_secret = ''
@@ -26,7 +32,7 @@ q = Queue.Queue()
 #define main loop to fetch formatted tweet from queue
 def mainloop():
     scrollphathd.rotate(degrees=180)
-    scrollphathd.clear()               
+    scrollphathd.clear()
     scrollphathd.show()
 
     while True:
@@ -45,7 +51,7 @@ def mainloop():
 
         except Queue.Empty:
             time.sleep(1)
-                
+
 class MyStreamListener(tweepy.StreamListener):
     def on_status(self, status):
         if not status.text.startswith('RT'):
