@@ -15,28 +15,32 @@ import scrollphathd
 from scrollphathd.fonts import font5x7smoothed
 
 
-#adjust the tracked keyword below to your keyword or #hashtag
+# adjust the tracked keyword below to your keyword or #hashtag
 keyword = '#bilgetank'
 
-#enter your twitter app keys here
-#you can get these at apps.twitter.com
+# enter your twitter app keys here
+# you can get these at apps.twitter.com
 consumer_key = ''
 consumer_secret = ''
 
 access_token = ''
 access_token_secret = ''
 
-#make FIFO queue
+if consumer_key == '' or consumer_secret == '' or access_token == '' or access_token_secret == '':
+    print("You need to configure your Twitter API keys! Edit this file for more information!")
+    exit(0)
+
+# make FIFO queue
 q = Queue.Queue()
 
-#define main loop to fetch formatted tweet from queue
+# define main loop to fetch formatted tweet from queue
 def mainloop():
     scrollphathd.rotate(degrees=180)
     scrollphathd.clear()
     scrollphathd.show()
 
     while True:
-        #grab the tweet string from the queue
+        # grab the tweet string from the queue
         try:
             status = q.get(False)
             scrollphathd.write_string(status,font=font5x7smoothed, brightness=0.1)
@@ -55,7 +59,7 @@ def mainloop():
 class MyStreamListener(tweepy.StreamListener):
     def on_status(self, status):
         if not status.text.startswith('RT'):
-            #format the incoming tweet string
+            # format the incoming tweet string
             status = '     >>>>>     @%s: %s     ' % (status.user.screen_name.upper(), status.text.upper())
             status = status.encode('ascii', 'ignore').decode('ascii')
 
