@@ -4,9 +4,15 @@
 # loops through a bunch of interesting simple CA
 
 import time
+from sys import exit
 
-import numpy
+try:
+    import numpy
+except ImportError:
+    exit("This script requires the numpy module\nInstall with: sudo pip install numpy")
+
 import scrollphathd
+
 
 print("""
 Scroll pHAT HD: Cellular Automata
@@ -16,6 +22,7 @@ Displays a series of interesting cellular automata rules.
 Press Ctrl+C to exit!
 
 """)
+
 
 def mainloop():
 
