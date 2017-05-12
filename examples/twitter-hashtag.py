@@ -3,7 +3,10 @@
 #made by @mrglennjones with help from @pimoroni & pb
 
 import time
-import Queue
+try:
+    import queue
+except ImportError:
+    import Queue as queue
 from sys import exit
 
 try:
@@ -31,7 +34,7 @@ if consumer_key == '' or consumer_secret == '' or access_token == '' or access_t
     exit(0)
 
 # make FIFO queue
-q = Queue.Queue()
+q = queue.queue()
 
 # define main loop to fetch formatted tweet from queue
 def mainloop():
@@ -53,7 +56,7 @@ def mainloop():
                 status_length -= 1
                 time.sleep(0.01)
 
-        except Queue.Empty:
+        except queue.Empty:
             time.sleep(1)
 
 class MyStreamListener(tweepy.StreamListener):
