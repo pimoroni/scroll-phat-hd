@@ -30,7 +30,7 @@ while True:
     values = values[:scrollphathd.DISPLAY_WIDTH]
 
     # Plot the random values onto Scroll pHAT HD
-    scrollphathd.set_graph(values, low=MIN_VALUE, high=MAX_VALUE, brightness=0.5)
+    scrollphathd.set_graph(values, low=MIN_VALUE, high=MAX_VALUE, brightness=0.3)
 
     scrollphathd.show()
     time.sleep(0.05)

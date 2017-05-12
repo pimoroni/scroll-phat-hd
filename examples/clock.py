@@ -20,7 +20,7 @@ Press Ctrl+C to exit!
 DISPLAY_BAR = False
 
 # Brightness of the seconds bar and text
-BRIGHTNESS = 0.5
+BRIGHTNESS = 0.3
 
 # Uncomment to rotate
 #scrollphathd.rotate(180)
