@@ -59,7 +59,7 @@ class Matrix:
         self.address = address
 
         if gamma_table is None:
-            gamma_table = list(range(255))
+            gamma_table = list(range(256))
 
         self._gamma_table = gamma_table
 
@@ -106,6 +106,21 @@ class Matrix:
     @property
     def height(self):
         return self._height
+
+    def set_gamma(self, gamma_table):
+        """Set the LED gamma table
+
+        Set the table of values used to give the LEDs a pleasing
+        to the eye brightness curve.
+
+        :param gamma_table: List of 256 values in the range 0-255.
+
+        """
+
+        if len(gamma_table) != 256:
+            raise ValueError("Gamma table must be a list with 256 values.")
+
+        self._gamma_table = gamma_table
 
     def scroll(self, x=1, y=0):
         """Offset the buffer by x/y pixels
