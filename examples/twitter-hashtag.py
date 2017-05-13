@@ -34,7 +34,7 @@ if consumer_key == '' or consumer_secret == '' or access_token == '' or access_t
     exit(0)
 
 # make FIFO queue
-q = queue.queue()
+q = queue.Queue()
 
 # define main loop to fetch formatted tweet from queue
 def mainloop():
