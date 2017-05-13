@@ -45,6 +45,7 @@ def mainloop():
     while True:
         # grab the tweet string from the queue
         try:
+            scrollphathd.clear()
             status = q.get(False)
             scrollphathd.write_string(status,font=font5x7smoothed, brightness=0.1)
             status_length = scrollphathd.write_string(status, x=0, y=0,font=font5x7smoothed, brightness=0.1)
