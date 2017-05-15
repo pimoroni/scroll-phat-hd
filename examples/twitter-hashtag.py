@@ -34,7 +34,7 @@ if consumer_key == '' or consumer_secret == '' or access_token == '' or access_t
     exit(0)
 
 # make FIFO queue
-q = queue.queue()
+q = queue.Queue()
 
 # define main loop to fetch formatted tweet from queue
 def mainloop():
@@ -45,6 +45,7 @@ def mainloop():
     while True:
         # grab the tweet string from the queue
         try:
+            scrollphathd.clear()
             status = q.get(False)
             scrollphathd.write_string(status,font=font5x7smoothed, brightness=0.1)
             status_length = scrollphathd.write_string(status, x=0, y=0,font=font5x7smoothed, brightness=0.1)
