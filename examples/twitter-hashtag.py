@@ -3,6 +3,7 @@
 #made by @mrglennjones with help from @pimoroni & pb
 
 import time
+import unicodedata
 try:
     import queue
 except ImportError:
@@ -15,7 +16,7 @@ except ImportError:
     exit("This script requires the tweepy module\nInstall with: sudo pip install tweepy")
 
 import scrollphathd
-from scrollphathd.fonts import font5x7smoothed
+from scrollphathd.fonts import font5x7
 
 
 # adjust the tracked keyword below to your keyword or #hashtag
@@ -47,15 +48,22 @@ def mainloop():
         try:
             scrollphathd.clear()
             status = q.get(False)
-            scrollphathd.write_string(status,font=font5x7smoothed, brightness=0.1)
-            status_length = scrollphathd.write_string(status, x=0, y=0,font=font5x7smoothed, brightness=0.1)
+            scrollphathd.write_string(status,font=font5x7, brightness=0.1)
+            status_length = scrollphathd.write_string(status, x=0, y=0,font=font5x7, brightness=0.1)
             time.sleep(0.25)
 
             while status_length > 0:
                 scrollphathd.show()
                 scrollphathd.scroll(1)
                 status_length -= 1
-                time.sleep(0.01)
+                time.sleep(0.02)
+
+
+            scrollphathd.clear()
+            scrollphathd.show()
+            time.sleep(0.25)
+
+            q.task_done()
 
         except queue.Empty:
             time.sleep(1)
@@ -64,13 +72,17 @@ class MyStreamListener(tweepy.StreamListener):
     def on_status(self, status):
         if not status.text.startswith('RT'):
             # format the incoming tweet string
-            status = '     >>>>>     @%s: %s     ' % (status.user.screen_name.upper(), status.text.upper())
-            status = status.encode('ascii', 'ignore').decode('ascii')
+            status = u'     >>>>>     @{name}: {text}     '.format(name=status.user.screen_name.upper(), text=status.text.upper())
+            try:
+                status = unicodedata.normalize('NFKD', status).encode('ascii', 'ignore')
+            except BaseException as e:
+                print(e)
 
             # put tweet into the fifo queue
             q.put(status)
 
     def on_error(self, status_code):
+        print("Error: {}".format(status_code))
         if status_code == 420:
             return False
 
