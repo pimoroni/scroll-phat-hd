@@ -1,10 +1,19 @@
 import math
 import time
+import atexit
 
 try:
     import numpy
 except ImportError:
-    exit("This library requires the numpy module\nInstall with: sudo pip install numpy")
+    raise ImportError("This library requires the numpy module\nInstall with: sudo pip install numpy")
+
+try:
+    import smbus
+except ImportError:
+    if version_info[0] < 3:
+        raise ImportError("This library requires python-smbus\nInstall with: sudo apt-get install python-smbus")
+    elif version_info[0] == 3:
+        raise ImportError("This library requires python3-smbus\nInstall with: sudo apt-get install python3-smbus")
 
 
 from .fonts import font5x7
@@ -57,18 +66,13 @@ class Matrix:
     def __init__(self, i2c, address=0x74, gamma_table=None):
         self.i2c = i2c
         self.address = address
+        self._is_setup = False
+        self._clear_on_exit = True
 
         if gamma_table is None:
             gamma_table = list(range(256))
 
         self._gamma_table = gamma_table
-
-        try:
-            self._reset()
-        except IOError as e:
-            if hasattr(e,"errno") and e.errno == 5:
-                e.strerror += "\n\nMake sure your Scroll pHAT HD is attached, and double-check your soldering.\n"
-            raise e
 
         self._font = font5x7
         self._rotate = 0 # Increments of 90 degrees
@@ -77,6 +81,28 @@ class Matrix:
         self._brightness = 1.0
 
         self.clear()
+
+    def setup(self):
+        if self._is_setup:
+            return True
+
+        self._is_setup = True
+
+        if self.i2c is None:
+            try:
+                self.i2c = smbus.SMBus(1)
+            except IOError as e:
+                if hasattr(e,"errno") and e.errno == 2:
+                    e.strerror += "\n\nMake sure you've enabled i2c in your Raspberry Pi configuration.\n"
+                raise e
+
+        try:
+            self._reset()
+        except IOError as e:
+            if hasattr(e,"errno") and e.errno == 5:
+                e.strerror += "\n\nMake sure your Scroll pHAT HD is attached, and double-check your soldering.\n"
+            raise e
+
         self.show()
 
         # Display initialization
@@ -98,6 +124,28 @@ class Matrix:
 
         # Enable all LEDs
         self.i2c.write_i2c_block_data(self.address, 0, [255] * 17)
+
+        atexit.register(self._exit)
+
+    def set_clear_on_exit(self, value=True):
+        """Set whether Scroll pHAT HD should be cleared upon exit.
+
+        By default Scroll pHAT HD will turn off the pixels on exit, but calling::
+
+            scrollphathd.set_clear_on_exit(False)
+
+        Will ensure that it does not.
+
+        :param value: True or False (default True)
+
+        """
+
+        self._clear_on_exit = value
+
+    def _exit(self):
+        if self._clear_on_exit:
+            self.clear()
+            self.show()
 
     @property
     def width(self):
@@ -409,6 +457,8 @@ class Matrix:
         transforms applied before taking a 17x7 slice and displaying.
 
         """
+
+        self.setup()
 
         next_frame = 0 if self._current_frame == 1 else 0
         display_shape = self.get_shape()
