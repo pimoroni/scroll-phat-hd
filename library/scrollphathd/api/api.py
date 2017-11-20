@@ -13,15 +13,14 @@ except ImportError:
 scrollhat = Blueprint('scrollhat', __name__)
 api_queue = Queue()
 
-@scrollhat.route('/scroll/<text>/<speed>')
-def scroll(text, speed):
-    api_queue.put(Action("scroll", {"text": text,
-                                    "speed": speed}))
+@scrollhat.route('/scroll/<x>/<y>')
+def scroll(x, y):
+    api_queue.put(Action("scroll", (x, y)))
 
 
 @scrollhat.route('/show/<text>')
 def show(text):
-    api_queue.put(Action("write", {"text": text}))
+    api_queue.put(Action("write", text))
 
 
 @scrollhat.route('/clear')
@@ -33,16 +32,15 @@ def run():
     while True:
         action = api_queue.get(block=True)
         if action.action_type == "write":
-            scrollphathd.write_string(action.data["text"], font=font3x5)
+            scrollphathd.write_string(action.data, font=font3x5)
             scrollphathd.show()
 
         if action.action_type == "clear":
             scrollphathd.clear()
 
         if action.action_type == "scroll":
-            scrollphathd.write_string(action.data["text"], font=font3x5)
+            scrollphathd.scroll(action.data[0], action.data[1])
             scrollphathd.show()
-            # TODO scrolling behaviour?
 
 def start_background_thread():
     api_thread = Thread(target=run())
