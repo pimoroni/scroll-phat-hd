@@ -29,6 +29,11 @@ def show(text):
 def clear():
     api_queue.put(Action("clear", {}))
 
+@scrollphathd.route('/flip', methods=["POST"])
+def flip():
+    data = request.get_json()
+    api_queue.put(Action("flip", (data["x"], data["y"])))
+
 
 def run():
     while True:
@@ -43,6 +48,9 @@ def run():
         if action.action_type == "scroll":
             scrollphathd.scroll(action.data[0], action.data[1])
             scrollphathd.show()
+
+        if action.action_type == "flip":
+            scrollphathd.flip(x=action.data["x"], y=action.data["y"])
 
 def start_background_thread():
     api_thread = Thread(target=run())
