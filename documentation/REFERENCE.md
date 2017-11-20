@@ -162,3 +162,4 @@ This starts a http flask server with the endpoints:
 
 If any data is formatted incorrectly, the blueprint api will respond with 422 (unprocessable entity) with a JSON response containing an indication of how the data was unprocessable, in the format `{"error": <string>}`.
 
+If all was ok, you'll get a 200 response with no data.
