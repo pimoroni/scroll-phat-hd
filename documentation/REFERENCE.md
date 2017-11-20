@@ -154,3 +154,9 @@ app.register_blueprint(scrollphathd_blueprint, url_prefix='scrollphathd')
 
 ```
 
+This starts a http flask server with the endpoints:
+`/scrollphathd/show` - post {"text": "helloworld"} with the content type of the post request set to "application/json"
+`/scrollphathd/clear` - post to clear the screen
+`/scrollphathd/scroll` - post {"x": 1,"y": 1} to move it 1 in each direction. Content type must be set to "application/json"
+`/scrollphathd/flip` - post {"x": "true||false", "y": "true||false"} to flip either, both or none of the directions. 
+
