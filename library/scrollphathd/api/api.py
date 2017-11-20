@@ -20,7 +20,7 @@ def scroll():
     try:
         api_queue.put(Action("scroll", (data["x"], data["y"])))
     except KeyError:
-        return {"error": "keys x and y not posted."}, HTTPStatus.BAD_REQUEST.value
+        return {"error": "keys x and y not posted."}, HTTPStatus.UNPROCESSABLE_ENTITY.value
     else:
         return HTTPStatus.OK.value
 
@@ -31,7 +31,7 @@ def show(text):
     try:
         api_queue.put(Action("write", data["text"]))
     except KeyError:
-        return {"error": "key 'text' not set"}, HTTPStatus.BAD_REQUEST.value
+        return {"error": "key 'text' not set"}, HTTPStatus.UNPROCESSABLE_ENTITY.value
     else:
         return HTTPStatus.OK.value
 
@@ -47,7 +47,7 @@ def flip():
         api_queue.put(Action("flip", (bool(data["x"]), bool(data["y"]))))
     except TypeError:
         return {"error": "Could not cast data correctly. Both `x` and `y` must be set to true or false."}, \
-               HTTPStatus.BAD_REQUEST.value
+               HTTPStatus.UNPROCESSABLE_ENTITY.value
     else:
         return HTTPStatus.OK.value
 
