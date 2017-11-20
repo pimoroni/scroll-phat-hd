@@ -6,24 +6,26 @@ from threading import Thread
 from .action import Action
 
 try:
-    from flask import Blueprint, render_template, abort
+    from flask import Blueprint, render_template, abort, request
 except ImportError:
     exit("flask must be installed in order to use the api. Install with pip install flask")
 
-scrollhat = Blueprint('scrollhat', __name__)
+scrollphathd_blueprint = Blueprint('scrollhat', __name__)
 api_queue = Queue()
 
-@scrollhat.route('/scroll/<x>/<y>')
-def scroll(x, y):
-    api_queue.put(Action("scroll", (x, y)))
+@scrollphathd_blueprint.route('/scroll', methods=["POST"])
+def scroll():
+    data = request.get_json()
+    api_queue.put(Action("scroll", (data["x"], data["y"])))
 
 
-@scrollhat.route('/show/<text>')
+@scrollphathd_blueprint.route('/show', methods=["POST"])
 def show(text):
-    api_queue.put(Action("write", text))
+    data = request.get_json()
+    api_queue.put(Action("write", data["text"]))
 
 
-@scrollhat.route('/clear')
+@scrollphathd_blueprint.route('/clear', methods=["POST"])
 def clear():
     api_queue.put(Action("clear", {}))
 
