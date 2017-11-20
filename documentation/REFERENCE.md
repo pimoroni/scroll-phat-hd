@@ -150,7 +150,7 @@ from flask import Flask
 
 start_background_thread()
 app = Flask(__name__)
-app.register_blueprint(scrollhat, url_prefix='scrollphathd')
+app.register_blueprint(scrollphathd_blueprint, url_prefix='scrollphathd')
 
 ```
 
