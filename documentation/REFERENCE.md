@@ -141,3 +141,16 @@ scrollphathd.flip(x=False, y=False)
 Parameters:  
 x – Flip horizontally left to right  
 y – Flip vertically up to down  
+
+## Run a http API
+
+```python
+from scrollphathd import scrollphathd_blueprint, start_background_thread
+from flask import Flask
+
+start_background_thread()
+app = Flask(__name__)
+app.register_blueprint(scrollhat, url_prefix='scrollphathd')
+
+```
+
