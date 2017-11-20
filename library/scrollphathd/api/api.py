@@ -4,6 +4,7 @@ from scrollphathd.fonts import font3x5
 from queue import Queue
 from threading import Thread
 from .action import Action
+from http import HTTPStatus
 
 try:
     from flask import Blueprint, render_template, abort, request
@@ -16,24 +17,39 @@ api_queue = Queue()
 @scrollphathd_blueprint.route('/scroll', methods=["POST"])
 def scroll():
     data = request.get_json()
-    api_queue.put(Action("scroll", (data["x"], data["y"])))
+    try:
+        api_queue.put(Action("scroll", (data["x"], data["y"])))
+    except KeyError:
+        return {"error": "keys x and y not posted."}, HTTPStatus.BAD_REQUEST.value
+    else:
+        return HTTPStatus.OK.value
 
 
 @scrollphathd_blueprint.route('/show', methods=["POST"])
 def show(text):
     data = request.get_json()
-    api_queue.put(Action("write", data["text"]))
-
+    try:
+        api_queue.put(Action("write", data["text"]))
+    except KeyError:
+        return {"error": "key 'text' not set"}, HTTPStatus.BAD_REQUEST.value
+    else:
+        return HTTPStatus.OK.value
 
 @scrollphathd_blueprint.route('/clear', methods=["POST"])
 def clear():
     api_queue.put(Action("clear", {}))
+    return HTTPStatus.OK.value
 
 @scrollphathd.route('/flip', methods=["POST"])
 def flip():
     data = request.get_json()
-    api_queue.put(Action("flip", (data["x"], data["y"])))
-
+    try:
+        api_queue.put(Action("flip", (bool(data["x"]), bool(data["y"]))))
+    except TypeError:
+        return {"error": "Could not cast data correctly. Both `x` and `y` must be set to true or false."}, \
+               HTTPStatus.BAD_REQUEST.value
+    else:
+        return HTTPStatus.OK.value
 
 def run():
     while True:
