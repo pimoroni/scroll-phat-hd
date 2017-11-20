@@ -69,6 +69,5 @@ def run():
             scrollphathd.flip(x=action.data[0], y=action.data[1])
 
 def start_background_thread():
-    api_thread = Thread(target=run())
+    api_thread = Thread(target=run)
     api_thread.start()
-    api_thread.join()
