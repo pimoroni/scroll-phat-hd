@@ -40,7 +40,7 @@ def clear():
     api_queue.put(Action("clear", {}))
     return HTTPStatus.OK.value
 
-@scrollphathd.route('/flip', methods=["POST"])
+@scrollphathd_blueprint.route('/flip', methods=["POST"])
 def flip():
     data = request.get_json()
     try:
@@ -71,3 +71,5 @@ def run():
 def start_background_thread():
     api_thread = Thread(target=run)
     api_thread.start()
+    
+scrollphathd_blueprint.before_app_first_request(start_background_thread)
