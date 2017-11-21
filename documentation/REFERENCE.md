@@ -145,10 +145,10 @@ y – Flip vertically up to down
 ## Run a http API
 
 ```python
-from scrollphathd import scrollphathd_blueprint, start_background_thread
+from scrollphathd import scrollphathd_blueprint
 from flask import Flask
 
-start_background_thread()
+
 app = Flask(__name__)
 app.register_blueprint(scrollphathd_blueprint, url_prefix='scrollphathd')
 app.run()
