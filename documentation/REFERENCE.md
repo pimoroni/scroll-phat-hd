@@ -151,7 +151,7 @@ from flask import Flask
 start_background_thread()
 app = Flask(__name__)
 app.register_blueprint(scrollphathd_blueprint, url_prefix='scrollphathd')
-
+app.run()
 ```
 
 This starts a http flask server with the endpoints:
