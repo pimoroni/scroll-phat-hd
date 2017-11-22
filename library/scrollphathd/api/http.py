@@ -1,5 +1,6 @@
 import scrollphathd
 from scrollphathd.fonts import font3x5
+from argparse import ArgumentParser
 
 try:
     from queue import Queue
@@ -15,7 +16,7 @@ except ImportError:
     import httplib as http_status
 
 try:
-    from flask import Blueprint, render_template, abort, request, jsonify
+    from flask import Blueprint, render_template, abort, request, jsonify, Flask
 except ImportError:
     raise ImportError("flask must be installed in order to use the api. Install with pip install flask")
 
@@ -102,8 +103,30 @@ def run():
 
         scrollphathd.show()
 
+
 def start_background_thread():
     api_thread = StoppableThread(target=run)
     api_thread.start()
-    
+
+
 scrollphathd_blueprint.before_app_first_request(start_background_thread)
+
+
+def main():
+    parser = ArgumentParser()
+    parser.add_argument("-p", "--port", type=int, help="HTTP port.", default=8080)
+    parser.add_argument("-H", "--host", type=str, help="HTTP host.", default="0.0.0.0")
+    args = parser.parse_args()
+
+    scrollphathd.set_clear_on_exit(False)
+    scrollphathd.set_brightness(0.1)
+
+    scrollphathd.write_string(str(args.port), font=font3x5, x=1, y=1)
+    scrollphathd.show()
+    app = Flask(__name__)
+    app.register_blueprint(scrollphathd_blueprint, url_prefix="scrollphathd")
+    app.run(port=args.port, host=args.host)
+
+
+if __name__ == '__main__':
+    main()
