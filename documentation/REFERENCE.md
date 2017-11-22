@@ -144,6 +144,8 @@ y – Flip vertically up to down
 
 ## Run a http API
 
+flask must be installed before the api bluerint can be imported.
+
 ```python
 from scrollphathd import scrollphathd_blueprint
 from flask import Flask
