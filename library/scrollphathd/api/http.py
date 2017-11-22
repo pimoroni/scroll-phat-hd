@@ -1,7 +1,10 @@
 from sys import exit
 import scrollphathd
 from scrollphathd.fonts import font3x5
-from queue import Queue
+try:
+    from queue import Queue
+except ImportError:
+    from Queue import Queue
 from threading import Thread
 from .action import Action
 from http import HTTPStatus
