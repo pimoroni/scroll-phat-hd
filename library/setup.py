@@ -42,6 +42,11 @@ setup(
     version         = '1.0.1',
     author          = 'Philip Howard',
     author_email    = 'phil@pimoroni.com',
+    entry_points={
+          'console_scripts': [
+              'http_api = scrollphathd.api.run_http_api.__main__:main'
+          ]
+      },
     description     = 'Scroll pHAT HD Driver',
     long_description= open('README.txt').read() + open('CHANGELOG.txt').read(),
     license         = 'MIT',
