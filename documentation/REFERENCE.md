@@ -144,8 +144,8 @@ y – Flip vertically up to down
 
 ## Run a http API
 
-flask must be installed before the api bluerint can be imported.
-
+flask must be installed before the api bluerint can be imported. 
+To build up a flask api using the blueprint you can use the following and add your own blueprints to the api as you choose:
 ```python
 from scrollphathd import scrollphathd_blueprint
 from flask import Flask
@@ -156,7 +156,10 @@ app.register_blueprint(scrollphathd_blueprint, url_prefix='scrollphathd')
 app.run()
 ```
 
-This starts a http flask server with the endpoints:
+Alternatively, with the module installed you should be able to run `scrollphathd_api` and optionally supply `-p|--port` and `-H|--host` which will start the same api as described above.
+
+
+Both options will start a http flask server with the endpoints:
 `/scrollphathd/show` - post {"text": "helloworld"} with the content type of the post request set to "application/json"
 `/scrollphathd/clear` - post to clear the screen
 `/scrollphathd/scroll` - post {"x": 1,"y": 1} to move it 1 in each direction. Content type must be set to "application/json"

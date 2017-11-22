@@ -44,7 +44,7 @@ setup(
     author_email    = 'phil@pimoroni.com',
     entry_points={
           'console_scripts': [
-              'http_api = scrollphathd.api.run_http_api.__main__:main'
+              'scrollphathd_api = scrollphathd.api.run_http_api.__main__:main'
           ]
       },
     description     = 'Scroll pHAT HD Driver',
