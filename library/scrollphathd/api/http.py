@@ -9,7 +9,7 @@ from http import HTTPStatus
 try:
     from flask import Blueprint, render_template, abort, request
 except ImportError:
-    exit("flask must be installed in order to use the api. Install with pip install flask")
+    raise ImportError("flask must be installed in order to use the api. Install with pip install flask")
 
 scrollphathd_blueprint = Blueprint('scrollhat', __name__)
 api_queue = Queue()
