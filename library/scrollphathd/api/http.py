@@ -1,11 +1,13 @@
 import scrollphathd
 from scrollphathd.fonts import font3x5
+
 try:
     from queue import Queue
 except ImportError:
     from Queue import Queue
-from threading import Thread
+
 from .action import Action
+from .stoppablethread import StoppableThread
 from http import HTTPStatus
 
 try:
@@ -71,7 +73,7 @@ def run():
             scrollphathd.flip(x=action.data[0], y=action.data[1])
 
 def start_background_thread():
-    api_thread = Thread(target=run)
+    api_thread = StoppableThread(target=run)
     api_thread.start()
     
 scrollphathd_blueprint.before_app_first_request(start_background_thread)
