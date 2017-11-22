@@ -1,4 +1,3 @@
-from sys import exit
 import scrollphathd
 from scrollphathd.fonts import font3x5
 try:
