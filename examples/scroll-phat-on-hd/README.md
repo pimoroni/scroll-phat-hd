@@ -8,7 +8,7 @@ The single file scrollphat.py encapsulate in a single file the essence of the sc
 
 If you copy that scrollphat.py in the same directory of a Scroll pHAT example, the use of import scrollphat will use that emulation library.
 
-By removing a few comment in scrollphat.py, it is also possible to display on both screen simultaneously.
+While scrollphat.py has been minimised and all the I2C code is gone, there is a scrollphat-full.py with minimal change. If you remove a few comment in that file and rename it toscrollphat.py, it is also possible to display on both screen HD and non HD pHAT simultaneously.
 
 Brightness treatement is a bit tricky, a minimum brightness of 0.1 is choosen to make sure something is visible when not specifying a value.
 
