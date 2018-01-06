@@ -11,7 +11,7 @@ from .action import Action
 from .stoppablethread import StoppableThread
 
 try:
-    import http.HTTPStatus as http_status
+    import http.client as http_status
 except ImportError:
     import httplib as http_status
 
@@ -26,7 +26,7 @@ api_queue = Queue()
 @scrollphathd_blueprint.route('/scroll', methods=["POST"])
 def scroll():
     response = {"result": "success"}
-    status_code = http_status.OK.value
+    status_code = http_status.OK
 
     data = request.get_json()
     if data is None:
@@ -35,7 +35,10 @@ def scroll():
         api_queue.put(Action("scroll", (data["x"], data["y"])))
     except KeyError:
         response = {"result": "KeyError", "error": "keys x and y not posted."}
-        status_code = http_status.UNPROCESSABLE_ENTITY.value
+        status_code = http_status.UNPROCESSABLE_ENTITY
+    except ValueError:
+        response = {"result": "ValueError", "error": "invalid integer."}
+        status_code = http_status.UNPROCESSABLE_ENTITY
 
     return jsonify(response), status_code
 
@@ -43,7 +46,7 @@ def scroll():
 @scrollphathd_blueprint.route('/show', methods=["POST"])
 def show(text):
     response = {"result": "success"}
-    status_code = http_status.OK.value
+    status_code = http_status.OK
 
     data = request.get_json()
     if data is None:
@@ -52,7 +55,7 @@ def show(text):
         api_queue.put(Action("write", data["text"]))
     except KeyError:
         response = {"result": "KeyError", "error": "key 'text' not set"}
-        status_code = http_status.UNPROCESSABLE_ENTITY.value
+        status_code = http_status.UNPROCESSABLE_ENTITY
 
     return jsonify(response), status_code
 
@@ -60,7 +63,7 @@ def show(text):
 @scrollphathd_blueprint.route('/clear', methods=["POST"])
 def clear():
     response = {"result": "success"}
-    status_code = http_status.OK.value
+    status_code = http_status.OK
 
     api_queue.put(Action("clear", {}))
     return jsonify(response), status_code
@@ -69,7 +72,7 @@ def clear():
 @scrollphathd_blueprint.route('/flip', methods=["POST"])
 def flip():
     response = {"result": "success"}
-    status_code = http_status.OK.value
+    status_code = http_status.OK
 
     data = request.get_json()
     if data is None:
@@ -78,10 +81,10 @@ def flip():
         api_queue.put(Action("flip", (bool(data["x"]), bool(data["y"]))))
     except TypeError:
         response = {"result": "TypeError", "error": "Could not cast data correctly. Both `x` and `y` must be set to true or false."}
-        status_code = http_status.UNPROCESSABLE_ENTITY.value
+        status_code = http_status.UNPROCESSABLE_ENTITY
     except KeyError:
         response = {"result": "KeyError", "error": "Could not cast data correctly. Both `x` and `y` must be in the posted json data."}
-        status_code = http_status.UNPROCESSABLE_ENTITY.value
+        status_code = http_status.UNPROCESSABLE_ENTITY
 
     return jsonify(response), status_code
 
@@ -124,7 +127,7 @@ def main():
     scrollphathd.write_string(str(args.port), font=font3x5, x=1, y=1)
     scrollphathd.show()
     app = Flask(__name__)
-    app.register_blueprint(scrollphathd_blueprint, url_prefix="scrollphathd")
+    app.register_blueprint(scrollphathd_blueprint, url_prefix="/scrollphathd")
     app.run(port=args.port, host=args.host)
 
 
