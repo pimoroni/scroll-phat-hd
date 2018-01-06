@@ -152,7 +152,7 @@ from flask import Flask
 
 
 app = Flask(__name__)
-app.register_blueprint(scrollphathd_blueprint, url_prefix='scrollphathd')
+app.register_blueprint(scrollphathd_blueprint, url_prefix='/scrollphathd')
 app.run()
 ```
 
