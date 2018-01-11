@@ -39,7 +39,7 @@ classifiers = ['Development Status :: 5 - Production/Stable',
 
 setup(
     name            = 'scrollphathd',
-    version         = '1.0.1',
+    version         = '1.1.0',
     author          = 'Philip Howard',
     author_email    = 'phil@pimoroni.com',
     entry_points={

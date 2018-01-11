@@ -1,3 +1,10 @@
+scrollphathd (1.1.0) stable; urgency=low
+
+  * New: Added Flask HTTP API
+  * New: Init is deferred until the library is used
+
+ -- Phil Howard <phil@pimoroni.com>  Thu, 11 Jan 2018 00:00:00 +0000
+
 scrollphathd (1.0.1) stable; urgency=low
 
   * New: Added gamma correction
