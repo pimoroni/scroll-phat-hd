@@ -32,7 +32,7 @@ def scroll():
     if data is None:
         data = request.form
     try:
-        api_queue.put(Action("scroll", (data["x"], data["y"])))
+        api_queue.put(Action("scroll", (int(data["x"]), int(data["y"]))))
     except KeyError:
         response = {"result": "KeyError", "error": "keys x and y not posted."}
         status_code = http_status.UNPROCESSABLE_ENTITY
@@ -44,7 +44,7 @@ def scroll():
 
 
 @scrollphathd_blueprint.route('/show', methods=["POST"])
-def show(text):
+def show():
     response = {"result": "success"}
     status_code = http_status.OK
 
