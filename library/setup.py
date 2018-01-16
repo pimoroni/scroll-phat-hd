@@ -39,14 +39,9 @@ classifiers = ['Development Status :: 5 - Production/Stable',
 
 setup(
     name            = 'scrollphathd',
-    version         = '1.1.0',
+    version         = '1.1.1',
     author          = 'Philip Howard',
     author_email    = 'phil@pimoroni.com',
-    entry_points={
-          'console_scripts': [
-              'scrollphathd_api = scrollphathd.api.http:main'
-          ]
-      },
     description     = 'Scroll pHAT HD Driver',
     long_description= open('README.txt').read() + open('CHANGELOG.txt').read(),
     license         = 'MIT',

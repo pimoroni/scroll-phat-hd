@@ -1,3 +1,8 @@
+1.1.1
+-----
+
+* Bugfix: Removed Flask HTTP API entry_point to prevent bin file conflict between Python 2 and 3
+
 1.1.0
 -----
 
