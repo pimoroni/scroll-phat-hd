@@ -412,7 +412,7 @@ class Matrix:
 
         :param x: Position of pixel from left of buffer
         :param y: Position of pixel from top of buffer
-        :param brightness: Intensity of the pixel, from 0.0 to 1.0 or 0 to 255.
+        :param brightness: Intensity of the pixel, from 0.0 to 1.0.
 
         """
 
