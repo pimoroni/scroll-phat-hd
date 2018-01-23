@@ -160,10 +160,11 @@ Alternatively, with the module installed you should be able to run `scrollphathd
 
 
 Both options will start a http flask server with the endpoints:
-`/scrollphathd/show` - post {"text": "helloworld"} with the content type of the post request set to "application/json"
-`/scrollphathd/clear` - post to clear the screen
-`/scrollphathd/scroll` - post {"x": 1,"y": 1} to move it 1 in each direction. Content type must be set to "application/json"
-`/scrollphathd/flip` - post {"x": "true||false", "y": "true||false"} to flip either, both or none of the directions. 
+
+* `/scrollphathd/show` - post `{"text": "helloworld"}` with the content type of the post request set to `application/json`
+* `/scrollphathd/clear` - post to clear the screen
+* `/scrollphathd/scroll` - post `{"x": 1,"y": 1}` to move it 1 in each direction. Content type must be set to `application/json`
+* `/scrollphathd/flip` - post `{"x": "true||false", "y": "true||false"}` to flip either, both or none of the directions. 
 
 If any data is formatted incorrectly, the blueprint api will respond with 422 (unprocessable entity) with a JSON response containing an indication of how the data was unprocessable, in the format `{"error": <string>}`.
 
