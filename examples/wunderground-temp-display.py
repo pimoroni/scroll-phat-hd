@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # wunderground-temp-display.py
 #
 # Python script to grab Wunderground temperature data and display on scrollphathd. This script shows the current temperature along with an indicator of
@@ -20,15 +21,20 @@
 
 import scrollphathd #default scrollphathd library
 from scrollphathd.fonts import font3x5
-import urllib2	#used to make web calls to Wunderground
+try:
+    import urllib.request as urllib2
+except ImportError:
+    import urllib2	#used to make web calls to Wunderground
 import json 	#used to parse Wunderground JSON data
 import time	#returns time values
+import os
 
 #Comment the below if your display is upside down
 scrollphathd.rotate(180)
 
 # Wunderground API key
 WGND_API_KEY = "paste your key here" 	#make sure to put your unique wunderground key in here
+WGND_API_KEY = os.environ.get("WGND_API_KEY", WGND_API_KEY) #or set the WGND_API_KEY environment variable
 
 #Customize this for your desired location. Easiest way to figure it out is to do a wunderground location search and copy/paste the tail end of the URL
 #	Note that some locations are a bit wonky. If a specific location has a hypen "-" in it and it doesn't work, try substituting an underscore "_" instead
@@ -76,7 +82,7 @@ if TEMP_SCALE == "F": #set max wind speed according to scale
 else:
 	MAX_WIND_SPEED = 100.0 #KPH; default 100.0
 
-# Debug flag  - set to 1 if you want to print informative console messages
+# Debug flag  - set to 1 if you want to print(informative console messages)
 DEBUG = 0
 
 #Initialize global variables before use
@@ -119,7 +125,7 @@ def get_weather_data():
 	url_str = "http://api.wunderground.com/api/" + WGND_API_KEY + "/conditions/q/" + WGND_STATION + ".json"
 	conditions = urllib2.urlopen(url_str)
 	json_string = conditions.read() 		#load into a json string
-	parsed_cond = json.loads(json_string) 	#parse the string into a json catalog
+	parsed_cond = json.loads(json_string.decode()) 	#parse the string into a json catalog
 	conditions.close()
 
 	#build current temperature string
@@ -129,7 +135,7 @@ def get_weather_data():
 		average_temp_cumulative = 0.0
 		average_temp_counter = 0
 		if DEBUG:
-			print "Resetting average temp counters"
+			print("Resetting average temp counters")
 	# parse out the current temperature and wind speeds from the json catalog based on which temperature scale is being used
 	# assumption was made that if C is being used for temp, kph is also in use. Apologies if that is not the case everywhere. :-)
 	if TEMP_SCALE == "F": #Fahrenheit
@@ -154,14 +160,14 @@ def get_weather_data():
 	as_int = int(current_temp)
 	actual_str = str(as_int)
 	if DEBUG:
-		print "get_weather_data()"
-		print "Current temp", current_temp, TEMP_SCALE
-		print "Average temp" , average_temp , TEMP_SCALE
-		print "Feels like", feels_like, TEMP_SCALE
-		print "Wind speed: ", wind_speed
-		print "Wind gusts: ", wind_gusts
-		print "Feels like string: [", fl_str, "]"
-		print "Temperature string: [", actual_str, "]"
+		print("get_weather_data()")
+		print("Current temp", current_temp, TEMP_SCALE)
+		print("Average temp" , average_temp , TEMP_SCALE)
+		print("Feels like", feels_like, TEMP_SCALE)
+		print("Wind speed: ", wind_speed)
+		print("Wind gusts: ", wind_gusts)
+		print("Feels like string: [", fl_str, "]")
+		print("Temperature string: [", actual_str, "]")
 
 	#
 	# If you want to play around with displaying other measurements, here are a few you can use. You can view the entire menu by pasting the wunderground
@@ -175,8 +181,8 @@ def get_weather_data():
 	actual_str = actual_str + TEMP_SCALE # remove unneeded trailing data and append temperature scale (C or F) to the end
 	feels_like_str = fl_str + TEMP_SCALE # remove unneeded trailing data and append temperature scale (C or F) to the end
 	if DEBUG:
-		print "Actual str: ", actual_str
-		print "Feels like str: ", feels_like_str
+		print("Actual str: ", actual_str)
+		print("Feels like str: ", feels_like_str)
 	return;
 # 
 # draw_kr_pulse(position, direction) - draws a Knight Rider-style pulsing pixel. I put this in so that I could tell that the app was running, since weather
@@ -228,22 +234,22 @@ def draw_wind_line():
 	global wind_gusts
 	wind_multiplier = (17.0 / MAX_WIND_SPEED)
 	if DEBUG:
-		print "Wind multiplier: ", wind_multiplier
+		print("Wind multiplier: ", wind_multiplier)
 	wind_calc = wind_multiplier * wind_speed
 	if DEBUG:
-		print "wind calc: ", wind_calc
+		print("wind calc: ", wind_calc)
 	wind_calc = int(wind_calc) #convert to int
 	if wind_calc > 17: #just in case something goes haywire, like a hurricane :-)
 		wind_calc = 17
 	gust_calc = wind_multiplier * wind_gusts
 	if DEBUG:
-		print "gust calc: ", gust_calc
+		print("gust calc: ", gust_calc)
 	gust_calc = int(gust_calc)
 	if gust_calc > 17:
 		gust_calc = 17
 	if DEBUG:
-		print "Wind speed, calc", wind_speed, wind_calc
-		print "wind gusts, calc", wind_gusts , gust_calc
+		print("Wind speed, calc", wind_speed, wind_calc)
+		print("wind gusts, calc", wind_gusts , gust_calc)
 	# Draw the wind speed first
 	for x in range(0,wind_calc):
 		scrollphathd.set_pixel(x, 6, WIND_BRIGHTNESS)
@@ -277,10 +283,10 @@ def display_temp_value():
 
 # BEGIN MAIN LOGIC
 
-print "'Live' temperature and wind display using Wunderground data."
-print "Uses Raspberry Pi-W and Scrollphathd display. Written by Mark Ehr, January 2018"
-print "Press Ctrl-C to exit"
-print  "Current weather station: " , WGND_STATION
+print("'Live' temperature and wind display using Wunderground data.")
+print("Uses Raspberry Pi-W and Scrollphathd display. Written by Mark Ehr, January 2018")
+print("Press Ctrl-C to exit")
+print( "Current weather station: " , WGND_STATION)
 
 # Initial weather data poll and write to display
 get_weather_data()
@@ -300,15 +306,15 @@ while True:
 		draw_wind_line()
 		if current_temp < average_temp and (current_temp < 100 or current_temp < -9): #don't show temp trend arrow if > 100 degrees or < -10 degrees -- not enough room on the display.
 			if DEBUG:
-				print time.asctime(time.localtime(time.time())), "Actual temp", actual_str, "Feels like temp", feels_like_str, "-"
+				print(time.asctime(time.localtime(time.time())), "Actual temp", actual_str, "Feels like temp", feels_like_str, "-")
 			draw_temp_trend(-1)
 		elif current_temp == average_temp and (current_temp < 100 or current_temp < -9):
 			if DEBUG:
-				print time.asctime(time.localtime(time.time())), "Actual temp", actual_str, "Feels like temp", feels_like_str, "="
+				print(time.asctime(time.localtime(time.time())), "Actual temp", actual_str, "Feels like temp", feels_like_str, "=")
 			draw_temp_trend(0)
 		elif current_temp > average_temp and (current_temp < 100 or current_temp < -9):
 			if DEBUG:
-				print time.asctime(time.localtime(time.time())), "Actual temp", actual_str, "Feels like temp", feels_like_str, "+"
+				print(time.asctime(time.localtime(time.time())), "Actual temp", actual_str, "Feels like temp", feels_like_str, "+")
 			draw_temp_trend(1)
 		display_temp_value() #if you want actual temp, just change to ACTUAL
 
@@ -322,4 +328,4 @@ while True:
 #termination code; clear the display
 scrollphathd.clear()
 scrollphathd.show()
-print "Exiting...."
+print("Exiting....")
