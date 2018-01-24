@@ -323,7 +323,7 @@ class Matrix:
             self.buf = self._grow_buffer(self.buf, (x + width, y + height))
 
         # fill in one operation using a slice
-        self.buf[x:x+width,y:y+height] = int(255.0 * brightness)
+        self.buf[x:x+width,y:y+height] = brightness
 
     def clear_rect(self, x, y, width, height):
         """Clear a rectangle.
@@ -419,8 +419,6 @@ class Matrix:
         if brightness > 1.0 or brightness < 0:
             raise ValueError("Value {} out of range. Brightness should be between 0 and 1".format(brightness))
 
-        brightness = int(255.0 * brightness)
-
         try:
             self.buf[x][y] = brightness
 
@@ -450,7 +448,7 @@ class Matrix:
         else:
             return (self._width, self._height)
 
-    def show(self):
+    def show(self, before_display=None):
         """Show the buffer contents on the display.
 
         The buffer is copied, then  scrolling, rotation and flip y/x
@@ -472,6 +470,11 @@ class Matrix:
         # Chop a width * height window out of the display buffer
         display_buffer = display_buffer[:display_shape[0], :display_shape[1]]
 
+        # Allow the cropped buffer to be modified in-place before it's transformed and displayed
+        # This permits static elements to be drawn over the top of a scrolling buffer
+        if callable(before_display):
+            display_buffer = before_display(display_buffer)
+
         if self._flipx:
             display_buffer = numpy.flipud(display_buffer)
 
@@ -488,7 +491,7 @@ class Matrix:
                 idx = self._pixel_addr(x, self._height-(y+1))
 
                 try:
-                    output[idx] = self._gamma_table[int(display_buffer[x][y] * self._brightness)]
+                    output[idx] = self._gamma_table[int(display_buffer[x][y] * 255 * self._brightness)]
 
                 except IndexError:
                     output[idx] = 0
