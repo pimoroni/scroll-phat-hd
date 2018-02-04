@@ -12,6 +12,7 @@ DISPLAY_WIDTH = display._width
 pixel = display.set_pixel
 set_pixel = display.set_pixel
 set_brightness = display.set_brightness
+set_font = display.set_font
 show = display.show
 scroll = display.scroll
 fill = display.fill
