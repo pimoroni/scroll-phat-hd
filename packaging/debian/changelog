@@ -1,3 +1,10 @@
+scrollphathd (1.2.0) stable; urgency=low
+
+  * New: Added set_font to set current font for all write_string calls
+  * New: Added before_display argument to show to modify the display buffer
+
+ -- Phil Howard <phil@pimoroni.com>  Mon, 12 Feb 2018 00:00:00 +0000
+
 scrollphathd (1.1.1) stable; urgency=low
 
   * Bugfix: Removed Flask HTTP API entry_point to prevent bin file conflict between Python 2 and 3

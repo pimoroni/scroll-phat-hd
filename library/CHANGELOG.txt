@@ -1,3 +1,9 @@
+1.2.0
+-----
+
+* New: Added set_font to set current font for all write_string calls
+* New: Added before_display argument to show to modify the display buffer
+
 1.1.1
 -----
 
