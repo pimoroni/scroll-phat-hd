@@ -393,6 +393,17 @@ class Matrix:
 
         self._brightness = brightness
 
+    def set_font(self, font):
+        """Set a global font value.
+
+        :param font: Font value from .font (font3x5, font5x5, font5x7, font5x7smoothed)
+
+        Note: Import the font before invoking set_font(), (available by) default is font5x7.
+
+        """
+
+        self._font = font
+
     def _grow_buffer(self, buffer, newshape):
         """Grows a copy of buffer until the new shape fits inside it.
 
