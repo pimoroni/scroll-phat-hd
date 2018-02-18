@@ -1,11 +1,19 @@
+import time
+import signal
+
 import scrollphathd
-from scrollphathd.fonts import font3x5
+
 from argparse import ArgumentParser
 
 try:
     from queue import Queue
 except ImportError:
     from Queue import Queue
+
+try:
+    from queue import Empty
+except ImportError:
+    from Queue import Empty
 
 from .action import Action
 from .stoppablethread import StoppableThread
@@ -22,6 +30,9 @@ except ImportError:
 
 scrollphathd_blueprint = Blueprint('scrollhat', __name__)
 api_queue = Queue()
+
+# To handle automatic scroll
+auto_scroll = False
 
 @scrollphathd_blueprint.route('/scroll', methods=["POST"])
 def scroll():
@@ -45,12 +56,19 @@ def scroll():
 
 @scrollphathd_blueprint.route('/show', methods=["POST"])
 def show():
+    global auto_scroll
+
     response = {"result": "success"}
     status_code = http_status.OK
 
     data = request.get_json()
     if data is None:
         data = request.form
+    # Update global auto_scroll value
+    if data["auto_scroll"] == "True":
+        auto_scroll = True
+    else:
+        auto_scroll = False
     try:
         api_queue.put(Action("write", data["text"]))
     except KeyError:
@@ -91,20 +109,32 @@ def flip():
 
 def run():
     while True:
-        action = api_queue.get(block=True)
-        if action.action_type == "write":
-            scrollphathd.write_string(action.data, font=font3x5)
+        global auto_scroll
 
-        if action.action_type == "clear":
-            scrollphathd.clear()
+        try:
+            action = api_queue.get(block=False, timeout=1)
 
-        if action.action_type == "scroll":
-            scrollphathd.scroll(action.data[0], action.data[1])
+            if action.action_type == "write":
+                # Clear the buffer before writing new text
+                scrollphathd.clear()
+                scrollphathd.write_string(action.data)
 
-        if action.action_type == "flip":
-            scrollphathd.flip(x=action.data[0], y=action.data[1])
+            if action.action_type == "clear":
+                scrollphathd.clear()
+
+            if action.action_type == "scroll":
+                scrollphathd.scroll(action.data[0], action.data[1])
+
+            if action.action_type == "flip":
+                scrollphathd.flip(x=action.data[0], y=action.data[1])
+        except Empty:
+            pass
 
         scrollphathd.show()
+
+        if auto_scroll is True:
+            scrollphathd.scroll()
+            time.sleep(0.1)
 
 
 def start_background_thread():
@@ -122,9 +152,10 @@ def main():
     args = parser.parse_args()
 
     scrollphathd.set_clear_on_exit(False)
+    # To check if it is visible!
     scrollphathd.set_brightness(0.1)
 
-    scrollphathd.write_string(str(args.port), font=font3x5, x=1, y=1)
+    scrollphathd.write_string(str(args.port), x=1, y=1)
     scrollphathd.show()
     app = Flask(__name__)
     app.register_blueprint(scrollphathd_blueprint, url_prefix="/scrollphathd")

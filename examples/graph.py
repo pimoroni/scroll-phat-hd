@@ -17,7 +17,9 @@ Press Ctrl+C to exit!
 MIN_VALUE = 0
 MAX_VALUE = 50
 
-scrollphathd.rotate(180)
+# Uncomment the below if your display is upside down
+#   (e.g. if you're using it in a Pimoroni Scroll Bot)
+#scrollphathd.rotate(degrees=180)
 
 # Begin with a list of 17 zeros
 values = [0] * scrollphathd.DISPLAY_WIDTH

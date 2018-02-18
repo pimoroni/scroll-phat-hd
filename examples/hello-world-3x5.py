@@ -16,13 +16,14 @@ Press Ctrl+C to exit!
 
 """)
 
-#Uncomment to rotate the text
-#scrollphathd.rotate(180)
+# Uncomment the below if your display is upside down
+#   (e.g. if you're using it in a Pimoroni Scroll Bot)
+#scrollphathd.rotate(degrees=180)
 
 #Set a more eye-friendly default brightness
 scrollphathd.set_brightness(0.5)
 
-scrollphathd.write_string("Hello World! ", x=0, y=1, font=font3x5, brightness=0.5)
+scrollphathd.write_string(" Hello World!", y=1, font=font3x5)
 
 while True:
     scrollphathd.show()
