@@ -116,8 +116,20 @@ class Matrix:
         # Disable audio sync
         self.i2c.write_i2c_block_data(self.address, _AUDIOSYNC_REGISTER, [0])
 
+        enable_pattern = [
+            0b11111111, 0b01111111,
+            0b11111111, 0b01111111,
+            0b11111111, 0b01111111,
+            0b11111111, 0b01111111,
+            0b11111111, 0b01111111,
+            0b11111111, 0b01111111,
+            0b11111111, 0b01111111,
+            0b11111111, 0b11111111,
+        ]
+
+        # Enable LEDs
         self._bank(1)
-        self.i2c.write_i2c_block_data(self.address, 0, [255] * 17)
+        self.i2c.write_i2c_block_data(self.address, 0x00, enable_pattern)
 
         # Switch to bank 0 ( frame 0 )
         self._bank(0)
