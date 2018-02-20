@@ -1,5 +1,4 @@
 from sys import version_info
-from .api.http import start_background_thread, scrollphathd_blueprint
 from . import is31fl3731
 
 __version__ = '1.2.0'
