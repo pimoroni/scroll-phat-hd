@@ -23,10 +23,7 @@ try:
 except ImportError:
     import httplib as http_status
 
-try:
-    from flask import Blueprint, render_template, abort, request, jsonify, Flask
-except ImportError:
-    raise ImportError("flask must be installed in order to use the api. Install with pip install flask")
+from flask import Blueprint, render_template, abort, request, jsonify, Flask
 
 scrollphathd_blueprint = Blueprint('scrollhat', __name__)
 api_queue = Queue()

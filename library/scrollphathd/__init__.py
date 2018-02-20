@@ -1,8 +1,7 @@
 from sys import version_info
-from .api.http import start_background_thread, scrollphathd_blueprint
 from . import is31fl3731
 
-__version__ = '1.2.1'
+__version__ = '1.2.0'
 
 display = is31fl3731.ScrollPhatHD(None, gamma_table=is31fl3731.LED_GAMMA)
 
