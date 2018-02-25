@@ -168,7 +168,7 @@ class Matrix:
         return self._height
 
     def set_gamma(self, gamma_table):
-        """Set the LED gamma table
+        """Set the LED gamma table.
 
         Set the table of values used to give the LEDs a pleasing
         to the eye brightness curve.
@@ -183,9 +183,9 @@ class Matrix:
         self._gamma_table = gamma_table
 
     def scroll(self, x=1, y=0):
-        """Offset the buffer by x/y pixels
+        """Offset the buffer by x/y pixels.
 
-        Scroll pHAT HD displays an 17x7 pixel window into the bufer,
+        Scroll pHAT HD displays an 17x7 pixel window into the buffer,
         which starts at the left offset and wraps around.
 
         The x and y values are added to the internal scroll offset.
