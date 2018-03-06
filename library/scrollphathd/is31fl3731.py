@@ -15,7 +15,7 @@ except ImportError:
     elif version_info[0] == 3:
         raise ImportError("This library requires python3-smbus\nInstall with: sudo apt-get install python3-smbus")
 
-
+# Default font
 from .fonts import font5x7
 
 _MODE_REGISTER = 0x00
@@ -168,7 +168,7 @@ class Matrix:
         return self._height
 
     def set_gamma(self, gamma_table):
-        """Set the LED gamma table
+        """Set the LED gamma table.
 
         Set the table of values used to give the LEDs a pleasing
         to the eye brightness curve.
@@ -183,9 +183,9 @@ class Matrix:
         self._gamma_table = gamma_table
 
     def scroll(self, x=1, y=0):
-        """Offset the buffer by x/y pixels
+        """Offset the buffer by x/y pixels.
 
-        Scroll pHAT HD displays an 17x7 pixel window into the bufer,
+        Scroll pHAT HD displays an 17x7 pixel window into the buffer,
         which starts at the left offset and wraps around.
 
         The x and y values are added to the internal scroll offset.
@@ -299,9 +299,11 @@ class Matrix:
         :param string: The string to display
         :param x: Offset x - distance of the string from the left of the buffer
         :param y: Offset y - distance of the string from the top of the buffer
+        :param letter_spacing: distance in pixel(s) between two consecutive chars
         :param font: Font to use, default is to use the one specified with `set_font`
         :param brightness: Brightness of the pixels that compromise the text, from 0.0 to 1.0
         :param monospaced: Whether to space characters out evenly
+        :param fill_background: Not used!
 
         """
 

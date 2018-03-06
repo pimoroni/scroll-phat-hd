@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#made by @mrglennjones with help from @pimoroni & pb
+# made by @mrglennjones with help from @pimoroni & pb
 
 import time
 import unicodedata
@@ -39,7 +39,9 @@ q = queue.Queue()
 
 # define main loop to fetch formatted tweet from queue
 def mainloop():
-    scrollphathd.rotate(degrees=180)
+    # Uncomment the below if your display is upside down
+    #   (e.g. if you're using it in a Pimoroni Scroll Bot)
+    #scrollphathd.rotate(degrees=180)
     scrollphathd.clear()
     scrollphathd.show()
 
