@@ -29,14 +29,15 @@ import json 	#used to parse Wunderground JSON data
 import time	#returns time values
 import os
 
-#Comment the below if your display is upside down
-scrollphathd.rotate(180)
+# Uncomment the below if your display is upside down
+#   (e.g. if you're using it in a Pimoroni Scroll Bot)
+#scrollphathd.rotate(degrees=180)
 
 # Wunderground API key
 WGND_API_KEY = "paste your key here" 	#make sure to put your unique wunderground key in here
 WGND_API_KEY = os.environ.get("WGND_API_KEY", WGND_API_KEY) #or set the WGND_API_KEY environment variable
 
-#Customize this for your desired location. Easiest way to figure it out is to do a wunderground location search and copy/paste the tail end of the URL
+# Customize this for your desired location. Easiest way to figure it out is to do a wunderground location search and copy/paste the tail end of the URL
 #	Note that some locations are a bit wonky. If a specific location has a hypen "-" in it and it doesn't work, try substituting an underscore "_" instead
 #	Even then, I couldn't get some locations to work properly. Seems like a possible bug in the wunderground API.
 

@@ -1,9 +1,26 @@
 #!/usr/bin/env python
 
-import signal
-import time
+import threading
 
 import scrollphathd
+
+
+def autoscroll(interval=0.1):
+    """Autoscroll with a thread (recursive function).
+
+    Automatically show and scroll the buffer according to the interval value.
+
+    :param interval: Amount of seconds (or fractions thereof), not zero
+
+    """
+
+    # Start a timer
+    threading.Timer(interval, autoscroll, [interval]).start()
+    # Show the buffer
+    scrollphathd.show()
+    # Scroll the buffer content
+    scrollphathd.scroll()
+
 
 print("""
 Scroll pHAT HD: Hello World
@@ -23,11 +40,5 @@ Press Ctrl+C to exit!
 #   set a more eye-friendly default brightness
 scrollphathd.write_string(" Hello World!", brightness=0.5)
 
-# Auto scroll using a while + time mechanism (no thread)
-while True:
-    # Show the buffer
-    scrollphathd.show()
-    # Scroll the buffer content
-    scrollphathd.scroll()
-    # Wait for 0.1s
-    time.sleep(0.1)
+# Auto scroll using a thread
+autoscroll()
