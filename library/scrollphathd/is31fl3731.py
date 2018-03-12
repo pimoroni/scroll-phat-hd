@@ -116,26 +116,31 @@ class Matrix:
         # Disable audio sync
         self.i2c.write_i2c_block_data(self.address, _AUDIOSYNC_REGISTER, [0])
 
+        # Enable only connected LEDs,
+        # Bytes correspond to groups of 8 LEDs, little-endian
+        # eg: [ 7 6 5 4 3 2 1 0 ] [ 15 14 13 12 11 10 9 8 ]
+        # This is a bi-directional 8x9 matrix, for a total of 144 LEDs
+        # we're enabling 119 (17x7) of them.
         enable_pattern = [
-            0b11111111, 0b01111111,
-            0b11111111, 0b01111111,
-            0b11111111, 0b01111111,
-            0b11111111, 0b01111111,
-            0b11111111, 0b01111111,
-            0b11111111, 0b01111111,
-            0b11111111, 0b01111111,
-            0b11111111, 0b11111111,
+        #   Matrix A    Matrix B
+            0b01111111, 0b01111111,
+            0b01111111, 0b01111111,
+            0b01111111, 0b01111111,
+            0b01111111, 0b01111111,
+            0b01111111, 0b01111111,
+            0b01111111, 0b01111111,
+            0b01111111, 0b01111111,
+            0b01111111, 0b01111111,
+            0b01111111, 0b00000000,
         ]
 
         # Enable LEDs
-        self._bank(1)
-        self.i2c.write_i2c_block_data(self.address, 0x00, enable_pattern)
+        for bank in [1, 0]:
+            self._bank(bank)
+            self.i2c.write_i2c_block_data(self.address, 0x00, enable_pattern)
 
         # Switch to bank 0 ( frame 0 )
         self._bank(0)
-
-        # Enable all LEDs
-        self.i2c.write_i2c_block_data(self.address, 0, [255] * 17)
 
         atexit.register(self._exit)
 
