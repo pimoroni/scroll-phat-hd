@@ -182,7 +182,7 @@ class Matrix:
 
         """
 
-        if len(gamma_table) != 256:
+        if len(gamma_table) != 256 or not isinstance(gamma_table, list):
             raise ValueError("Gamma table must be a list with 256 values.")
 
         self._gamma_table = gamma_table

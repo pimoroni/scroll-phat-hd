@@ -28,4 +28,4 @@ set_graph = display.set_graph
 get_buffer_shape = display.get_buffer_shape
 get_shape = display.get_shape
 set_clear_on_exit = display.set_clear_on_exit
-
+set_gamma = display.set_gamma
