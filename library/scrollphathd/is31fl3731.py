@@ -298,21 +298,77 @@ class Matrix:
 
         return (x + px, y + font.height)
 
+    def calculate_string_width(self, string, font=None, letter_spacing=1, monospaced=False):
+        """Calculate the width of a string.
+
+        :param string: The string to measure
+        :param font: Font to use, default is to use the one specified with `set_font`
+        :param letter_spacing: Distance (in pixels) between characters
+        :param monospaced: Whether to space characters out evenly (using `font.width`)
+
+        """
+
+        width = 0
+
+        for char in string:
+            width += self.calculate_char_width(char, font=font, monospaced=monospaced)
+            width += 1 + letter_spacing
+
+        return width
+
+    def calculate_char_width(self, char, font=None, monospaced=False):
+        """Calculate the width of a single character.
+
+        :param char: The character to measure
+        :param font: Font to use, default is to use the one specified with `set_font`
+        :param monospaced: Whether to space characters out evenly (using `font.width`)
+
+        """
+ 
+        if font is None:
+            if self._font is not None:
+                font = self._font
+            else:
+                return 0
+
+        if char in font.data:
+            char_map = font.data[char]
+        elif type(char) is not int and ord(char) in font.data:
+            char_map = font.data[ord(char)]
+        else:
+            return 0
+
+        if monospaced:
+            return font.width - 1
+        else:
+            return len(char_map[0]) - 1
+
     def write_string(self, string, x=0, y=0, font=None, letter_spacing=1, brightness=1.0, monospaced=False, fill_background=False):
         """Write a string to the buffer. Calls draw_char for each character.
 
         :param string: The string to display
         :param x: Offset x - distance of the string from the left of the buffer
         :param y: Offset y - distance of the string from the top of the buffer
-        :param letter_spacing: distance in pixel(s) between two consecutive chars
+        :param letter_spacing: Distance (in pixels) between characters
         :param font: Font to use, default is to use the one specified with `set_font`
         :param brightness: Brightness of the pixels that compromise the text, from 0.0 to 1.0
-        :param monospaced: Whether to space characters out evenly
+        :param monospaced: Whether to space characters out evenly (using `font.width`)
         :param fill_background: Not used!
 
         """
 
         o_x = x
+
+        if font is None:
+            if self._font is not None:
+                font = self._font
+            else:
+                raise ValueError("Must supply a valid font")
+
+        string_width = self.calculate_string_width(string, font, letter_spacing, monospaced)
+
+        # Grow the buffer once to avoid *very* slow incremental growth as each individual pixel is set
+        self.buf = self._grow_buffer(self.buf, (x + string_width, y + font.height))
 
         for char in string:
             x, n = self.draw_char(x, y, char, font=font, brightness=brightness, monospaced=monospaced)
