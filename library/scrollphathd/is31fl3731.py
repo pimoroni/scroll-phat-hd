@@ -505,7 +505,10 @@ class Matrix:
         """
 
         if brightness > 1.0 or brightness < 0:
-            raise ValueError("Value {} out of range. Brightness should be between 0 and 1".format(brightness))
+            raise ValueError("Value {} out of range. Brightness must be between 0 and 1".format(brightness))
+
+        if x < 0 or y < 0:
+            raise ValueError("Pixel coordinates x and y must be positive integers")
 
         try:
             self.buf[x][y] = brightness
