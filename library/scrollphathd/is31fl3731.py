@@ -258,7 +258,7 @@ class Matrix:
         except AttributeError:
             pass
 
-        self.buf = numpy.zeros((1, 1))
+        self.buf = numpy.zeros((self._width, self._height))
 
     def draw_char(self, x, y, char, font=None, brightness=1.0, monospaced=False):
         """Draw a single character to the buffer.
