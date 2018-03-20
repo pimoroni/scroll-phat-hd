@@ -438,6 +438,8 @@ class Matrix:
         if high is None:
             high = max(values)
 
+        self.buf = self._grow_buffer(self.buf, (x + width, y + height))
+
         span = high - low
 
         for p_x in range(width):
@@ -586,7 +588,6 @@ class Matrix:
 
         offset = 0
         for chunk in self._chunk(output, 32):
-            #print(chunk)
             self.i2c.write_i2c_block_data(self.address, _COLOR_OFFSET + offset, chunk)
             offset += 32
 
@@ -629,8 +630,6 @@ class Matrix:
 
         if value is None:
             return self.i2c.readfrom_mem(self.address, register, 1)[0]
-
-        #print "reg", value
 
         self.i2c.write_i2c_block_data(self.address, register, [value])
 
