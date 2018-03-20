@@ -124,7 +124,11 @@ def get_weather_data():
 	# Note that JSON, while very powerful, can also be very confusing to decode. I'd recommend you do a little reading on
 	#	it if you plan on playing around with this code much. It took me quite a while to figure out. 
 	url_str = "http://api.wunderground.com/api/" + WGND_API_KEY + "/conditions/q/" + WGND_STATION + ".json"
-	conditions = urllib2.urlopen(url_str)
+        try:
+	    conditions = urllib2.urlopen(url_str)
+        except urllib2.HTTPError, e:
+            e.msg = "{} (Did you set the API key?)".format(e.msg)
+            raise (e)
 	json_string = conditions.read() 		#load into a json string
 	parsed_cond = json.loads(json_string.decode()) 	#parse the string into a json catalog
 	conditions.close()
