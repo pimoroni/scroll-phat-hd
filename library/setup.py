@@ -39,11 +39,11 @@ classifiers = ['Development Status :: 5 - Production/Stable',
 
 setup(
     name            = 'scrollphathd',
-    version         = '1.2.0',
+    version         = '1.2.1',
     author          = 'Philip Howard',
     author_email    = 'phil@pimoroni.com',
     description     = 'Scroll pHAT HD Driver',
-    long_description= open('README.txt').read() + open('CHANGELOG.txt').read(),
+    long_description= open('README.rst').read() + "\n" + open('CHANGELOG.txt').read(),
     license         = 'MIT',
     keywords        = 'Raspberry Pi LED',
     url             = 'http://www.pimoroni.com',

@@ -1,3 +1,14 @@
+scrollphathd (1.2.1) stable; urgency=low
+
+  * New: Exposed set_gamma method for user gamma correction
+  * Improvement: Removed web API import to prevent hard dependency on Flask
+  * Improvement: Many improvements to the HTTP API including autoscroll
+  * Optimisation: write_string will calculate string size and grow buffer once to fit
+  * Optimisation: set_graph will grow buffer to fit the graph
+  * Bugfix: Fixed ASCII font to place accented characters at correct codepoints
+
+ -- Phil Howard <phil@pimoroni.com>  Wed, 21 Mar 2018 00:00:00 +0000
+
 scrollphathd (1.2.0) stable; urgency=low
 
   * New: Added set_font to set current font for all write_string calls
