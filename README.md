@@ -69,6 +69,10 @@ sudo python3 setup.py install
 
 In all cases you will have to enable the i2c bus.
 
+## Alternative Libraries
+
+* Node JS library by @whatsim - https://github.com/whatsim/scrollcontroller
+
 ## Documentation & Support
 
 * Guides and tutorials - https://learn.pimoroni.com/scroll-phat-hd
