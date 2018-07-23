@@ -12,14 +12,15 @@ def generatemap():
         for x in range(-1, xsize + 1):
             matrix[y, x] = {'now': 0, 'soon': 0}
 
-    for x in range(10):
-        matrix[3, x + 3]['now'] = 1
-
     # random light on
-    # for _ in range(100):
-    #     y = random.randint(0, ysize - 1)
-    #     x = random.randint(0, xsize - 1)
-    #     matrix[y, x]['now'] = 1
+    # todo beautify
+    for _ in range(100):
+        y = random.randint(0, ysize - 1)
+        x = random.randint(0, xsize - 1)
+        matrix[y, x]['now'] = 1
+
+    # for x in range(10):
+    #     matrix[3, x + 3]['now'] = 1
 
 
 def printmap(sleeptime):
@@ -33,15 +34,15 @@ def printmap(sleeptime):
                 active_counter += 1
             else:
                 phat.set_pixel(x, y, 0)
-    print(active_counter)
     phat.show()
     time.sleep(sleeptime)
     phat.clear()
 
-    # return active_counter
+    return active_counter
 
 
 def lifecycle():
+    # preparing next cycle
     for y in range(ysize):
         for x in range(xsize):
             neighbors = countneighbors(y, x, matrix[y, x]['now'])
@@ -49,6 +50,10 @@ def lifecycle():
                 matrix[y, x]['soon'] = 1 if 1 < neighbors < 4 else 0
             else:
                 matrix[y, x]['soon'] = 1 if neighbors == 3 else 0
+
+    # activating next cycle
+    for y in range(ysize):
+        for x in range(xsize):
             matrix[y, x]['now'] = matrix[y, x]['soon']
 
 
@@ -61,24 +66,22 @@ def countneighbors(py, px, status):
     return neighbors
 
 
-
 while True:
+    max_iterations = 100
+    stagnation_max = 10
 
+    active_count_old = 0
+    stagnation_count = 0
     generatemap()
     printmap(2)
-    stagnation = 0
-    stagnation_max = 10
-    active_count_old = 0
-
     while True:
         lifecycle()
-        printmap(2)
-        active_count = printmap(0.3)
+        active_count = printmap(0.1)
         if active_count_old == active_count:
-            stagnation += 1
-            print("ONE DOWN #" + str(stagnation))
+            stagnation_count += 1
         active_count_old = active_count
-        print(active_count)
+        print("iter #{}, stagnation #{}".format(max_iterations, stagnation_count))
+        max_iterations -= 1
 
-        if stagnation == stagnation_max:
+        if stagnation_count == stagnation_max or max_iterations < 0:
             break
