@@ -1,3 +1,4 @@
+"""IS31FL3731 144 LED Matrix Driver."""
 import time
 
 _MODE_REGISTER = 0x00
@@ -26,6 +27,7 @@ _COLOR_OFFSET = 0x24
 _NUM_PIXELS = 144
 _NUM_FRAMES = 8
 
+
 class IS31FL3731:
     """Class representing the IS31FL3731 matrix driver."""
 
@@ -45,17 +47,17 @@ class IS31FL3731:
                 import smbus
                 self.i2c = smbus.SMBus(1)
             except ImportError as e:
-                raise ImportError("You must supply an i2c device or install the smbus library.")
+                raise ImportError('You must supply an i2c device or install the smbus library.')
             except IOError as e:
-                if hasattr(e,"errno") and e.errno == 2:
+                if hasattr(e, 'errno') and e.errno == 2:
                     e.strerror += "\n\nMake sure you've enabled i2c in your Raspberry Pi configuration.\n"
                 raise e
 
         try:
             self.reset()
         except IOError as e:
-            if hasattr(e,"errno") and e.errno == 5:
-                e.strerror += "\n\nMake sure your Scroll pHAT HD is attached, and double-check your soldering.\n"
+            if hasattr(e, 'errno') and e.errno == 5:
+                e.strerror += '\n\nMake sure your Scroll pHAT HD is attached, and double-check your soldering.\n'
             raise e
 
         for frame in reversed(range(_NUM_FRAMES)):
@@ -82,7 +84,7 @@ class IS31FL3731:
         self.i2c.write_i2c_block_data(self.address, 0x00, enable_pattern)
 
     def clear(self):
-        """Clear the buffer
+        """Clear the buffer.
 
         You must call `show` after clearing the buffer to update the display.
 
@@ -98,10 +100,10 @@ class IS31FL3731:
 
         """
         if brightness > 255 or brightness < 0:
-            raise ValueError("Value {} out of range. Brightness must be between 0 and 255".format(brightness))
+            raise ValueError('Value {} out of range. Brightness must be between 0 and 255'.format(brightness))
 
         if index < 0 or index > 143:
-            raise ValueError("Index must be between 0 and 143")
+            raise ValueError('Index must be between 0 and 143')
 
         self._buf[frame][index] = brightness
 
@@ -134,7 +136,7 @@ class IS31FL3731:
 
 
         """
-        self._i2c_write(_FRAME_REGISTER, frame, bank=_CONFIG_BANK);
+        self._i2c_write(_FRAME_REGISTER, frame, bank=_CONFIG_BANK)
 
     def set_bank(self, bank):
         """Set the current memory bank/frame."""
@@ -158,6 +160,5 @@ class IS31FL3731:
 
     def _chunk(self, l, n):
         """Split a list of values in to chunks of length n."""
-        for i in range(0, len(l)+1, n):
+        for i in range(0, len(l) + 1, n):
             yield l[i:i + n]
-

@@ -55,13 +55,14 @@ display = None
 buf = None
 
 
-def setup():
+def setup(i2c_dev=None):
     """Set up Scroll pHAT HD."""
-    global display, buf
+    global display
+
     if display is not None:
         return
 
-    display = is31fl3731.IS31FL3731()
+    display = is31fl3731.IS31FL3731(i2c=i2c_dev)
 
     enable_pattern = [
         # Matrix A   Matrix B
@@ -78,8 +79,6 @@ def setup():
 
     for frame in range(is31fl3731._NUM_FRAMES):
         display.enable_leds(frame, enable_pattern)
-
-    clear()
 
     atexit.register(_exit)
 
@@ -110,7 +109,6 @@ def set_pixel(x, y, brightness):
 
     """
     global buf
-    setup()
 
     if brightness > 1.0 or brightness < 0:
         raise ValueError('Value {} out of range. Brightness must be between 0 and 1'.format(brightness))
@@ -180,7 +178,8 @@ def show(before_display=None):
     for axis in [0, 1]:
         if not _scroll[axis] == 0:
             display_buffer = numpy.roll(
-                display_buffer, -_scroll[axis],
+                display_buffer,
+                -_scroll[axis],
                 axis=axis)
 
     # Chop a width * height window out of the display buffer
@@ -218,7 +217,6 @@ def show(before_display=None):
 def set_graph(values, low=None, high=None, brightness=1.0, x=0, y=0, width=None, height=None):
     """Plot a series of values into the display buffer."""
     global buf
-    setup()
 
     if width is None:
         width = DISPLAY_WIDTH
@@ -309,7 +307,7 @@ def scroll_to(x=0, y=0):
     _scroll[1] = y
 
 
-def rotate(self, degrees=0):
+def rotate(degrees=0):
     """Rotate the buffer 0, 90, 180 or 270 degrees before displaying.
 
     :param degrees: Amount to rotate- will snap to nearest 90
@@ -437,7 +435,6 @@ def write_string(string, x=0, y=0, font=None, letter_spacing=1, brightness=1.0, 
 
     """
     global buf
-    setup()
 
     o_x = x
 
@@ -455,7 +452,7 @@ def write_string(string, x=0, y=0, font=None, letter_spacing=1, brightness=1.0, 
     buf = grow_buffer(x + string_width, y + font.height)
 
     for char in string:
-        x, n = draw_char(
+        x, _ = draw_char(
             x,
             y,
             char,
@@ -493,6 +490,18 @@ def fill(brightness, x=0, y=0, width=None, height=None):
     buf[x:x + width, y:y + height] = brightness
 
 
+def clear_rect(x, y, width, height):
+    """Clear a rectangular area.
+
+    :param x: Offset x - distance from left of buffer
+    :param y: Offset y - distance from top of buffer
+    :param width: Width of area (default is 17)
+    :param height: Heigh of area (default is 7)
+
+    """
+    fill(0, x, y, width, height)
+
+
 def clear():
     """Clear the buffer.
 
@@ -519,4 +528,8 @@ def _pixel_addr(x, y):
 
 
 def _exit():
-    pass
+    clear()
+    show()
+
+
+clear()
