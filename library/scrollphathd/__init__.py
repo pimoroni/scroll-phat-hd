@@ -55,14 +55,22 @@ display = None
 buf = None
 
 
-def setup(i2c_dev=None):
-    """Set up Scroll pHAT HD."""
+def setup(i2c_dev=None, i2c_address=0x74):
+    """Set up Scroll pHAT HD.
+
+    :param i2c_dev: smbus-compatible i2c object
+    :param i2c_address: 7-bit i2c address
+
+
+    """
     global display
 
     if display is not None:
         return
 
-    display = is31fl3731.IS31FL3731(i2c=i2c_dev)
+    display = is31fl3731.IS31FL3731(
+        i2c=i2c_dev,
+        address=i2c_address)
 
     enable_pattern = [
         # Matrix A   Matrix B

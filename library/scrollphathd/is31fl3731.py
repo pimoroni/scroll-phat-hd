@@ -42,6 +42,11 @@ class IS31FL3731:
         self.address = address
         self.clear()
 
+        if self.i2c is not None:
+            for attr in ('read_byte_data', 'write_byte_data', 'write_i2c_block_data'):
+                if not hasattr(self.i2c, attr):
+                    raise RuntimeError('i2c transport must implement: "{}"'.format(attr))
+
         if self.i2c is None:
             try:
                 import smbus
