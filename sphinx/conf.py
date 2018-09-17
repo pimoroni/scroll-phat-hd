@@ -60,8 +60,8 @@ class MethodDocumenter(autodoc.MethodDocumenter):
             self.objpath[0] = u'scrollphathd'
         autodoc.MethodDocumenter.add_directive_header(self, sig)
 
-class ClassOutlineDocumenter(autodoc.ClassDocumenter):
-    objtype = 'classoutline'
+class ModuleOutlineDocumenter(autodoc.ModuleDocumenter):
+    objtype = 'moduleoutline'
 
     def add_directive_header(self, sig):
         pass # Squash directive header for At A Glance view
@@ -71,7 +71,7 @@ class ClassOutlineDocumenter(autodoc.ClassDocumenter):
         sphinx_app.add_autodocumenter(OutlineMethodDocumenter)
         #sphinx_app.add_autodocumenter(OutlineClassDocumenter)
         sphinx_app.add_autodocumenter(OutlineFunctionDocumenter)
-        autodoc.ClassDocumenter.__init__(self, directive, name, indent)
+        autodoc.ModuleDocumenter.__init__(self, directive, name, indent)
 
     def __del__(self):
         # Return the Method and Function documenters to normal
@@ -83,9 +83,9 @@ class ClassOutlineDocumenter(autodoc.ClassDocumenter):
 def setup(app):
     global sphinx_app
     sphinx_app = app
-    app.add_autodocumenter(ClassOutlineDocumenter)
+    app.add_autodocumenter(ModuleOutlineDocumenter)
     app.add_autodocumenter(MethodDocumenter)
-    ClassOutlineDocumenter.objtype = 'class'
+    ModuleOutlineDocumenter.objtype = 'module'
 
 # -- General configuration ------------------------------------------------
 

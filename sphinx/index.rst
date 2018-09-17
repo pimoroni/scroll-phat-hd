@@ -14,12 +14,12 @@ Scroll pHAT provides a matrix of 119 individually brightness controlled white LE
 * Soldering - https://learn.pimoroni.com/tutorial/sandyj/soldering-phats
 * Get help - http://forums.pimoroni.com/c/support
 
-.. currentmodule:: scrollphathd.is31fl3731
+.. currentmodule:: scrollphathd
 
 At A Glance
 -----------
 
-.. autoclassoutline:: scrollphathd.is31fl3731.Matrix
+.. automoduleoutline:: scrollphathd
    :members:
 
 .. toctree::
@@ -33,37 +33,37 @@ Scroll pHAT HD uses white LEDs which can be brightness controlled.
 
 When you set a pixel it will not immediately display on Scroll pHAT HD, you must call :python:`scrollphathd.show()`.
 
-.. automethod:: scrollphathd.is31fl3731.Matrix.set_pixel
+.. autofunction:: scrollphathd.set_pixel
    :noindex:
 
 Write A Text String
 -------------------
 
-.. automethod:: scrollphathd.is31fl3731.Matrix.write_string
+.. autofunction:: scrollphathd.write_string
    :noindex:
 
 Draw A Single Char
 ------------------
 
-.. automethod:: scrollphathd.is31fl3731.Matrix.draw_char
+.. autofunction:: scrollphathd.draw_char
    :noindex:
 
 Display A Graph
 ---------------
 
-.. automethod:: scrollphathd.is31fl3731.Matrix.set_graph
+.. autofunction:: scrollphathd.set_graph
    :noindex:
 
 Fill An Area
 ------------
 
-.. automethod:: scrollphathd.is31fl3731.Matrix.fill
+.. autofunction:: scrollphathd.fill
    :noindex:
 
 Clear An Area
 -------------
 
-.. automethod:: scrollphathd.is31fl3731.Matrix.clear_rect
+.. autofunction:: scrollphathd.clear_rect
    :noindex:
 
 Display Buffer
@@ -72,47 +72,47 @@ Display Buffer
 All of your changes to Scroll pHAT HD are stored in a Python buffer. To display them
 on Scroll pHAT HD you must call :python:`scrollphathd.show()`.
 
-.. automethod:: scrollphathd.is31fl3731.Matrix.show
+.. autofunction:: scrollphathd.show
    :noindex:
 
 Clear Buffer
 ------------
 
-.. automethod:: scrollphathd.is31fl3731.Matrix.clear
+.. autofunction:: scrollphathd.clear
    :noindex:
 
 Scroll The Buffer
 -----------------
 
-.. automethod:: scrollphathd.is31fl3731.Matrix.scroll
+.. autofunction:: scrollphathd.scroll
    :noindex:
 
 Scroll To A Position
 --------------------
 
-.. automethod:: scrollphathd.is31fl3731.Matrix.scroll_to
+.. autofunction:: scrollphathd.scroll_to
    :noindex:
 
 Rotate The Display
 ------------------
 
-.. automethod:: scrollphathd.is31fl3731.Matrix.rotate
+.. autofunction:: scrollphathd.rotate
    :noindex:
 
 Flip The Display
 ----------------
 
-.. automethod:: scrollphathd.is31fl3731.Matrix.flip
+.. autofunction:: scrollphathd.flip
    :noindex:
 
 Get The Display Size
 --------------------
 
-.. automethod:: scrollphathd.is31fl3731.Matrix.get_shape
+.. autofunction:: scrollphathd.get_shape
    :noindex:
 
 Get The Buffer Size
 -------------------
 
-.. automethod:: scrollphathd.is31fl3731.Matrix.get_buffer_shape
+.. autofunction:: scrollphathd.get_buffer_shape
    :noindex:
