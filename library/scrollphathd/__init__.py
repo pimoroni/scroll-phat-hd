@@ -524,6 +524,15 @@ def clear():
     buf = numpy.zeros((DISPLAY_WIDTH, DISPLAY_HEIGHT))
 
 
+def get_buffer_shape():
+    """Get the size/shape of the internal buffer.
+
+    Returns a tuple containing the width and height of the buffer.
+
+    """
+    return buf.shape
+
+
 def _pixel_addr(x, y):
     """Translate an x,y coordinate to a pixel index."""
     if x > 8:
