@@ -303,7 +303,8 @@ while True:
         get_weather_data()
         scrollphathd.clear()
         draw_wind_line()
-        if current_temp < average_temp and (current_temp < 100 or current_temp < -9):  # don't show temp trend arrow if > 100 degrees or < -10 degrees -- not enough room on the display.
+        # don't show temp trend arrow if > 100 degrees or < -10 degrees -- not enough room on the display.
+        if current_temp < average_temp and (current_temp < 100 or current_temp < -9):
             if DEBUG:
                 print(time.asctime(time.localtime(time.time())), "Actual temp", actual_str, "Feels like temp", feels_like_str, "-")
             draw_temp_trend(-1)
