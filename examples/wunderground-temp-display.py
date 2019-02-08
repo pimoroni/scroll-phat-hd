@@ -123,7 +123,7 @@ def get_weather_data():
     url_str = "http://api.wunderground.com/api/" + WGND_API_KEY + "/conditions/q/" + WGND_STATION + ".json"
     try:
         conditions = urllib2.urlopen(url_str)
-    except urllib2.HTTPError, e:
+    except urllib2.HTTPError as e:
         e.msg = "{} (Did you set the API key?)".format(e.msg)
         raise (e)
 
@@ -159,7 +159,9 @@ def get_weather_data():
     average_temp_cumulative = average_temp_cumulative + current_temp
     average_temp_counter = average_temp_counter + 1
     average_temp = average_temp_cumulative / average_temp_counter
-    fl_int = int(feels_like)  # convert to integer from float. For some reason you can't cast the above directly as an int, so need to take an extra step. I'm sure there is a more elegant way to doing this, but it works. :-)
+    fl_int = int(feels_like)  # convert to integer from float.
+                              # For some reason you can't cast the above directly as an int, so need to take an extra step.
+                              # I'm sure there is a more elegant way to doing this, but it works. :-)
     fl_str = str(fl_int)
     as_int = int(current_temp)
     actual_str = str(as_int)
