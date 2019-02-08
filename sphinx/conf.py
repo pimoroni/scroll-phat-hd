@@ -1,19 +1,15 @@
 #-*- coding: utf-8 -*-
 
 import sys
-import site
-
 import mock
+
 PACKAGE_NAME = u"Scroll pHAT HD"
 PACKAGE_HANDLE = "ScrollpHATHD"
 PACKAGE_MODULE = "scrollphathd"
 
-# Prompte /usr/local/lib to the front of sys.path
-#sys.path.insert(0,site.getsitepackages()[0])
-
 import sphinx_rtd_theme
 
-MOCK_MODULES = ['smbus','numpy']
+MOCK_MODULES = ['smbus', 'numpy']
 for module_name in MOCK_MODULES:
     sys.modules[module_name] = mock.MagicMock()
 
@@ -24,11 +20,13 @@ import scrollphathd
 
 from sphinx.ext import autodoc
 
+
 class OutlineClassDocumenter(autodoc.ClassDocumenter):
     objtype = 'class'
 
     def add_content(self, more_content, no_docstring=False):
         return
+
 
 class OutlineMethodDocumenter(autodoc.MethodDocumenter):
     objtype = 'method'
@@ -41,6 +39,7 @@ class OutlineMethodDocumenter(autodoc.MethodDocumenter):
             self.objpath[0] = u'scrollphathd'
         autodoc.MethodDocumenter.add_directive_header(self, sig)
 
+
 class OutlineFunctionDocumenter(autodoc.FunctionDocumenter):
     objtype = 'function'
 
@@ -52,6 +51,7 @@ class OutlineFunctionDocumenter(autodoc.FunctionDocumenter):
             self.objpath[0] = u'scrollphathd'
         autodoc.FunctionDocumenter.add_directive_header(self, sig)
 
+
 class MethodDocumenter(autodoc.MethodDocumenter):
     objtype = 'method'
 
@@ -60,22 +60,23 @@ class MethodDocumenter(autodoc.MethodDocumenter):
             self.objpath[0] = u'scrollphathd'
         autodoc.MethodDocumenter.add_directive_header(self, sig)
 
+
 class ModuleOutlineDocumenter(autodoc.ModuleDocumenter):
     objtype = 'moduleoutline'
 
     def add_directive_header(self, sig):
-        pass # Squash directive header for At A Glance view
+        pass  # Squash directive header for At A Glance view
 
     def __init__(self, directive, name, indent=u''):
         # Monkey patch the Method and Function documenters
         sphinx_app.add_autodocumenter(OutlineMethodDocumenter)
-        #sphinx_app.add_autodocumenter(OutlineClassDocumenter)
+        # sphinx_app.add_autodocumenter(OutlineClassDocumenter)
         sphinx_app.add_autodocumenter(OutlineFunctionDocumenter)
         autodoc.ModuleDocumenter.__init__(self, directive, name, indent)
 
     def __del__(self):
         # Return the Method and Function documenters to normal
-        #sphinx_app.add_autodocumenter(autodoc.ClassDocumenter)
+        # sphinx_app.add_autodocumenter(autodoc.ClassDocumenter)
         sphinx_app.add_autodocumenter(MethodDocumenter)
         sphinx_app.add_autodocumenter(autodoc.FunctionDocumenter)
 
@@ -86,6 +87,7 @@ def setup(app):
     app.add_autodocumenter(ModuleOutlineDocumenter)
     app.add_autodocumenter(MethodDocumenter)
     ModuleOutlineDocumenter.objtype = 'module'
+
 
 # -- General configuration ------------------------------------------------
 
@@ -190,7 +192,6 @@ todo_include_todos = False
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
-#html_theme = 'alabaster'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
