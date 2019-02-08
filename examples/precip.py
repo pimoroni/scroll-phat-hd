@@ -14,7 +14,7 @@ def generate_lightning(intensity):
 
         # generate a random crooked path from top to bottom,
         # making sure to not go off the sides
-        for y in xrange(0, height):
+        for y in range(0, height):
             if y > 1 and y < height - 1:
                 branch = random.random()
                 if branch < .3:
@@ -58,7 +58,7 @@ def new_drop(pixels, values):
     # First, get a list of columns that haven't generated
     # a particle recently
     cols = []
-    for x in xrange(0, width):
+    for x in range(0, width):
         good_col = True
         for y in xrange(0, int(height * values['safe'])):
             if pixels[x][y] == values['brightness']:
