@@ -60,7 +60,7 @@ def new_drop(pixels, values):
     cols = []
     for x in range(0, width):
         good_col = True
-        for y in xrange(0, int(height * values['safe'])):
+        for y in range(0, int(height * values['safe'])):
             if pixels[x][y] == values['brightness']:
                 good_col = False
         if good_col is True:
@@ -82,8 +82,8 @@ def new_drop(pixels, values):
 
 def fade_pixels(pixel_array, fade):
     """Fade all the lit particles on the board by the fade variable"""
-    for x in xrange(0, width):
-        for y in xrange(0, height):
+    for x in range(0, width):
+        for y in range(0, height):
             if pixel_array[x][y] > 0:
                 pixel_array[x][y] -= fade
                 pixel_array[x][y] = round(pixel_array[x][y], 2)
@@ -94,19 +94,19 @@ def fade_pixels(pixel_array, fade):
 
 def update_pixels(pixels, values):
     """Update the board by lighting new pixels as they fall"""
-    for x in xrange(0, width):
-        for y in xrange(0, height - 1):
+    for x in range(0, width):
+        for y in range(0, height - 1):
             if pixels[x][y] == values['brightness']:
                 pixels[x][y + 1] = values['brightness'] + values['fade']
 
     fade_pixels(pixels, values['fade'])
 
-    x = xrange(width)
-    y = xrange(height)
+    x = range(width)
+    y = range(height)
     [[[scrollphathd.set_pixel(a, b, pixels[a][b])] for a in x] for b in y]
 
-    for a in xrange(0, len(pixels)):
-        for b in xrange(0, len(pixels[a])):
+    for a in range(0, len(pixels)):
+        for b in range(0, len(pixels[a])):
             scrollphathd.set_pixel(a, b, pixels[a][b])
 
     scrollphathd.show()
@@ -295,9 +295,9 @@ if __name__ == '__main__':
     # Set up initial pixel matrix
     pixels = []
 
-    for x in xrange(width):
+    for x in range(width):
         pixels.append([])
-        for y in xrange(height):
+        for y in range(height):
             pixels[x].append(0)
 
     # Print conditions
