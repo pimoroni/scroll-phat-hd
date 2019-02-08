@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import signal
 import time
 
 import pigpio
@@ -15,6 +14,7 @@ using the default 5x7 pixel large font.
 Press Ctrl+C to exit!
 
 """)
+
 
 class I2C_PIGPIO():
     def __init__(self):
@@ -33,11 +33,11 @@ class I2C_PIGPIO():
 
 scrollphathd.setup(i2c_dev=I2C_PIGPIO())
 # Uncomment the below if your display is upside down
-#   (e.g. if you're using it in a Pimoroni Scroll Bot)
-#scrollphathd.rotate(degrees=180)
+# (e.g. if you're using it in a Pimoroni Scroll Bot)
+# scrollphathd.rotate(degrees=180)
 
 # Write the "Hello World!" string in the buffer and
-#   set a more eye-friendly default brightness
+# set a more eye-friendly default brightness
 scrollphathd.write_string(" Hello World!", brightness=0.5)
 
 # Auto scroll using a while + time mechanism (no thread)
