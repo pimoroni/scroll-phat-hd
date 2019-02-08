@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import time
-import signal
 
 import scrollphathd
 from scrollphathd.fonts import font3x5
@@ -18,13 +17,14 @@ Press Ctrl+C to exit!
 
 # Uncomment the below if your display is upside down
 #   (e.g. if you're using it in a Pimoroni Scroll Bot)
-#scrollphathd.rotate(degrees=180)
+# scrollphathd.rotate(degrees=180)
 
 # Set a more eye-friendly default brightness
 scrollphathd.set_brightness(0.5)
 
 # Write the string to scroll
 scrollphathd.write_string(" Hello World! ", x=0, y=1, font=font3x5, brightness=1.0)
+
 
 def draw_static_elements(buf):
     # Buf is given as a two dimensional array of elements buf[x][y]
@@ -44,6 +44,7 @@ def draw_static_elements(buf):
 
     return buf
 
+
 try:
     while True:
         scrollphathd.show(before_display=draw_static_elements)
@@ -51,4 +52,3 @@ try:
         time.sleep(0.05)
 except KeyboardInterrupt:
     pass
-

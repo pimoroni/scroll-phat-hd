@@ -37,11 +37,12 @@ if consumer_key == '' or consumer_secret == '' or access_token == '' or access_t
 # make FIFO queue
 q = queue.Queue()
 
+
 # define main loop to fetch formatted tweet from queue
 def mainloop():
     # Uncomment the below if your display is upside down
     #   (e.g. if you're using it in a Pimoroni Scroll Bot)
-    #scrollphathd.rotate(degrees=180)
+    # scrollphathd.rotate(degrees=180)
     scrollphathd.clear()
     scrollphathd.show()
 
@@ -50,8 +51,8 @@ def mainloop():
         try:
             scrollphathd.clear()
             status = q.get(False)
-            scrollphathd.write_string(status,font=font5x7, brightness=0.1)
-            status_length = scrollphathd.write_string(status, x=0, y=0,font=font5x7, brightness=0.1)
+            scrollphathd.write_string(status, font=font5x7, brightness=0.1)
+            status_length = scrollphathd.write_string(status, x=0, y=0, font=font5x7, brightness=0.1)
             time.sleep(0.25)
 
             while status_length > 0:
@@ -59,7 +60,6 @@ def mainloop():
                 scrollphathd.scroll(1)
                 status_length -= 1
                 time.sleep(0.02)
-
 
             scrollphathd.clear()
             scrollphathd.show()
@@ -69,6 +69,7 @@ def mainloop():
 
         except queue.Empty:
             time.sleep(1)
+
 
 class MyStreamListener(tweepy.StreamListener):
     def on_status(self, status):
@@ -106,4 +107,3 @@ except KeyboardInterrupt:
     myStream.disconnect()
     del myStream
     print("Exiting!")
-

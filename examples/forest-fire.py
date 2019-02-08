@@ -44,14 +44,16 @@ f = 0.001
 tree, burning, space = (0.3, 0.9, 0.0)
 
 # Each square's neighbour coordinates
-hood = ((-1,-1), (-1,0), (-1,1),
-        (0,-1),          (0, 1),
-        (1,-1),  (1,0),  (1,1))
+hood = ((-1, -1), (-1, 0), (-1, 1),
+        (0, -1), (0, 1),
+        (1, -1), (1, 0), (1, 1))
+
 
 # Function to populate the initial forest
 def initialise():
-    grid = {(x,y): (tree if random.random()<= initial_trees else space) for x in range(width) for y in range(height)}
+    grid = {(x, y): (tree if random.random() <= initial_trees else space) for x in range(width) for y in range(height)}
     return grid
+
 
 # Display the forest, in its current state, on Scroll pHAT HD
 def show_grid(grid):
@@ -60,6 +62,7 @@ def show_grid(grid):
         for y in range(height):
             scrollphathd.set_pixel(x, y, grid[(x, y)])
     scrollphathd.show()
+
 
 # Go through grid, update grid squares based on state of
 # square and neighbouring squares
@@ -75,6 +78,7 @@ def update_grid(grid):
                 new_grid[(x, y)] = (burning if any(grid.get((x + dx, y + dy), space) == burning for dx, dy in hood) or random.random() <= f else tree)
     return new_grid
 
+
 # Main function. Initialises grid, then shows, updates, and
 # waits for 1/20 of a second.
 def main():
@@ -83,6 +87,7 @@ def main():
         show_grid(grid)
         grid = update_grid(grid)
         time.sleep(0.05)
+
 
 # Catches control-c and exits cleanly
 try:
