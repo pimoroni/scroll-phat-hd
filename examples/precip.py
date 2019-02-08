@@ -10,8 +10,8 @@ import scrollphathd
 def generate_lightning(intensity):
     """Generate a lightning bolt"""
     if random.random() < intensity:
-        x = random.randint(0, width-1)
-        
+        x = random.randint(0, width - 1)
+
         # generate a random crooked path from top to bottom,
         # making sure to not go off the sides
         for y in xrange(0, height):
@@ -23,13 +23,13 @@ def generate_lightning(intensity):
                         x = 0
                 elif branch > .6:
                     x += 1
-                    if x >= width-1:
-                        x = width-1
+                    if x >= width - 1:
+                        x = width - 1
 
             # generate a wider flash around the bolt itself
-            wide = [int(x-(width/2)), int(x+(width/2))]
-            med = [int(x-(width/4)), int(x+(width/4))]
-            small = [x-1, x+1]
+            wide = [int(x - (width / 2)), int(x + (width / 2))]
+            med = [int(x - (width / 4)), int(x + (width / 4))]
+            small = [x - 1, x + 1]
 
             for val in [wide, med, small]:
                 if val[0] < 0:
@@ -42,7 +42,7 @@ def generate_lightning(intensity):
                     flash[1],
                     x=flash[0][0],
                     y=y,
-                    width=flash[0][1]-flash[0][0]+1,
+                    width=flash[0][1] - flash[0][0] + 1,
                     height=1
                 )
 
@@ -54,13 +54,13 @@ def generate_lightning(intensity):
 
 def new_drop(pixels, values):
     """Generate a new particle at the top of the board"""
-    
+
     # First, get a list of columns that haven't generated
     # a particle recently
     cols = []
     for x in xrange(0, width):
         good_col = True
-        for y in xrange(0, int(height*values['safe'])):
+        for y in xrange(0, int(height * values['safe'])):
             if pixels[x][y] == values['brightness']:
                 good_col = False
         if good_col is True:
@@ -95,9 +95,9 @@ def fade_pixels(pixel_array, fade):
 def update_pixels(pixels, values):
     """Update the board by lighting new pixels as they fall"""
     for x in xrange(0, width):
-        for y in xrange(0, height-1):
+        for y in xrange(0, height - 1):
             if pixels[x][y] == values['brightness']:
-                pixels[x][y+1] = values['brightness'] + values['fade']
+                pixels[x][y + 1] = values['brightness'] + values['fade']
 
     fade_pixels(pixels, values['fade'])
 
@@ -111,6 +111,7 @@ def update_pixels(pixels, values):
 
     scrollphathd.show()
 
+
 # Command line argument parsing functions
 def msg(name=None):
     return '''precip.py [options...]
@@ -123,7 +124,7 @@ def setup_parser():
         description='Generate precipitation; CTRL+C to exit',
         usage=msg(),
         argument_default=argparse.SUPPRESS
-        )
+    )
     parser.add_argument(
         "-a",
         "--amount",
@@ -181,7 +182,7 @@ def setup_parser():
             270
         ],
         type=int
-        )
+    )
     parser.add_argument(
         "-s",
         "--safe",
@@ -189,7 +190,7 @@ def setup_parser():
         "before a new particle can be generated in that column "
         "(0 to 1, fraction of the column)",
         type=float
-        )
+    )
     parser.add_argument(
         "-t",
         "--type",
@@ -206,6 +207,7 @@ def setup_parser():
     )
 
     return parser
+
 
 if __name__ == '__main__':
 

@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import time
-import signal
 
 import scrollphathd
 from scrollphathd.fonts import font5x7
@@ -12,17 +11,17 @@ Scroll pHAT HD: Hello utf-8
 
 Scrolls the 256 characters Scroll pHAT supports across the screen.
 
-Note: many otherwise useless control characters have been 
+Note: many otherwise useless control characters have been
 replaced with symbols you might find useful!
 
 Press Ctrl+C to exit!
 
 """)
 
-#Uncomment to rotate the text
-#scrollphathd.rotate(180)
+# Uncomment to rotate the text
+# scrollphathd.rotate(180)
 
-#Set a more eye-friendly default brightness
+# Set a more eye-friendly default brightness
 scrollphathd.set_brightness(0.5)
 
 text = [unichr(x) for x in range(256)]

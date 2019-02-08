@@ -3,15 +3,14 @@ import scrollphathd
 from scrollphathd.api.http import scrollphathd_blueprint
 from scrollphathd.fonts import font3x5
 from flask import Flask
-import os
 
 # Set the font
 scrollphathd.set_font(font3x5)
 # Set the brightness
 scrollphathd.set_brightness(0.5)
 # Uncomment the below if your display is upside down
-#   (e.g. if you're using it in a Pimoroni Scroll Bot)
-#scrollphathd.rotate(degrees=180)
+# (e.g. if you're using it in a Pimoroni Scroll Bot)
+# scrollphathd.rotate(degrees=180)
 
 if __name__ == "__main__":
     app = Flask(__name__)

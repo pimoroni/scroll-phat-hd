@@ -29,10 +29,9 @@ def mainloop():
     # set up the scrollPhat
     scrollphathd.clear()
     # Uncomment the below if your display is upside down
-    #   (e.g. if you're using it in a Pimoroni Scroll Bot)
-    #scrollphathd.rotate(degrees=180)
+    # (e.g. if you're using it in a Pimoroni Scroll Bot)
+    # scrollphathd.rotate(degrees=180)
     scrollphathd.set_brightness(0.1)
-
 
     # define a list of some interesting rule numbers to loop through
     rules = [22, 30, 54, 60, 75, 90, 110, 150]
@@ -57,7 +56,6 @@ def mainloop():
     row = 0
 
     speed = 10
-
 
     while True:
 
@@ -102,10 +100,9 @@ def mainloop():
             #  so we will use the value of cell 0, effectively wrapping
             #  the horizontal edges of the display
 
-            a = inputRow[x-1] if x > 0 else inputRow[16]
+            a = inputRow[x - 1] if x > 0 else inputRow[16]
             b = inputRow[x]
-            c = inputRow[x+1] if x < 16 else inputRow[0]
-
+            c = inputRow[x + 1] if x < 16 else inputRow[0]
 
             #  a, b and c now contain the states of the three input cells
             #  that determine the state of our output cell
@@ -132,7 +129,6 @@ def mainloop():
             #  if we find an abc of a=1, b=0, c=0 we would match
             #  with "100" and output a 1
 
-
             #  if we were using rule number 110 we would get this mapping
 
             #  inputs   111   110   101   100   011   010   001   000
@@ -140,7 +136,6 @@ def mainloop():
 
             #  because the padded binary representation of the number 110 is
             #  "01101100" we get no match for "100"
-
 
             #  ok, so lets consider the first evolution of rule 30 starting
             #  with a single dot in the center of the first row.
@@ -181,8 +176,6 @@ def mainloop():
             #  row 1 > 0011100
             #  row 2 > 0110010
 
-
-
             #  so that's nice, but we need a general way to do this for any rule
             #  ...
 
@@ -201,7 +194,6 @@ def mainloop():
             #  ... "00001000"
             #  and see if it matches against our binary rule 30
 
-
             #  0 0 0 0 1 0 0 0
             #  0 0 0 1 1 1 1 0
             #          ^
@@ -216,7 +208,6 @@ def mainloop():
             #  x & y Does a "bitwise and". Each bit of the output is 1 if the
             #  corresponding bit of x AND of y is 1, otherwise it's 0.
 
-
             #  so, after all that we now know the state of this output cell.
             #  fortunately the algorithm is a lot shorter than the explaination ;)
 
@@ -224,8 +215,7 @@ def mainloop():
             o = 1 << ((a << 2) + (b << 1) + c)
 
             #  set the output cell to 1 if it &s with the rule, othewise 0
-            outputRow[x] = 1 if o&rule else 0
-
+            outputRow[x] = 1 if o & rule else 0
 
         # incrementally fill in the rows until we fill the last row
         # then roll up the display matrix and evolve the last row
@@ -239,6 +229,7 @@ def mainloop():
 
         # have a nap
         time.sleep(0.01 * speed)
+
 
 try:
     mainloop()

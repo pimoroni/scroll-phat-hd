@@ -30,4 +30,3 @@ while True:
     scrollphathd.show()
     scrollphathd.scroll()
     time.sleep(0.05)
-
