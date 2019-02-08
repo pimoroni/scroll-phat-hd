@@ -143,13 +143,13 @@ def get_weather_data():
     # parse out the current temperature and wind speeds from the json catalog based on which temperature scale is being used
     # assumption was made that if C is being used for temp, kph is also in use. Apologies if that is not the case everywhere. :-)
     if TEMP_SCALE == "F":  # Fahrenheit
-        temperature = str(parsed_cond['current_observation']['temp_f'])  # string used for display purposes
+        # temperature = str(parsed_cond['current_observation']['temp_f'])  # string used for display purposes
         current_temp = parsed_cond['current_observation']['temp_f']      # string used for calculations
         wind_speed = float(parsed_cond['current_observation']['wind_mph'])
         wind_gusts = float(parsed_cond['current_observation']['wind_gust_mph'])
         feels_like = float(parsed_cond['current_observation']['feelslike_f'])
     else:                  # Celsius
-        temperature = str(parsed_cond['current_observation']['temp_c'])
+        # temperature = str(parsed_cond['current_observation']['temp_c'])
         current_temp = parsed_cond['current_observation']['temp_c']
         wind_speed = float(parsed_cond['current_observation']['wind_kph'])
         wind_gusts = float(parsed_cond['current_observation']['wind_gust_kph'])
@@ -159,9 +159,9 @@ def get_weather_data():
     average_temp_cumulative = average_temp_cumulative + current_temp
     average_temp_counter = average_temp_counter + 1
     average_temp = average_temp_cumulative / average_temp_counter
-    fl_int = int(feels_like)  # convert to integer from float.
-                              # For some reason you can't cast the above directly as an int, so need to take an extra step.
-                              # I'm sure there is a more elegant way to doing this, but it works. :-)
+    fl_int = int(feels_like)  # Convert to integer from float.
+    #                           For some reason you can't cast the above directly as an int, so need to take an extra step.
+    #                           I'm sure there is a more elegant way to doing this, but it works. :-)
     fl_str = str(fl_int)
     as_int = int(current_temp)
     actual_str = str(as_int)
