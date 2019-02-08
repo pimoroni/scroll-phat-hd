@@ -24,20 +24,22 @@ IMAGE_BRIGHTNESS = 0.5
 
 img = Image.open("mouth.bmp")
 
+
 def get_pixel(x, y):
     p = img.getpixel((x, y))
 
     if img.getpalette() is not None:
-        r, g, b = img.getpalette()[p:p+3]
+        r, g, b = img.getpalette()[p:p + 3]
         p = max(r, g, b)
 
     return p / 255.0
+
 
 try:
     for x in range(0, scrollphathd.DISPLAY_WIDTH):
         for y in range(0, scrollphathd.DISPLAY_HEIGHT):
             brightness = get_pixel(x, y)
-            scrollphathd.pixel(x, 6-y, brightness * IMAGE_BRIGHTNESS)
+            scrollphathd.pixel(x, 6 - y, brightness * IMAGE_BRIGHTNESS)
 
     while True:
         scrollphathd.show()

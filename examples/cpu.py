@@ -24,8 +24,8 @@ i = 0
 cpu_values = [0] * scrollphathd.DISPLAY_WIDTH
 
 # Uncomment the below if your display is upside down
-#   (e.g. if you're using it in a Pimoroni Scroll Bot)
-#scrollphathd.rotate(degrees=180)
+# (e.g. if you're using it in a Pimoroni Scroll Bot)
+# scrollphathd.rotate(degrees=180)
 
 while True:
     try:

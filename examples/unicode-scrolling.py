@@ -3,6 +3,9 @@
 import time
 
 import scrollphathd
+from scrollphathd.fonts import font5x7unicode
+
+scrollphathd.set_font(font5x7unicode)
 
 print("""
 Scroll pHAT HD: Simple Scrolling
@@ -32,4 +35,6 @@ def scroll_message(message):
     time.sleep(0.5)                              # Delay at the end of scrolling
 
 
-scroll_message("Hello World! How are you today?")
+message = "".join([unichr(x) for x in range(256)])
+
+scroll_message(message)

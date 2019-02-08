@@ -7,7 +7,7 @@ try:
 except ImportError:
     exit("This script requires the pillow module\nInstall with: sudo pip install pillow")
 
-FONT_FILE = "5x7-font.png"
+FONT_FILE = "5x7-font-unicode.png"
 
 SHEET_WIDTH = 16
 SHEET_HEIGHT = 16
@@ -15,14 +15,13 @@ SHEET_HEIGHT = 16
 FONT_WIDTH = 5
 FONT_HEIGHT = 7
 
-CHAR_SPACING_X = 2
-CHAR_SPACING_Y = 2
-MARGIN_X = 2
-MARGIN_Y = 2
+CHAR_SPACING_X = 1
+CHAR_SPACING_Y = 1
+MARGIN_X = 1
+MARGIN_Y = 1
 
 CHAR_START = 0x00
 CHAR_END = 0xff
-
 
 def get_char_position(char):
     """Get the x/y position of the char"""
@@ -32,22 +31,19 @@ def get_char_position(char):
 
     return (x, y)
 
-
 def get_char_coords(x, y):
     """Get the x/y position of the char in pixels"""
 
-    x = MARGIN_X + (x * (FONT_WIDTH + CHAR_SPACING_X))
+    x = MARGIN_X + (x * (FONT_WIDTH  + CHAR_SPACING_X))
     y = MARGIN_Y + (y * (FONT_HEIGHT + CHAR_SPACING_Y))
 
     return (x, y)
-
 
 def get_color(font_image, color):
     offset = color * 3
     r, g, b = font_image.getpalette()[offset:offset+3]
 
     return 255 - max(r, g, b)
-
 
 def get_char_data(font_image, o_x, o_y):
     char = [[0 for x in range(FONT_WIDTH)] for y in range(FONT_HEIGHT)]
@@ -59,7 +55,6 @@ def get_char_data(font_image, o_x, o_y):
             char[y][x] = color
 
     return numpy.array(char)
-
 
 def load_font(font_file):
     font = {}
@@ -73,7 +68,6 @@ def load_font(font_file):
         font[char] = get_char_data(font_image, px, py)
 
     return font
-
 
 def kern_font(font):
     for char, data in font.iteritems():
@@ -105,19 +99,18 @@ def kern_font(font):
 
     return font
 
-
 if __name__ == "__main__":
     font = kern_font(load_font(FONT_FILE))
 
-    numpy.set_printoptions(formatter={'int': lambda x: "0x{:02x}".format(x)})
+    numpy.set_printoptions(formatter={'int':lambda x:"0x{:02x}".format(x)})
 
     print("data = {")
     for key, value in font.iteritems():
         print("0x{key:08x}: {value},\n".format(key=key, value=numpy.array2string(
-            value,
+            value, 
             separator=',',
             prefix=' ' * 12
-        )))
+	)))
     print("}")
     print("width = {}".format(FONT_WIDTH))
     print("height = {}".format(FONT_HEIGHT))
@@ -135,4 +128,5 @@ if __name__ == "__main__":
         print("")
         print("-" * FONT_WIDTH)
         print("")
-    # print("font = " + str(font))
+    #print("font = " + str(font))
+    

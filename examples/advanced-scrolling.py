@@ -15,7 +15,7 @@ Press Ctrl+C to exit.
 
 # Uncomment the below if your display is upside down
 #   (e.g. if you're using it in a Pimoroni Scroll Bot)
-#scrollphathd.rotate(degrees=180)
+# scrollphathd.rotate(degrees=180)
 
 # Dial down the brightness
 scrollphathd.set_brightness(0.2)
@@ -65,7 +65,7 @@ while True:
 
     for current_line, line_length in enumerate(lengths):
         # Delay a slightly longer time at the start of each line
-        time.sleep(delay*10)
+        time.sleep(delay * 10)
 
         # Scroll to the end of the current line
         for y in range(line_length):
@@ -78,7 +78,7 @@ while True:
         # We should rapidly scroll back to the first line.
         if current_line == len(lines) - 1 and rewind:
             for y in range(pos_y):
-                scrollphathd.scroll(-int(pos_x/pos_y), -1)
+                scrollphathd.scroll(-int(pos_x / pos_y), -1)
                 scrollphathd.show()
                 time.sleep(delay)
 
