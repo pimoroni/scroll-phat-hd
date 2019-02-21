@@ -1,5 +1,8 @@
-import scrollphathd as phat
-import time, random
+#!/usr/bin/env python
+
+import scrollphathd
+import time
+import random
 
 YSIZE = 7
 XSIZE = 17
@@ -12,7 +15,7 @@ SPEED = 3
 print("""
 Scroll pHAT HD: GameOfLife
 
-Plays Conway's Game of Life. 
+Plays Conway's Game of Life.
 Starts with random live cells and stops when stagnation is detected
 or the maximum amount of iterations is reached.
 
@@ -34,19 +37,19 @@ def generatemap():
 
 def printmap(sleeptime):
     alive_counter = 0
-    phat.clear()
+    scrollphathd.clear()
 
     for y in range(0, YSIZE):
         for x in range(0, XSIZE):
             if matrix[y, x]:
-                phat.set_pixel(x, y, BRIGHT)
+                scrollphathd.set_pixel(x, y, BRIGHT)
                 alive_counter += 1
             else:
-                phat.set_pixel(x, y, 0)
+                scrollphathd.set_pixel(x, y, 0)
 
-    phat.show()
+    scrollphathd.show()
     time.sleep(sleeptime / 10)
-    phat.clear()
+    scrollphathd.clear()
 
     return alive_counter
 
