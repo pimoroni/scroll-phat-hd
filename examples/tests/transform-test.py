@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
 import time
-import signal
-import math
 import argparse
 
 import scrollphathd
@@ -36,7 +34,6 @@ scrollphathd.write_string(args.message, x=0, y=0, font=font3x5, brightness=0.5)
 
 
 while True:
-
     scrollphathd.flip(args.flip_x, args.flip_y)
     scrollphathd.rotate(args.rotate)
     scrollphathd.scroll(args.scroll_x, args.scroll_y)

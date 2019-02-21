@@ -24,7 +24,7 @@ BRIGHTNESS = 0.3
 
 # Uncomment the below if your display is upside down
 #   (e.g. if you're using it in a Pimoroni Scroll Bot)
-#scrollphathd.rotate(degrees=180)
+# scrollphathd.rotate(degrees=180)
 
 while True:
     scrollphathd.clear()
@@ -69,10 +69,10 @@ while True:
     # Display the time (HH:MM) in a 5x5 pixel font
     scrollphathd.write_string(
         time.strftime("%H:%M"),
-        x=0, # Align to the left of the buffer
-        y=0, # Align to the top of the buffer
-        font=font5x5, # Use the font5x5 font we imported above
-        brightness=BRIGHTNESS # Use our global brightness value
+        x=0,                   # Align to the left of the buffer
+        y=0,                   # Align to the top of the buffer
+        font=font5x5,          # Use the font5x5 font we imported above
+        brightness=BRIGHTNESS  # Use our global brightness value
     )
 
     # int(time.time()) % 2 will tick between 0 and 1 every second.

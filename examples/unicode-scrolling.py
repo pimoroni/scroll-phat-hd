@@ -18,21 +18,22 @@ Press Ctrl+C to exit.
 
 
 def scroll_message(message):
-    scrollphathd.clear() # Clear the display and reset scrolling to (0, 0)
-    length = scrollphathd.write_string(message) # Write out your message
-    scrollphathd.show() # Show the result
-    time.sleep(0.5) # Initial delay before scrolling
+    scrollphathd.clear()                         # Clear the display and reset scrolling to (0, 0)
+    length = scrollphathd.write_string(message)  # Write out your message
+    scrollphathd.show()                          # Show the result
+    time.sleep(0.5)                              # Initial delay before scrolling
 
     length -= scrollphathd.width
-    
+
     # Now for the scrolling loop...
     while length > 0:
-        scrollphathd.scroll(1) # Scroll the buffer one place to the left
-        scrollphathd.show() # Show the result
+        scrollphathd.scroll(1)                   # Scroll the buffer one place to the left
+        scrollphathd.show()                      # Show the result
         length -= 1
-        time.sleep(0.02) # Delay for each scrolling step
+        time.sleep(0.02)                         # Delay for each scrolling step
 
-    time.sleep(0.5) # Delay at the end of scrolling
+    time.sleep(0.5)                              # Delay at the end of scrolling
+
 
 message = "".join([unichr(x) for x in range(256)])
 
