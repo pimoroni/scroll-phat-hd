@@ -3,21 +3,6 @@
 # binary_clock.py - A Python implementation of a binary clock
 # for the Pimoroni Scroll Bot.
 # Copyright (C) 2018 Freddy Spierenburg
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor,
-# Boston, MA 02110-1301 USA
 
 import scrollphathd
 import datetime
@@ -67,8 +52,8 @@ class BinaryClock(Clock):
         self._max_degree = 45
         self._hand_position = [2, 4, 7, 9, 12, 14]
         self._hand_bits = 4
-        self._last_minute = None
-        self._max_intensity = 0.7
+        self._max_intensity = 0.6
+        self._intensities_init(self._max_intensity)
         Clock.__init__(self)
 
     def _draw_binary(self, x, value):
@@ -104,7 +89,7 @@ class BinaryClock(Clock):
     def _intensities_init(self, max_intensity):
         self._intensities = {
             hand_position: [
-                self._intensity(int(random.uniform(-self._max_degree, self._max_degree)), max_intensity) for hand_bit in range(self._hand_bits)
+                self._intensity(max_intensity) for hand_bit in range(self._hand_bits)
             ] for hand_position in self._hand_position
         }
 
@@ -115,20 +100,15 @@ class BinaryClock(Clock):
             ] for hand_position in self._intensities.keys()
         }
 
-    def _intensity(self, start_degree, max_intensity):
-        degrees = range(self._max_degree) + list(reversed(range(self._max_degree)))
-        if start_degree < 0:
-            start_degree = self._max_degree * 2 + max(start_degree, -self._max_degree)
+    def _intensity(self, max_intensity):
         while True:
-            for degree in degrees[start_degree::]:
+            for silence in range(random.randrange(99)):
+                yield 0
+            for degree in range(self._max_degree) + list(reversed(range(self._max_degree))):
                 yield math.tan(math.radians(degree)) * max_intensity
-            start_degree = 0
 
     def update(self):
         Clock.update(self)
-        if self._last_minute != self.minute():
-            self._intensities_init(self._max_intensity)
-            self._last_minute = self.minute()
         self._brightness_step()
 
 
