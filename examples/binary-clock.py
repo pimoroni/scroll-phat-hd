@@ -32,13 +32,13 @@ class Clock(Time):
         Time.__init__(self)
 
     def _hour(self):
-        print self.hour()
+        print(self.hour())
 
     def _minute(self):
-        print self.minute()
+        print(self.minute())
 
     def _second(self):
-        print self.second()
+        print(self.second())
 
     def draw(self):
         self._hour()
