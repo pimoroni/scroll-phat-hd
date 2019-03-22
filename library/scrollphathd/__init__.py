@@ -6,7 +6,7 @@ import numpy
 
 __version__ = '1.2.1'
 
-DISPLAY_WIDTH = width = 17
+DISPLAY_WIDTH = width = 11
 DISPLAY_HEIGHT = height = 7
 
 _clear_on_exit = True
@@ -55,7 +55,7 @@ display = None
 buf = None
 
 
-def setup(i2c_dev=None, i2c_address=0x74):
+def setup(i2c_dev=None, i2c_address=0x75):
     """Set up Scroll pHAT HD.
 
     :param i2c_dev: smbus-compatible i2c object
@@ -79,10 +79,10 @@ def setup(i2c_dev=None, i2c_address=0x74):
         0b01111111, 0b01111111,
         0b01111111, 0b01111111,
         0b01111111, 0b01111111,
-        0b01111111, 0b01111111,
-        0b01111111, 0b01111111,
-        0b01111111, 0b01111111,
         0b01111111, 0b00000000,
+        0b00000000, 0b00000000,
+        0b00000000, 0b00000000,
+        0b00000000, 0b00000000,
     ]
 
     for frame in range(is31fl3731._NUM_FRAMES):
@@ -535,14 +535,18 @@ def get_buffer_shape():
 
 def _pixel_addr(x, y):
     """Translate an x,y coordinate to a pixel index."""
-    if x > 8:
-        x = x - 8
-        y = 6 - (y + 8)
-    else:
-        x = 8 - x
+    mapping = [
+        6, 22, 38, 54, 70, 86, 14, 30, 46, 62, 78,
+        5, 21, 37, 53, 69, 85, 13, 29, 45, 61, 77,
+        4, 20, 36, 52, 68, 84, 12, 28, 44, 60, 76,
+        3, 19, 35, 51, 67, 83, 11, 27, 43, 59, 75,
+        2, 18, 34, 50, 66, 82, 10, 26, 42, 58, 74,
+        1, 17, 33, 49, 65, 81, 9, 25, 41, 57, 73,
+        0, 16, 32, 48, 64, 80, 8, 24, 40, 56, 72
+    ]
 
-    return x * 16 + y
-
+    y = DISPLAY_HEIGHT - 1 - y
+    return mapping[(y * DISPLAY_WIDTH) + x]
 
 def _exit():
     clear()
