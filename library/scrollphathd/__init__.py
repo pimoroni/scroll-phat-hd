@@ -326,7 +326,7 @@ def rotate(degrees=0):
     _rotate = int(round(degrees / 90.0))
 
 
-def flip(self, x=False, y=False):
+def flip(x=False, y=False):
     """Flip the buffer horizontally and/or vertically before displaying.
 
     :param x: Flip horizontally left to right
