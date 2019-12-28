@@ -339,6 +339,17 @@ def flip(x=False, y=False):
     _flipy = y
 
 
+def set_font(self, font):
+    """Set a global font value.
+
+    :param font: Font value from .font (font3x5, font5x5, font5x7, font5x7smoothed)
+
+    Note: Import the font before invoking set_font(), (available by) default is font5x7.
+    """
+    global _font
+    _font = font
+
+
 def draw_char(x, y, char, font=None, brightness=1.0, monospaced=False):
     """Draw a single character to the buffer.
 
