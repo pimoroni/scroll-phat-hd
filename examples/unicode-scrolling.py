@@ -16,6 +16,13 @@ single messages across the display.
 Press Ctrl+C to exit.
 """)
 
+# For python 2/3 compatibility, check to see if `unichr` is defined.
+# If it isn't, then this is python3, in which case the `chr` builtin can
+# be used instead.
+try:
+    unichr
+except NameError:
+    unichr = chr
 
 def scroll_message(message):
     scrollphathd.clear()                         # Clear the display and reset scrolling to (0, 0)
