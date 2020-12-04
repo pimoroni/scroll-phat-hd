@@ -135,8 +135,31 @@ def kern_font(font):
 
     return font
 
+def show_font_string(font, string):
+    for r in range(0,FONT_HEIGHT):
+        for char in string:
+            try:
+                value = font[ ord(char) ]
+                try:
+                    for c in value[r]:
+                        a = u'\u2591'
+                        if ( c > 255*0.75 ):
+                            a = u'\u258b'
+                        elif ( c > 255*0.50 ):
+                            a = u'\u2593'
+                        elif ( c > 255*0.25 ):
+                            a = u'\u2592'
+                        sys.stderr.write( a )
+                except:
+                    pass
+            except:
+                pass
+            sys.stderr.write( '\t' )
+        sys.stderr.write( '\n' )
+
 
 if __name__ == "__main__":
+    sys.stderr.write( "making %s\n" % FONT_FILE.split('.')[0])
     font = kern_font(load_font(FONT_FILE))
 
     numpy.set_printoptions(formatter={'int': lambda x: "0x{:02x}".format(x)})
@@ -151,18 +174,5 @@ if __name__ == "__main__":
     print("}")
     print("width = {}".format(FONT_WIDTH))
     print("height = {}".format(FONT_HEIGHT))
-    sys.exit()
 
-    for char in range(CHAR_START, CHAR_END+1):
-        for row in font[char]:
-            r = ''
-            for col in row:
-                if col > 0:
-                    r += '#'
-                else:
-                    r += ' '
-            print(r)
-        print("")
-        print("-" * FONT_WIDTH)
-        print("")
-    # print("font = " + str(font))
+    show_font_string( font, "ABCxyz019" )
