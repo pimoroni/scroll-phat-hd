@@ -7,5 +7,5 @@ DEST=../library/scrollphathd/fonts/
 ./mkfont.py gauntlet.png -sz 13 3 -fz 7 7 -c 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' > $DEST/fontgauntlet.py
 ./mkfont.py organ.png -sz 13 3 -fz 13 7 -m 1 1 -s 1 1 -c 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890' > $DEST/fontorgan.py
 ./mkfont.py hachicro.png -sz 13 4 -fz 7 7 -s 1 1 -m 0 1 -c 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789' > $DEST/fonthachicro.py
-./mkfont.py d3.png -sz 13 4 -fz 6 5 -s 0 1 -c 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' > $DEST/fontd3.py
+./mkfont.py d3.png -sz 13 4 -fz 6 5 -s 0 1 -c 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789' > $DEST/fontd3.py
 
