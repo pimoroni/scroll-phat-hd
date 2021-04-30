@@ -3,9 +3,7 @@
 import time
 
 import scrollphathd
-from scrollphathd.fonts import font5x7unicode
-
-scrollphathd.set_font(font5x7unicode)
+from scrollphathd.fonts import fontd3, fontgauntlet, fontorgan, fonthachicro
 
 print("""
 Scroll pHAT HD: Simple Scrolling
@@ -16,16 +14,9 @@ single messages across the display.
 Press Ctrl+C to exit.
 """)
 
-# For python 2/3 compatibility, check to see if `unichr` is defined.
-# If it isn't, then this is python3, in which case the `chr` builtin can
-# be used instead.
-try:
-    unichr
-except NameError:
-    unichr = chr
 
-
-def scroll_message(message):
+def scroll_message(font, message):
+    scrollphathd.set_font(font)
     scrollphathd.clear()                         # Clear the display and reset scrolling to (0, 0)
     length = scrollphathd.write_string(message)  # Write out your message
     scrollphathd.show()                          # Show the result
@@ -43,6 +34,12 @@ def scroll_message(message):
     time.sleep(0.5)                              # Delay at the end of scrolling
 
 
-message = "".join([unichr(x) for x in range(256)])
+scrollphathd.set_brightness(0.5)
 
-scroll_message(message)
+for font, text in (
+        (fontd3, "THIS IS FONT D3"),
+        (fontgauntlet, "THIS IS FONT GAUNTLET"),
+        (fontorgan, "THIS IS FONT ORGAN"),
+        (fonthachicro, "This is font Hachicro"), ):
+    scroll_message(font, text)
+    time.sleep(0.5)

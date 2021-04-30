@@ -12,21 +12,23 @@ except ImportError:
 
 parser = argparse.ArgumentParser(description='Process bitmap into scroll-phat-hd font')
 parser.add_argument('file', help='image file to read')
-parser.add_argument('-sz','--sheetsize', dest='sheetsize', default=[16,16], nargs='+', type=int,
-                           help='sheet size (columns,rows) in characters (default: 16,16)')
-parser.add_argument('-fz','--fontsize', dest='fontsize', default=[5,7], nargs='+', type=int,
-                           help='font size (x,y) in pixels (default: 5,7)')
-parser.add_argument('-s','--spacing', dest='spacing', default=[1,1], nargs='+', type=int,
-                           help='pixel gap (x,y) between characters (default: 1,1)')
-parser.add_argument('-m','--margin', dest='margin', default=[0,0], nargs='+', type=int,
-                           help='pixel gap (x,y) from top left of sheet (default: 0,0)')
-parser.add_argument('-vert','--vertical', dest='vertical', action='store_true',
-                           help='characters are vertical in sheet')
-parser.add_argument('-c','--characters', dest='charset', default='', type=str,
-                           help='character set in the sheet (default: all 0-255)')
-if len(sys.argv)<2:
+parser.add_argument('-sz', '--sheetsize', dest='sheetsize', default=[16, 16], nargs='+', type=int,
+                    help='sheet size (columns,rows) in characters (default: 16,16)')
+parser.add_argument('-fz', '--fontsize', dest='fontsize', default=[5, 7], nargs='+', type=int,
+                    help='font size (x,y) in pixels (default: 5,7)')
+parser.add_argument('-s', '--spacing', dest='spacing', default=[1, 1], nargs='+', type=int,
+                    help='pixel gap (x,y) between characters (default: 1,1)')
+parser.add_argument('-m', '--margin', dest='margin', default=[0, 0], nargs='+', type=int,
+                    help='pixel gap (x,y) from top left of sheet (default: 0,0)')
+parser.add_argument('-vert', '--vertical', dest='vertical', action='store_true',
+                    help='characters are vertical in sheet')
+parser.add_argument('-c', '--characters', dest='charset', default='', type=str,
+                    help='character set in the sheet (default: all 0-255)')
+
+if len(sys.argv) < 2:
     parser.print_usage(sys.stderr)
     sys.exit(1)
+
 args = parser.parse_args()
 
 FONT_FILE = args.file
@@ -35,17 +37,17 @@ FONT_FILE = args.file
 (MARGIN_X, MARGIN_Y) = args.margin
 (CHAR_SPACING_X, CHAR_SPACING_Y) = args.spacing
 CHAR_SET = []
+
 if not args.charset:
-    for i in range(0,256):
+    for i in range(0, 256):
         CHAR_SET.append(i)
 else:
     lc = ''
     for c in args.charset:
         if c != '\\' or lc == '\\':
-            CHAR_SET.append( ord(c) )
+            CHAR_SET.append(ord(c))
         lc = c
 
-    
 
 def get_char_position(char):
     """Get the x/y position of the char"""
@@ -70,7 +72,7 @@ def get_char_coords(x, y):
 
 def get_color(font_image, color):
     offset = color * 3
-    r, g, b = font_image.getpalette()[offset:offset+3]
+    r, g, b = font_image.getpalette()[offset:offset + 3]
 
     return 255 - max(r, g, b)
 
@@ -82,8 +84,8 @@ def get_char_data(font_image, o_x, o_y):
         for y in range(FONT_HEIGHT):
             try:
                 palette_index = font_image.getpixel((o_x + x, o_y + y))
-            except:
-                raise IndexError("Invalid coordinates: {}:{}".format(o_x+x, o_y+y))
+            except IndexError:
+                raise IndexError("Invalid coordinates: {}:{}".format(o_x + x, o_y + y))
             color = get_color(font_image, palette_index)
             char[y][x] = color
 
@@ -100,7 +102,7 @@ def load_font(font_file):
     for char in CHAR_SET:
         x, y = get_char_position(char)
         px, py = get_char_coords(x, y)
-        font[ char ] = get_char_data(font_image, px, py)
+        font[char] = get_char_data(font_image, px, py)
 
     return font
 
@@ -135,31 +137,32 @@ def kern_font(font):
 
     return font
 
+
 def show_font_string(font, string):
-    for r in range(0,FONT_HEIGHT):
+    for r in range(0, FONT_HEIGHT):
         for char in string:
             try:
-                value = font[ ord(char) ]
+                value = font[ord(char)]
                 try:
                     for c in value[r]:
                         a = u'\u2591'
-                        if ( c > 255*0.75 ):
+                        if c > 255 * 0.75:
                             a = u'\u258b'
-                        elif ( c > 255*0.50 ):
+                        elif c > 255 * 0.50:
                             a = u'\u2593'
-                        elif ( c > 255*0.25 ):
+                        elif c > 255 * 0.25:
                             a = u'\u2592'
-                        sys.stderr.write( a )
-                except:
+                        sys.stderr.write(a)
+                except IndexError:
                     pass
-            except:
+            except KeyError:
                 pass
-            sys.stderr.write( '\t' )
-        sys.stderr.write( '\n' )
+            sys.stderr.write('\t')
+        sys.stderr.write('\n')
 
 
 if __name__ == "__main__":
-    sys.stderr.write( "making %s\n" % FONT_FILE.split('.')[0])
+    sys.stderr.write("making %s\n" % FONT_FILE.split('.')[0])
     font = kern_font(load_font(FONT_FILE))
 
     numpy.set_printoptions(formatter={'int': lambda x: "0x{:02x}".format(x)})
@@ -175,4 +178,4 @@ if __name__ == "__main__":
     print("width = {}".format(FONT_WIDTH))
     print("height = {}".format(FONT_HEIGHT))
 
-    show_font_string( font, "ABCxyz019" )
+    show_font_string(font, "ABCxyz019")
