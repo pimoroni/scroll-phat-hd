@@ -61,7 +61,7 @@ class BinaryClock(Clock):
             self._SPHD.set_pixel(
                 x,
                 ((self._hand_bits - 1 - y) * 2),
-                1 if value & (1 << y) > 0 else self._brightness[x][y])
+                1 if int(value) & (1 << y) > 0 else self._brightness[x][y])
 
     def _draw_hand(self, x_left, x_right, value):
         self._draw_binary(x_left, value / 10)
@@ -104,7 +104,7 @@ class BinaryClock(Clock):
         while True:
             for silence in range(random.randrange(99)):
                 yield 0
-            for degree in range(self._max_degree) + list(reversed(range(self._max_degree))):
+            for degree in list(range(self._max_degree)) + list(reversed(range(self._max_degree))):
                 yield math.tan(math.radians(degree)) * max_intensity
 
     def update(self):
