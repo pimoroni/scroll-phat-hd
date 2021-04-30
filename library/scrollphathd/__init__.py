@@ -4,7 +4,7 @@ from . import is31fl3731
 from .fonts import font5x7
 import numpy
 
-__version__ = '1.2.1'
+__version__ = '1.3.0'
 
 DISPLAY_WIDTH = width = 17
 DISPLAY_HEIGHT = height = 7
