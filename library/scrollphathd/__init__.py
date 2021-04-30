@@ -339,7 +339,7 @@ def flip(x=False, y=False):
     _flipy = y
 
 
-def set_font(self, font):
+def set_font(font):
     """Set a global font value.
 
     :param font: Font value from .font (font3x5, font5x5, font5x7, font5x7smoothed)
