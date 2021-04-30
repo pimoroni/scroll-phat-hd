@@ -1,5 +1,8 @@
+#!/usr/bin/env python
+
 import os
 import sys
+import argparse
 import numpy
 
 try:
@@ -7,29 +10,52 @@ try:
 except ImportError:
     exit("This script requires the pillow module\nInstall with: sudo pip install pillow")
 
-FONT_FILE = "5x7-font.png"
+parser = argparse.ArgumentParser(description='Process bitmap into scroll-phat-hd font')
+parser.add_argument('file', help='image file to read')
+parser.add_argument('-sz','--sheetsize', dest='sheetsize', default=[16,16], nargs='+', type=int,
+                           help='sheet size (columns,rows) in characters (default: 16,16)')
+parser.add_argument('-fz','--fontsize', dest='fontsize', default=[5,7], nargs='+', type=int,
+                           help='font size (x,y) in pixels (default: 5,7)')
+parser.add_argument('-s','--spacing', dest='spacing', default=[1,1], nargs='+', type=int,
+                           help='pixel gap (x,y) between characters (default: 1,1)')
+parser.add_argument('-m','--margin', dest='margin', default=[0,0], nargs='+', type=int,
+                           help='pixel gap (x,y) from top left of sheet (default: 0,0)')
+parser.add_argument('-vert','--vertical', dest='vertical', action='store_true',
+                           help='characters are vertical in sheet')
+parser.add_argument('-c','--characters', dest='charset', default='', type=str,
+                           help='character set in the sheet (default: all 0-255)')
+if len(sys.argv)<2:
+    parser.print_usage(sys.stderr)
+    sys.exit(1)
+args = parser.parse_args()
 
-SHEET_WIDTH = 16
-SHEET_HEIGHT = 16
+FONT_FILE = args.file
+(SHEET_WIDTH, SHEET_HEIGHT) = args.sheetsize
+(FONT_WIDTH, FONT_HEIGHT) = args.fontsize
+(MARGIN_X, MARGIN_Y) = args.margin
+(CHAR_SPACING_X, CHAR_SPACING_Y) = args.spacing
+CHAR_SET = []
+if not args.charset:
+    for i in range(0,256):
+        CHAR_SET.append(i)
+else:
+    lc = ''
+    for c in args.charset:
+        if c != '\\' or lc == '\\':
+            CHAR_SET.append( ord(c) )
+        lc = c
 
-FONT_WIDTH = 5
-FONT_HEIGHT = 7
-
-CHAR_SPACING_X = 2
-CHAR_SPACING_Y = 2
-MARGIN_X = 2
-MARGIN_Y = 2
-
-CHAR_START = 0x00
-CHAR_END = 0xff
-
+    
 
 def get_char_position(char):
     """Get the x/y position of the char"""
-
-    x = char % SHEET_WIDTH
-    y = char // SHEET_WIDTH
-
+    i = CHAR_SET.index(char)
+    if args.vertical:
+        y = i % SHEET_HEIGHT
+        x = i // SHEET_HEIGHT
+    else:
+        x = i % SHEET_WIDTH
+        y = i // SHEET_WIDTH
     return (x, y)
 
 
@@ -54,7 +80,10 @@ def get_char_data(font_image, o_x, o_y):
 
     for x in range(FONT_WIDTH):
         for y in range(FONT_HEIGHT):
-            palette_index = font_image.getpixel((o_x + x, o_y + y))
+            try:
+                palette_index = font_image.getpixel((o_x + x, o_y + y))
+            except:
+                raise IndexError("Invalid coordinates: {}:{}".format(o_x+x, o_y+y))
             color = get_color(font_image, palette_index)
             char[y][x] = color
 
@@ -66,11 +95,12 @@ def load_font(font_file):
 
     font_path = os.path.join(os.path.dirname(__file__), font_file)
     font_image = Image.open(font_path)
+    font_image = font_image.convert("P", palette=Image.ADAPTIVE, colors=256)
 
-    for char in range(CHAR_START, CHAR_END+1):
+    for char in CHAR_SET:
         x, y = get_char_position(char)
         px, py = get_char_coords(x, y)
-        font[char] = get_char_data(font_image, px, py)
+        font[ char ] = get_char_data(font_image, px, py)
 
     return font
 
@@ -105,8 +135,31 @@ def kern_font(font):
 
     return font
 
+def show_font_string(font, string):
+    for r in range(0,FONT_HEIGHT):
+        for char in string:
+            try:
+                value = font[ ord(char) ]
+                try:
+                    for c in value[r]:
+                        a = u'\u2591'
+                        if ( c > 255*0.75 ):
+                            a = u'\u258b'
+                        elif ( c > 255*0.50 ):
+                            a = u'\u2593'
+                        elif ( c > 255*0.25 ):
+                            a = u'\u2592'
+                        sys.stderr.write( a )
+                except:
+                    pass
+            except:
+                pass
+            sys.stderr.write( '\t' )
+        sys.stderr.write( '\n' )
+
 
 if __name__ == "__main__":
+    sys.stderr.write( "making %s\n" % FONT_FILE.split('.')[0])
     font = kern_font(load_font(FONT_FILE))
 
     numpy.set_printoptions(formatter={'int': lambda x: "0x{:02x}".format(x)})
@@ -121,18 +174,5 @@ if __name__ == "__main__":
     print("}")
     print("width = {}".format(FONT_WIDTH))
     print("height = {}".format(FONT_HEIGHT))
-    sys.exit()
 
-    for char in range(CHAR_START, CHAR_END+1):
-        for row in font[char]:
-            r = ''
-            for col in row:
-                if col > 0:
-                    r += '#'
-                else:
-                    r += ' '
-            print(r)
-        print("")
-        print("-" * FONT_WIDTH)
-        print("")
-    # print("font = " + str(font))
+    show_font_string( font, "ABCxyz019" )
