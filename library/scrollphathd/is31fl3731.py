@@ -49,10 +49,10 @@ class IS31FL3731:
 
         if self.i2c is None:
             try:
-                import smbus
-                self.i2c = smbus.SMBus(1)
+                import smbus2
+                self.i2c = smbus2.SMBus(1)
             except ImportError as e:
-                raise ImportError('You must supply an i2c device or install the smbus library.')
+                raise ImportError('You must supply an i2c device or install the smbus2 library.')
             except IOError as e:
                 if hasattr(e, 'errno') and e.errno == 2:
                     e.strerror += "\n\nMake sure you've enabled i2c in your Raspberry Pi configuration.\n"
