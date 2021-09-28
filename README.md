@@ -1,7 +1,8 @@
 ![Scroll pHAT HD](scroll-phat-hd-logo.png)
 https://shop.pimoroni.com/products/scroll-phat-hd
+https://shop.pimoroni.com/products/scroll-hat-mini
 
-17x7 pixels of single-colour, brightness-controlled, message scrolling goodness!
+17x7 pixels of single-colour, brightness-controlled, message scrolling goodness! This library will work with Scroll pHAT HD and Scroll HAT Mini.
 
 ## Installing
 
