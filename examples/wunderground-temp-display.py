@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# !/usr/bin/env python
 #
 #
 #
@@ -10,7 +10,7 @@
 #
 # Development environment: Python v3 on a Raspberry Pi Zero-W running Raspbian and default scrollphathd libraries
 #
-# Originally built by Mark Ehr, 1/12/18, and released to the public domain with no warranties expressed or implied. Or something along those lines. 
+# Originally built by Mark Ehr, 1/12/18, and released to the public domain with no warranties expressed or implied. Or something along those lines.
 # Feel free to use this code any way that you'd like. If you want to give credit, that's great.
 #
 # Note: if you want this to auto-run upon boot, add this line to the bottom of /etc/rc.local just above the "exit 0" line:
@@ -20,8 +20,6 @@
 # communicate with the display. Check the hardware connection to make sure all of the pins are seated. In Mark's case, it
 # happened randomly until they re-soldered the header connections on the RPi as well as the hat.
 #
-#!/usr/bin/env python
-
 
 # Default scrollphathd library
 import scrollphathd
@@ -50,7 +48,7 @@ OW_API_KEY = "YOUR_API_KEY_GOES_HERE"
 OW_API_KEY = os.environ.get("OW_API_KEY", OW_API_KEY)
 
 # Customize this for your desired location. Find a JSON list of all city IDs here: http://bulk.openweathermap.org/sample/
-OW_STATION = "5799841"                  
+OW_STATION = "5799841"
 # Kirkland, WA
 
 # Weather polling interval (seconds). Free OpenWeather API accounts allow 60 calls/minute and 1Mil/month.
@@ -175,7 +173,7 @@ def get_weather_data():
         if DEBUG:
             print("get_weather_data()")
             print("Current temp ", current_temp, TEMP_SCALE)
-            print("Average temp ", average_temp , TEMP_SCALE)
+            print("Average temp ", average_temp, TEMP_SCALE)
             print("Feels like ", feels_like, TEMP_SCALE)
             print("Wind speed: ", wind_speed)
             print("Wind gusts: ", wind_gusts)
@@ -219,7 +217,7 @@ def draw_temp_trend(dir):
         scrollphathd.set_pixel(16, 1, BRIGHT)
     elif dir == -1:   # Decreasing = down arrow
         for y in range(0, 5):
-            scrollphathd.set_pixel(15, y, BRIGHT) #draw middle line of arrow
+            scrollphathd.set_pixel(15, y, BRIGHT)   # Draw middle line of arrow
         scrollphathd.set_pixel(14, 3, BRIGHT)
         scrollphathd.set_pixel(16, 3, BRIGHT)
     return
