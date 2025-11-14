@@ -1,13 +1,12 @@
-import scrollphathd
-
 import threading
-
 from argparse import ArgumentParser
 
+import scrollphathd
+
 try:
-    from queue import Queue, Empty
+    from queue import Queue
 except ImportError:
-    from Queue import Queue, Empty
+    from Queue import Queue
 
 from .action import Action
 from .stoppablethread import StoppableThread
@@ -17,7 +16,7 @@ try:
 except ImportError:
     import httplib as http_status
 
-from flask import Blueprint, render_template, abort, request, jsonify, Flask
+from flask import Blueprint, Flask, jsonify, request
 
 scrollphathd_blueprint = Blueprint('scrollhat', __name__)
 api_queue = Queue()
@@ -48,7 +47,7 @@ class AutoScroll():
 
 
 @scrollphathd_blueprint.route('/autoscroll', methods=["POST"])
-def autoscroll():
+def autoscroll_():
     response = {"result": "success"}
     status_code = http_status.OK
 

@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
-import time
+import colorsys
 import math
 import random
-import colorsys
+import time
 
 from gpiozero import Button
+
 import scrollphathd
 
 print("""Scroll HAT Mini: simon.py

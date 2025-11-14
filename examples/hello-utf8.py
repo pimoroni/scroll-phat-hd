@@ -3,9 +3,10 @@
 
 import time
 
+from six import unichr
+
 import scrollphathd
 from scrollphathd.fonts import font5x7
-from six import unichr
 
 print("""
 Scroll pHAT HD: Hello utf-8

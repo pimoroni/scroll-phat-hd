@@ -13,7 +13,6 @@ import time
 
 import scrollphathd
 
-
 print("""
 Scroll pHAT HD: Forest Fire
 

@@ -1,5 +1,6 @@
 import threading
 
+
 class StoppableThread(threading.Thread):
     """Basic Stoppable Thread Wrapper
     Adds event for stopping the execution

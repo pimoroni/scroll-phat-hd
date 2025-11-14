@@ -1,8 +1,9 @@
 #!/usr/bin/env python
+from flask import Flask
+
 import scrollphathd
 from scrollphathd.api.http import scrollphathd_blueprint
 from scrollphathd.fonts import font3x5
-from flask import Flask
 
 # Set the font
 scrollphathd.set_font(font3x5)

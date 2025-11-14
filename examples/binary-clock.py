@@ -4,10 +4,11 @@
 # for the Pimoroni Scroll Bot.
 # Copyright (C) 2018 Freddy Spierenburg
 
-import scrollphathd
 import datetime
 import math
 import random
+
+import scrollphathd
 
 
 class Time(object):

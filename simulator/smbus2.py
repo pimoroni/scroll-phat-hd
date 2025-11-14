@@ -1,7 +1,7 @@
-import sys
-import subprocess
-import pickle
 import os
+import pickle
+import subprocess
+import sys
 
 
 class SMBus:

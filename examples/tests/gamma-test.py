@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import time
+
 import scrollphathd
 
 DELAY = 0.0001

@@ -4,10 +4,12 @@
 
 import time
 import unicodedata
+
 try:
     import queue
 except ImportError:
     import Queue as queue
+
 from sys import exit
 
 try:
@@ -17,7 +19,6 @@ except ImportError:
 
 import scrollphathd
 from scrollphathd.fonts import font5x7
-
 
 # adjust the tracked keyword below to your keyword or #hashtag
 keyword = '#bilgetank'

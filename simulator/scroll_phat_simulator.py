@@ -1,8 +1,8 @@
-import threading
-import sys
 import pickle
-import tkinter as tk
 import signal
+import sys
+import threading
+import tkinter as tk
 
 ROWS = 7
 COLUMNS = 17

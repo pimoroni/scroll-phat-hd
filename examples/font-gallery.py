@@ -3,7 +3,7 @@
 import time
 
 import scrollphathd
-from scrollphathd.fonts import fontd3, fontgauntlet, fontorgan, fonthachicro
+from scrollphathd.fonts import fontd3, fontgauntlet, fonthachicro, fontorgan
 
 print("""
 Scroll pHAT HD: Simple Scrolling

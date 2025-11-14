@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
-import time
 import math
+import time
+
 from gpiozero import Button
 
 import scrollphathd
-
 
 print("""Unicorn HAT Mini: buttons.py
 

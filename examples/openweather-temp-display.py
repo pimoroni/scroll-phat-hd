@@ -33,9 +33,9 @@ except ImportError:
 
 # Used to parse OpenWeather JSON data
 import json
+import os
 # Returns time values
 import time
-import os
 
 # Uncomment the below if your display is upside down
 # (e.g. if you're using it in a Pimoroni Scroll Bot)

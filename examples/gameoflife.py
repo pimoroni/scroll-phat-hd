@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-import scrollphathd
-import time
 import random
+import time
+
+import scrollphathd
 
 YSIZE = 7
 XSIZE = 17

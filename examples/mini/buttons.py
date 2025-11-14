@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-from gpiozero import Button
 from signal import pause
+
+from gpiozero import Button
 
 print("""Scroll HAT Mini: buttons.py
 

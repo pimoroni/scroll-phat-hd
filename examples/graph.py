@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-import time
 import random
+import time
 
 import scrollphathd
 

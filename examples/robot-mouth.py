@@ -10,7 +10,6 @@ except ImportError:
 
 import scrollphathd
 
-
 print("""
 Scroll pHAT HD: Robot Mouth
 

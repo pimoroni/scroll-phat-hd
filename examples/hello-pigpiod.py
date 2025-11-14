@@ -3,6 +3,7 @@
 import time
 
 import pigpio
+
 import scrollphathd
 
 print("""

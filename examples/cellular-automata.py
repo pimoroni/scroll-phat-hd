@@ -13,7 +13,6 @@ except ImportError:
 
 import scrollphathd
 
-
 print("""
 Scroll pHAT HD: Cellular Automata
 
@@ -59,7 +58,7 @@ def mainloop():
 
     while True:
 
-        # redraw first so that it shows the initial contitions when first run
+        # redraw first so that it shows the initial conditions when first run
         for y in range(0, 7):
             for x in range(0, 17):
                 scrollphathd.pixel(x, y, matrix[y, x])
@@ -200,7 +199,7 @@ def mainloop():
             #          ^
             #      a match!
 
-            #  this is equivelant to the bitwise AND operation:
+            #  this is equivialent to the bitwise AND operation:
             #  3&30
 
             #  see here :
@@ -209,12 +208,12 @@ def mainloop():
             #  corresponding bit of x AND of y is 1, otherwise it's 0.
 
             #  so, after all that we now know the state of this output cell.
-            #  fortunately the algorithm is a lot shorter than the explaination ;)
+            #  fortunately the algorithm is a lot shorter than the explanation ;)
 
             #  construct our abc by bitshift and move a 1 to that index.
             o = 1 << ((a << 2) + (b << 1) + c)
 
-            #  set the output cell to 1 if it &s with the rule, othewise 0
+            #  set the output cell to 1 if it &s with the rule, otherwise 0
             outputRow[x] = 1 if o & rule else 0
 
         # incrementally fill in the rows until we fill the last row

@@ -4,11 +4,12 @@ Little game for the Scroll HAT Mini.
 """
 
 import math
-import scrollphathd
 import time
+from random import random, shuffle
 
 from gpiozero import Button
-from random import random, shuffle
+
+import scrollphathd
 
 # ------------------------------------------------------------
 
@@ -40,7 +41,7 @@ class Rockfall():
     # How much to change the wait time by each tick
     WAIT_DIFF = 0.001
 
-    # The min and max population fractions, and how much the butttons change
+    # The min and max population fractions, and how much the buttons change
     # it by
     MIN_FRAC = 1.0 / HEIGHT
     MAX_FRAC = 4.0 / HEIGHT
@@ -174,7 +175,7 @@ class Rockfall():
                 start = now
                 last = now
 
-            # Wait for  bit befor emoving on
+            # Wait for a bit before moving on
             time.sleep(0.05)
 
 # ----------------------------------------------------------------------

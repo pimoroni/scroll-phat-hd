@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-import time
 import argparse
+import time
 
 import scrollphathd
 from scrollphathd.fonts import font3x5

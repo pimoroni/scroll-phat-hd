@@ -52,7 +52,7 @@ class IS31FL3731:
                 import smbus2
                 self.i2c = smbus2.SMBus(1)
             except ImportError as e:
-                raise ImportError('You must supply an i2c device or install the smbus2 library.')
+                raise ImportError('You must supply an i2c device or install the smbus2 library.') from e
             except IOError as e:
                 if hasattr(e, 'errno') and e.errno == 2:
                     e.strerror += "\n\nMake sure you've enabled i2c in your Raspberry Pi configuration.\n"
@@ -163,7 +163,7 @@ class IS31FL3731:
             self.set_bank(bank)
         return self.i2c.read_byte_data(self.address, register)
 
-    def _chunk(self, l, n):
-        """Split a list of values in to chunks of length n."""
-        for i in range(0, len(l) + 1, n):
-            yield l[i:i + n]
+    def _chunk(self, data, length):
+        """Split a list of values into chunks of a given length."""
+        for i in range(0, len(data) + 1, length):
+            yield data[i:i + length]
